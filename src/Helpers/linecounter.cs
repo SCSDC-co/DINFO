@@ -1,10 +1,6 @@
-using System;
-using System.IO;
-using System.Linq;
-
 namespace Helpers.LineCounter;
 
-public static class LineCounter
+public static class LineCounter_Class
 {
     public static int CountLines(string fileName)
     {
