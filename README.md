@@ -46,7 +46,7 @@ Here’s what is planned for **Dinfo**:
 - [ ] **Detect file types**  
        Identify the type of each file (e.g., C#, Python, etc.) to give better insight into the directory content.
 
-- [ ] **Scan entire directories**  
+- [x] **Scan entire directories**  
        Recursively scan an entire directory and display the line count for all files.
 
 - [ ] **File statistics overview**  
