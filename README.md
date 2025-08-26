@@ -19,15 +19,21 @@ Currently, it can count the number of lines in one or more files passed as argum
 2. Open a terminal and navigate to the folder containing the program.
 3. Run the program with one or more file paths as arguments:
 
+```bash
 dotnet run Program.cs AnotherFile.txt
+```
 
 Or, if you have the compiled executable:
 
-Dinfo.exe Program.cs AnotherFile.txt
+```bash
+Dinfo Program.cs AnotherFile.txt
+```
 
 The program will output the number of lines in each file. For example:
 
+```bash
 Lines of Program.cs: 21
+```
 
 ## Requirements
 
