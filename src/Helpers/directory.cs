@@ -1,4 +1,4 @@
-using Helpers.LineCounter;
+using Helpers.FilesTools;
 
 namespace Helpers.DirTools;
 
@@ -10,7 +10,7 @@ public static class DirectoryHelper
 
         foreach (string fileName in fileEntries)
         {
-            Console.WriteLine($"Lines of {fileName}: {LineCounter_Class.CountLines(fileName)}");
+            Console.WriteLine($"Lines of {fileName}: {FilesHelper.CountLines(fileName)}");
         }
 
         string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);

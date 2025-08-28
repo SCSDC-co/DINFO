@@ -1,5 +1,5 @@
 ﻿using Helpers.DirTools;
-using Helpers.LineCounter;
+using Helpers.FilesTools;
 
 namespace dinfo;
 
@@ -30,7 +30,7 @@ public static class Program
                     }
                     else if (attributes.HasFlag(FileAttributes.Normal))
                     {
-                        Console.WriteLine($"Lines of {arg}: {LineCounter_Class.CountLines(arg)}");
+                        Console.WriteLine($"Lines of {arg}: {FilesHelper.CountLines(arg)}");
                     }
                     else
                     {

@@ -1,6 +1,6 @@
-namespace Helpers.LineCounter;
+namespace Helpers.FilesTools;
 
-public static class LineCounter_Class
+public static class FilesHelper
 {
     public static int CountLines(string fileName)
     {
