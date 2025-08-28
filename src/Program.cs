@@ -1,6 +1,7 @@
 ﻿using Helpers.DirTools;
 using Helpers.FilesTools;
 using Utils.Globals;
+using Utils.Help;
 
 namespace dinfo;
 
@@ -11,8 +12,20 @@ public static class Program
         if (args.Length == 0)
             DirectoryHelper.ProcessDirectory(Directory.GetCurrentDirectory());
 
+        if (args.Length == 1 && args[0] == "-h" || args[0] == "--help")
+        {
+            HelpUtils.PrintHelp();
+            return;
+        }
+
         foreach (string arg in args)
         {
+            if (arg == "-r" || arg == "--recursive")
+            {
+                GlobalsUtils.recursive = true;
+                continue;
+            }
+
             if (!File.Exists(arg) && !Directory.Exists(arg))
                 Console.WriteLine($"Invalid input, skipping {arg}");
 

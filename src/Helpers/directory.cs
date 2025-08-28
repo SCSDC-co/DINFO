@@ -19,9 +19,11 @@ public static class DirectoryHelper
         }
 
         string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
-        foreach (string subdirectory in subdirectoryEntries)
-        {
-            ProcessDirectory(subdirectory);
-        }
+
+        if (GlobalsUtils.recursive)
+            foreach (string subdirectory in subdirectoryEntries)
+            {
+                ProcessDirectory(subdirectory);
+            }
     }
 }
