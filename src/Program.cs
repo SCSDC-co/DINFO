@@ -27,7 +27,10 @@ public static class Program
             }
 
             if (!File.Exists(arg) && !Directory.Exists(arg))
+            {
                 Console.WriteLine($"Invalid input, skipping {arg}");
+                continue;
+            }
 
             var attributes = File.GetAttributes(arg);
 
