@@ -14,6 +14,7 @@ public static class DirectoryHelper
             Console.WriteLine($"Lines of {fileName}: {FilesHelper.CountLines(fileName)}");
 
             GlobalsUtils.filesProcessed++;
+            GlobalsUtils.totalFiles++;
             GlobalsUtils.totalLines += FilesHelper.CountLines(fileName);
         }
 
