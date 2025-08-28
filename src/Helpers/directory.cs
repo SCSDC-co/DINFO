@@ -1,4 +1,5 @@
 using Helpers.FilesTools;
+using Utils.Globals;
 
 namespace Helpers.DirTools;
 
@@ -11,6 +12,9 @@ public static class DirectoryHelper
         foreach (string fileName in fileEntries)
         {
             Console.WriteLine($"Lines of {fileName}: {FilesHelper.CountLines(fileName)}");
+
+            GlobalsUtils.filesProcessed++;
+            GlobalsUtils.totalLines += FilesHelper.CountLines(fileName);
         }
 
         string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
