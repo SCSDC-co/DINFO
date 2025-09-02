@@ -13,6 +13,7 @@ public static class DirectoryHelper
         {
             GlobalsUtils.totalFiles++;
             GlobalsUtils.totalLines += FilesHelper.CountLines(fileName);
+            GlobalsUtils.Files.Add(fileName);
         }
 
         string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);

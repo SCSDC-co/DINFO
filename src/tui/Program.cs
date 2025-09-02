@@ -7,22 +7,62 @@ namespace dinfo.tui;
 
 public static class Program
 {
+    public static void DirectoryInfo(string targetDirectory)
+    {
+        DirectoryHelper.ProcessDirectory(targetDirectory);
+
+        /*
+         *  HEADER
+         */
+        var headerPanel = new Panel($"[bold green]DINFO: {targetDirectory}[/]");
+
+        headerPanel.Border = BoxBorder.Rounded;
+        headerPanel.Expand = true;
+        headerPanel.BorderStyle = new Style(Color.Green);
+
+        AnsiConsole.Write(headerPanel);
+
+        /*
+         *  INFO
+         */
+        var infoPanel = new Panel(
+            $"[bold green]Number of files:[/] {GlobalsUtils.totalFiles}\n[bold green]Number of lines:[/] {GlobalsUtils.totalLines}"
+        );
+
+        infoPanel.Border = BoxBorder.Rounded;
+        infoPanel.BorderStyle = new Style(Color.Green);
+        infoPanel.Header = new PanelHeader("[bold green] INFO [/]");
+
+        if (!GlobalsUtils.verbose)
+        {
+            AnsiConsole.Write(infoPanel);
+        }
+        else
+        {
+            var filesPanel = new Panel($"[bold green]{string.Join(", ", GlobalsUtils.Files)}[/] ");
+
+            filesPanel.Border = BoxBorder.Rounded;
+            filesPanel.BorderStyle = new Style(Color.Green);
+            filesPanel.Header = new PanelHeader("[bold green] FILES [/]");
+
+            var infoColumns = new Grid();
+
+            infoColumns.AddColumn();
+            infoColumns.AddColumn();
+
+            infoColumns.AddRow(infoPanel, filesPanel);
+
+            AnsiConsole.Write(infoColumns);
+        }
+    }
+
     public static void Main(string[] args)
     {
+        var currentDirectory = Directory.GetCurrentDirectory();
+
         if (args.Length == 0)
         {
-            var currentDirectory = Directory.GetCurrentDirectory();
-
-            DirectoryHelper.ProcessDirectory(currentDirectory);
-
-            var headerPanel = new Panel($"[bold green]DINFO: {currentDirectory}[/]");
-
-            headerPanel.Border = BoxBorder.Rounded;
-            headerPanel.Padding = new Padding(1, 1, 1, 1);
-            headerPanel.Expand = true;
-            headerPanel.BorderStyle = new Style(Color.Green);
-
-            AnsiConsole.Write(headerPanel);
+            DirectoryInfo(currentDirectory);
         }
 
         if (args.Length == 1 && (args[0] == "-h" || args[0] == "--help"))
@@ -33,7 +73,19 @@ public static class Program
 
         foreach (string arg in args)
         {
-            var attributes = File.GetAttributes(arg);
+            if (arg == "-r" || arg == "--recursive")
+            {
+                GlobalsUtils.recursive = true;
+                DirectoryInfo(currentDirectory);
+                continue;
+            }
+
+            if (arg == "-v" || arg == "--verbose")
+            {
+                GlobalsUtils.verbose = true;
+                DirectoryInfo(currentDirectory);
+                continue;
+            }
 
             if (!Directory.Exists(arg))
             {
@@ -41,15 +93,11 @@ public static class Program
                 continue;
             }
 
-            if (arg == "-r" || arg == "--recursive")
-            {
-                GlobalsUtils.recursive = true;
-                continue;
-            }
+            var attributes = File.GetAttributes(arg);
 
             if (attributes.HasFlag(FileAttributes.Directory))
             {
-                DirectoryHelper.ProcessDirectory(arg);
+                DirectoryInfo(arg);
             }
             else
             {
