@@ -1,6 +1,7 @@
 ﻿using dinfo.core.Helpers.DirTools;
 using dinfo.core.Utils.Globals;
 using dinfo.core.Utils.Help;
+using Spectre.Console;
 
 namespace dinfo.tui;
 
@@ -10,7 +11,18 @@ public static class Program
     {
         if (args.Length == 0)
         {
-            DirectoryHelper.ProcessDirectory(Directory.GetCurrentDirectory());
+            var currentDirectory = Directory.GetCurrentDirectory();
+
+            DirectoryHelper.ProcessDirectory(currentDirectory);
+
+            var headerPanel = new Panel($"[bold green]DINFO: {currentDirectory}[/]");
+
+            headerPanel.Border = BoxBorder.Rounded;
+            headerPanel.Padding = new Padding(1, 1, 1, 1);
+            headerPanel.Expand = true;
+            headerPanel.BorderStyle = new Style(Color.Green);
+
+            AnsiConsole.Write(headerPanel);
         }
 
         if (args.Length == 1 && (args[0] == "-h" || args[0] == "--help"))
@@ -23,7 +35,7 @@ public static class Program
         {
             var attributes = File.GetAttributes(arg);
 
-            if (!File.Exists(arg) && !Directory.Exists(arg))
+            if (!Directory.Exists(arg))
             {
                 Console.WriteLine($"Invalid input, skipping {arg}");
                 continue;
@@ -44,14 +56,5 @@ public static class Program
                 Console.WriteLine($"Invalid input, skipping {arg}");
             }
         }
-
-        Console.WriteLine();
-        Console.WriteLine(new string('-', 13));
-        Console.WriteLine("   SUMMARY");
-        Console.WriteLine(new string('-', 13));
-        Console.WriteLine();
-
-        Console.WriteLine($"Total files: {GlobalsUtils.totalFiles}");
-        Console.WriteLine($"Total lines: {GlobalsUtils.totalLines}");
     }
 }
