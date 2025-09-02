@@ -7,6 +7,8 @@ public static class DirectoryHelper
 {
     public static void ProcessDirectory(string targetDirectory)
     {
+        GlobalsUtils.totalDirs++;
+
         string[] fileEntries = Directory.GetFiles(targetDirectory);
 
         foreach (string fileName in fileEntries)
@@ -22,7 +24,6 @@ public static class DirectoryHelper
             foreach (string subdirectory in subdirectoryEntries)
             {
                 ProcessDirectory(subdirectory);
-                GlobalsUtils.totalDirs++;
             }
     }
 }
