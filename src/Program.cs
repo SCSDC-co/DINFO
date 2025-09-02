@@ -10,9 +10,11 @@ public static class Program
     public static void Main(string[] args)
     {
         if (args.Length == 0)
+        {
             DirectoryHelper.ProcessDirectory(Directory.GetCurrentDirectory());
+        }
 
-        if (args.Length == 1 && args[0] == "-h" || args[0] == "--help")
+        if (args.Length == 1 && (args[0] == "-h" || args[0] == "--help"))
         {
             HelpUtils.PrintHelp();
             return;
@@ -53,7 +55,9 @@ public static class Program
         }
 
         Console.WriteLine();
-        Console.WriteLine(new string('-', 20));
+        Console.WriteLine(new string('-', 13));
+        Console.WriteLine("   SUMMARY");
+        Console.WriteLine(new string('-', 13));
         Console.WriteLine();
 
         Console.WriteLine($"Total files: {GlobalsUtils.totalFiles}");
