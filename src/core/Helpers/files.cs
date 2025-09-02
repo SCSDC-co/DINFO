@@ -1,4 +1,4 @@
-namespace Helpers.FilesTools;
+namespace dinfo.core.Helpers.FilesTools;
 
 public static class FilesHelper
 {

@@ -1,4 +1,4 @@
-namespace Utils.Help;
+namespace dinfo.core.Utils.Help;
 
 public static class HelpUtils
 {

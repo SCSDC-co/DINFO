@@ -1,7 +1,7 @@
-using Helpers.FilesTools;
-using Utils.Globals;
+using dinfo.core.Helpers.FilesTools;
+using dinfo.core.Utils.Globals;
 
-namespace Helpers.DirTools;
+namespace dinfo.core.Helpers.DirTools;
 
 public static class DirectoryHelper
 {
@@ -11,9 +11,6 @@ public static class DirectoryHelper
 
         foreach (string fileName in fileEntries)
         {
-            Console.WriteLine($"Lines of {fileName}: {FilesHelper.CountLines(fileName)}");
-
-            GlobalsUtils.filesProcessed++;
             GlobalsUtils.totalFiles++;
             GlobalsUtils.totalLines += FilesHelper.CountLines(fileName);
         }
