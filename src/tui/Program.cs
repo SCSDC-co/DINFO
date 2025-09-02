@@ -26,7 +26,7 @@ public static class Program
          *  INFO
          */
         var infoPanel = new Panel(
-            $"[bold green]Number of files:[/] {GlobalsUtils.totalFiles}\n[bold green]Number of lines:[/] {GlobalsUtils.totalLines}"
+            $"[bold green]Number of files:[/] {GlobalsUtils.totalFiles}\n[bold green]Number of lines:[/] {GlobalsUtils.totalLines}\n[bold green]Number of directories:[/] {GlobalsUtils.totalDirs}"
         );
 
         infoPanel.Border = BoxBorder.Rounded;

@@ -22,6 +22,7 @@ public static class DirectoryHelper
             foreach (string subdirectory in subdirectoryEntries)
             {
                 ProcessDirectory(subdirectory);
+                GlobalsUtils.totalDirs++;
             }
     }
 }
