@@ -7,7 +7,7 @@ namespace dinfo.tui;
 
 public static class Program
 {
-    public static void DirectoryInfo(string targetDirectory)
+    public static void PrintDirectoryInfo(string targetDirectory)
     {
         DirectoryHelper.ProcessDirectory(targetDirectory);
 
@@ -29,7 +29,7 @@ public static class Program
             $"[bold green]Number of files:[/] {GlobalsUtils.totalFiles}\n" +
             $"[bold green]Number of lines:[/] {GlobalsUtils.totalLines}\n" +
             $"[bold green]Number of directories:[/] {GlobalsUtils.totalDirs}\n" +
-            $"[bold green]Total size:[/] {DirectoryHelper.sizeToReturn()} {GlobalsUtils.sizeExtension}"
+            $"[bold green]Total size:[/] {DirectoryHelper.SizeToReturn()} {GlobalsUtils.sizeExtension}"
         );
 
 
@@ -58,6 +58,19 @@ public static class Program
 
             AnsiConsole.Write(infoColumns);
         }
+
+        /*
+         *  PERIMSSIONS
+         */
+
+        var perms = DirectoryHelper.GetDirectoryPermissions(targetDirectory);
+        var permissionPanel = new Panel($"{perms}");
+
+        permissionPanel.Border = BoxBorder.Rounded;
+        permissionPanel.BorderStyle = new Style(Color.Green);
+        permissionPanel.Header = new PanelHeader("[bold green] PERMISSIONS [/]");
+
+        AnsiConsole.Write(permissionPanel);
     }
 
     public static void Main(string[] args)
@@ -87,7 +100,7 @@ public static class Program
                 default:
                     if (Directory.Exists(arg))
                     {
-                        DirectoryInfo(arg);
+                        PrintDirectoryInfo(arg);
                         hasDirectory = true;
                     }
                     else
@@ -100,7 +113,7 @@ public static class Program
 
         if (!hasDirectory)
         {
-            DirectoryInfo(currentDirectory);
+            PrintDirectoryInfo(currentDirectory);
         }
     }
 }
