@@ -26,8 +26,12 @@ public static class Program
          *  INFO
          */
         var infoPanel = new Panel(
-            $"[bold green]Number of files:[/] {GlobalsUtils.totalFiles}\n[bold green]Number of lines:[/] {GlobalsUtils.totalLines}\n[bold green]Number of directories:[/] {GlobalsUtils.totalDirs}"
+            $"[bold green]Number of files:[/] {GlobalsUtils.totalFiles}\n" +
+            $"[bold green]Number of lines:[/] {GlobalsUtils.totalLines}\n" +
+            $"[bold green]Number of directories:[/] {GlobalsUtils.totalDirs}\n" +
+            $"[bold green]Total size:[/] {DirectoryHelper.sizeToReturn()} {GlobalsUtils.sizeExtension}"
         );
+
 
         infoPanel.Border = BoxBorder.Rounded;
         infoPanel.BorderStyle = new Style(Color.Green);
@@ -59,50 +63,44 @@ public static class Program
     public static void Main(string[] args)
     {
         var currentDirectory = Directory.GetCurrentDirectory();
-
-        if (args.Length == 0)
-        {
-            DirectoryInfo(currentDirectory);
-        }
-
-        if (args.Length == 1 && (args[0] == "-h" || args[0] == "--help"))
-        {
-            HelpUtils.PrintHelp();
-            return;
-        }
+        bool hasDirectory = false;
 
         foreach (string arg in args)
         {
-            if (arg == "-r" || arg == "--recursive")
+            switch (arg)
             {
-                GlobalsUtils.recursive = true;
-                DirectoryInfo(currentDirectory);
-                continue;
-            }
+                case "-r":
+                case "--recursive":
+                    GlobalsUtils.recursive = true;
+                    break;
 
-            if (arg == "-v" || arg == "--verbose")
-            {
-                GlobalsUtils.verbose = true;
-                DirectoryInfo(currentDirectory);
-                continue;
-            }
+                case "-v":
+                case "--verbose":
+                    GlobalsUtils.verbose = true;
+                    break;
 
-            if (!Directory.Exists(arg))
-            {
-                Console.WriteLine($"Invalid input, skipping {arg}");
-                continue;
-            }
+                case "-h":
+                case "--help":
+                    HelpUtils.PrintHelp();
+                    return;
 
-            var attributes = File.GetAttributes(arg);
+                default:
+                    if (Directory.Exists(arg))
+                    {
+                        DirectoryInfo(arg);
+                        hasDirectory = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Invalid input, skipping {arg}");
+                    }
+                    break;
+            }
+        }
 
-            if (attributes.HasFlag(FileAttributes.Directory))
-            {
-                DirectoryInfo(arg);
-            }
-            else
-            {
-                Console.WriteLine($"Invalid input, skipping {arg}");
-            }
+        if (!hasDirectory)
+        {
+            DirectoryInfo(currentDirectory);
         }
     }
 }
