@@ -29,8 +29,7 @@ public static class Program
             $"[bold green]Number of files:[/] {GlobalsUtils.totalFiles}\n" +
             $"[bold green]Number of lines:[/] {GlobalsUtils.totalLines}\n" +
             $"[bold green]Number of directories:[/] {GlobalsUtils.totalDirs}\n" +
-            $"[bold green]Total size:[/] {DirectoryHelper.SizeToReturn()} {GlobalsUtils.sizeExtension}"
-        );
+            $"[bold green]Total size:[/] {DirectoryHelper.SizeToReturn()} {GlobalsUtils.sizeExtension}");
 
         infoPanel.Border = BoxBorder.Rounded;
         infoPanel.BorderStyle = new Style(Color.Green);
@@ -47,18 +46,31 @@ public static class Program
         permissionPanel.BorderStyle = new Style(Color.Green);
         permissionPanel.Header = new PanelHeader("[bold green] PERMISSIONS [/]");
 
+        /*
+         *  FILES EXTENSIONS
+         */
+
+        var extensionsPanel = new Panel(
+            $"[bold green]File extensions:[/] {string.Join(", ", GlobalsUtils.FilesTypes)}");
+
+        extensionsPanel.Border = BoxBorder.Rounded;
+        extensionsPanel.BorderStyle = new Style(Color.Green);
+        extensionsPanel.Header = new PanelHeader("[bold green] EXTENSIONS [/]");
+
         var infoColumns = new Grid();
 
         infoColumns.AddColumn();
         infoColumns.AddColumn();
+        infoColumns.AddColumn();
 
-        infoColumns.AddRow(infoPanel, permissionPanel);
+        infoColumns.AddRow(infoPanel, permissionPanel, extensionsPanel);
 
         AnsiConsole.Write(infoColumns);
 
         if (GlobalsUtils.verbose)
         {
-            var filesPanel = new Panel($"[bold green]{string.Join(", ", GlobalsUtils.Files)}[/] ");
+            var filesPanel =
+                new Panel($"[bold green]{string.Join(", ", GlobalsUtils.Files)}[/] ");
 
             filesPanel.Border = BoxBorder.Rounded;
             filesPanel.BorderStyle = new Style(Color.Green);

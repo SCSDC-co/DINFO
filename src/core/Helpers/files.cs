@@ -1,3 +1,5 @@
+using dinfo.core.Utils.Globals;
+
 namespace dinfo.core.Helpers.FilesTools;
 
 public static class FilesHelper
@@ -12,5 +14,21 @@ public static class FilesHelper
         IEnumerable<string> lines = File.ReadLines(fileName);
 
         return lines.Count();
+    }
+
+    public static void GetFileType(string fileName)
+    {
+        string name = Path.GetFileName(fileName);
+
+        if (name.StartsWith("."))
+        {
+            return;
+        }
+
+        string ext = Path.GetExtension(name);
+        if (!string.IsNullOrEmpty(ext))
+        {
+            GlobalsUtils.FilesTypes.Add(ext);
+        }
     }
 }

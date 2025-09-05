@@ -10,5 +10,6 @@ public static class GlobalsUtils
     public static double totalSizeMB = 0;
     public static bool recursive = false;
     public static bool verbose = false;
-    public static List<string> Files = new List<string>();
+    public static List<string> Files = [];
+    public static List<string> FilesTypes = [];
 }

@@ -19,6 +19,8 @@ public static class DirectoryHelper
             GlobalsUtils.totalFiles++;
             GlobalsUtils.totalLines += FilesHelper.CountLines(fileName);
             GlobalsUtils.Files.Add(fileName);
+
+            FilesHelper.GetFileType(fileName);
         }
 
         string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
@@ -32,8 +34,8 @@ public static class DirectoryHelper
 
     public static void GetDirectorySize(string targetDirectory)
     {
-        long dirSize = Directory.GetFiles(targetDirectory)
-                                .Sum(f => new FileInfo(f).Length);
+        long dirSize =
+            Directory.GetFiles(targetDirectory).Sum(f => new FileInfo(f).Length);
 
         GlobalsUtils.totalSizeB += dirSize;
 
@@ -74,7 +76,8 @@ public static class DirectoryHelper
                 string result = "";
                 foreach (FileSystemAccessRule rule in rules)
                 {
-                    result += $"{rule.IdentityReference}: {rule.AccessControlType} {rule.FileSystemRights}\n";
+                    result +=
+                        $"{rule.IdentityReference}: {rule.AccessControlType} {rule.FileSystemRights}\n";
                 }
 
                 return result.Trim();
@@ -92,7 +95,7 @@ public static class DirectoryHelper
                 var unixMode = File.GetUnixFileMode(path);
                 return unixMode.ToString();
 #else
-                return "Unix permissions not available on this .NET version";
+        return "Unix permissions not available on this .NET version";
 #endif
             }
             catch (Exception ex)
