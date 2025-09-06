@@ -28,7 +28,7 @@ public static class FilesHelper
         string ext = Path.GetExtension(name);
         if (!string.IsNullOrEmpty(ext))
         {
-            GlobalsUtils.FilesTypes.Add(ext);
+            GlobalsUtils.FileTypes.Add(ext);
         }
     }
 }

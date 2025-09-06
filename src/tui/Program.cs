@@ -26,10 +26,10 @@ public static class Program
          *  INFO
          */
         var infoPanel = new Panel(
-            $"[bold green]Number of files:[/] {GlobalsUtils.totalFiles}\n" +
-            $"[bold green]Number of lines:[/] {GlobalsUtils.totalLines}\n" +
-            $"[bold green]Number of directories:[/] {GlobalsUtils.totalDirs}\n" +
-            $"[bold green]Total size:[/] {DirectoryHelper.SizeToReturn()} {GlobalsUtils.sizeExtension}");
+            $"[bold green]Number of files:[/] {GlobalsUtils.TotalFiles}\n" +
+            $"[bold green]Number of lines:[/] {GlobalsUtils.TotalLines}\n" +
+            $"[bold green]Number of directories:[/] {GlobalsUtils.TotalDirs}\n" +
+            $"[bold green]Total size:[/] {DirectoryHelper.SizeToReturn()} {GlobalsUtils.SizeExtension}");
 
         infoPanel.Border = BoxBorder.Rounded;
         infoPanel.BorderStyle = new Style(Color.Green);
@@ -51,7 +51,7 @@ public static class Program
          */
 
         var extensionsPanel = new Panel(
-            $"[bold green]File extensions:[/] {string.Join(", ", GlobalsUtils.FilesTypes)}");
+            $"[bold green]File extensions:[/] {string.Join(", ", GlobalsUtils.FileTypes)}");
 
         extensionsPanel.Border = BoxBorder.Rounded;
         extensionsPanel.BorderStyle = new Style(Color.Green);
@@ -67,7 +67,7 @@ public static class Program
 
         AnsiConsole.Write(infoColumns);
 
-        if (GlobalsUtils.verbose)
+        if (GlobalsUtils.Verbose)
         {
             var filesPanel =
                 new Panel($"[bold green]{string.Join(", ", GlobalsUtils.Files)}[/] ");
@@ -90,13 +90,13 @@ public static class Program
             switch (arg)
             {
                 case "-r":
-                case "--recursive":
-                    GlobalsUtils.recursive = true;
+                case "--Recursive":
+                    GlobalsUtils.Recursive = true;
                     break;
 
                 case "-v":
-                case "--verbose":
-                    GlobalsUtils.verbose = true;
+                case "--Verbose":
+                    GlobalsUtils.Verbose = true;
                     break;
 
                 case "-h":

@@ -2,14 +2,14 @@ namespace dinfo.core.Utils.Globals;
 
 public static class GlobalsUtils
 {
-    public static string sizeExtension = "";
-    public static int totalLines = 0;
-    public static int totalFiles = 0;
-    public static int totalDirs = 0;
-    public static long totalSizeB = 0;
-    public static double totalSizeMB = 0;
-    public static bool recursive = false;
-    public static bool verbose = false;
+    public static string SizeExtension = "";
+    public static int TotalLines = 0;
+    public static int TotalFiles = 0;
+    public static int TotalDirs = 0;
+    public static long TotalSizeB = 0;
+    public static double TotalSizeMB = 0;
+    public static bool Recursive = false;
+    public static bool Verbose = false;
     public static List<string> Files = [];
-    public static List<string> FilesTypes = [];
+    public static List<string> FileTypes = [];
 }

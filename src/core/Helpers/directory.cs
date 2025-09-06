@@ -9,15 +9,15 @@ public static class DirectoryHelper
 {
     public static void ProcessDirectory(string targetDirectory)
     {
-        GlobalsUtils.totalDirs++;
+        GlobalsUtils.TotalDirs++;
         GetDirectorySize(targetDirectory);
 
         string[] fileEntries = Directory.GetFiles(targetDirectory);
 
         foreach (string fileName in fileEntries)
         {
-            GlobalsUtils.totalFiles++;
-            GlobalsUtils.totalLines += FilesHelper.CountLines(fileName);
+            GlobalsUtils.TotalFiles++;
+            GlobalsUtils.TotalLines += FilesHelper.CountLines(fileName);
             GlobalsUtils.Files.Add(fileName);
 
             FilesHelper.GetFileType(fileName);
@@ -25,7 +25,7 @@ public static class DirectoryHelper
 
         string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
 
-        if (GlobalsUtils.recursive)
+        if (GlobalsUtils.Recursive)
             foreach (string subdirectory in subdirectoryEntries)
             {
                 ProcessDirectory(subdirectory);
@@ -37,22 +37,22 @@ public static class DirectoryHelper
         long dirSize =
             Directory.GetFiles(targetDirectory).Sum(f => new FileInfo(f).Length);
 
-        GlobalsUtils.totalSizeB += dirSize;
+        GlobalsUtils.TotalSizeB += dirSize;
 
-        GlobalsUtils.totalSizeMB = GlobalsUtils.totalSizeB / 1000000.0;
+        GlobalsUtils.TotalSizeMB = GlobalsUtils.TotalSizeB / 1000000.0;
     }
 
     public static double SizeToReturn()
     {
-        if (GlobalsUtils.totalSizeB >= 1000000.0)
+        if (GlobalsUtils.TotalSizeB >= 1000000.0)
         {
-            GlobalsUtils.sizeExtension = "MB";
-            return GlobalsUtils.totalSizeMB;
+            GlobalsUtils.SizeExtension = "MB";
+            return GlobalsUtils.TotalSizeMB;
         }
-        else if (GlobalsUtils.totalSizeB <= 1000000.0)
+        else if (GlobalsUtils.TotalSizeB <= 1000000.0)
         {
-            GlobalsUtils.sizeExtension = "B";
-            return GlobalsUtils.totalSizeB;
+            GlobalsUtils.SizeExtension = "B";
+            return GlobalsUtils.TotalSizeB;
         }
         else
         {

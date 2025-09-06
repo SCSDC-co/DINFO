@@ -13,7 +13,7 @@ public static class HelpUtils
         Console.WriteLine();
         Console.WriteLine("Options:");
         Console.WriteLine("   -h, --help          Print this help message.");
-        Console.WriteLine("   -r, --recursive     Recursively process subdirectories.");
-        Console.WriteLine("   -v, --verbose       Print verbose information.");
+        Console.WriteLine("   -r, --Recursive     Recursively process subdirectories.");
+        Console.WriteLine("   -v, --Verbose       Print Verbose information.");
     }
 }
