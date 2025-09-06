@@ -74,7 +74,7 @@ dinfo -v C:\Projects\MyFolder
 
 ---
 
-## 🖼️ Example Output
+## 🖼️ Example Output (verbose)
 
 ![Example Output](.github/assets/example-output.png)
 
