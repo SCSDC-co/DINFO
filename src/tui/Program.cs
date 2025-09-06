@@ -7,133 +7,134 @@ namespace dinfo.tui;
 
 public static class Program
 {
-    public static void PrintDirectoryInfo(string targetDirectory)
-    {
-        DirectoryHelper.ProcessDirectory(targetDirectory);
+	public static void PrintDirectoryInfo(string targetDirectory)
+	{
+		DirectoryHelper.ProcessDirectory(targetDirectory);
 
-        /*
-         *  HEADER
-         */
-        var headerPanel = new Panel($"[bold green]DINFO: {targetDirectory}[/]");
+		/*
+		 *  HEADER
+		 */
+		var headerPanel = new Panel($"[bold green]DINFO: {targetDirectory}[/]");
 
-        headerPanel.Border = BoxBorder.Rounded;
-        headerPanel.Expand = true;
-        headerPanel.BorderStyle = new Style(Color.Green);
+		headerPanel.Border = BoxBorder.Rounded;
+		headerPanel.Expand = true;
+		headerPanel.BorderStyle = new Style(Color.Green);
 
-        AnsiConsole.Write(headerPanel);
+		AnsiConsole.Write(headerPanel);
 
-        /*
-         *  INFO
-         */
-        var infoPanel = new Panel(
-            $"[bold green]Number of files:[/] {GlobalsUtils.TotalFiles}\n" +
-            $"[bold green]Number of lines:[/] {GlobalsUtils.TotalLines}\n" +
-            $"[bold green]Number of directories:[/] {GlobalsUtils.TotalDirs}\n" +
-            $"[bold green]Total size:[/] {DirectoryHelper.SizeToReturn()} {GlobalsUtils.SizeExtension}");
+		/*
+		 *  INFO
+		 */
 
-        infoPanel.Border = BoxBorder.Rounded;
-        infoPanel.BorderStyle = new Style(Color.Green);
-        infoPanel.Header = new PanelHeader("[bold green] INFO [/]");
+		var infoPanel = new Panel(
+			$"[bold green]Number of files:[/] {GlobalsUtils.TotalFiles}\n" +
+			$"[bold green]Number of lines:[/] {GlobalsUtils.TotalLines}\n" +
+			$"[bold green]Number of directories:[/] {GlobalsUtils.TotalDirs}\n" +
+			$"[bold green]Total size:[/] {DirectoryHelper.SizeToReturn()} {GlobalsUtils.SizeExtension}");
 
-        /*
-         *  PERIMSSIONS
-         */
+		infoPanel.Border = BoxBorder.Rounded;
+		infoPanel.BorderStyle = new Style(Color.Green);
+		infoPanel.Header = new PanelHeader("[bold green] INFO [/]");
 
-        var perms = DirectoryHelper.GetDirectoryPermissions(targetDirectory);
-        var permissionPanel = new Panel($"{perms}");
+		/*
+		 *  PERIMSSIONS
+		 */
 
-        permissionPanel.Border = BoxBorder.Rounded;
-        permissionPanel.BorderStyle = new Style(Color.Green);
-        permissionPanel.Header = new PanelHeader("[bold green] PERMISSIONS [/]");
+		var perms = DirectoryHelper.GetDirectoryPermissions(targetDirectory);
+		var permissionPanel = new Panel($"{perms}");
 
-        /*
-         *  FILES EXTENSIONS
-         */
+		permissionPanel.Border = BoxBorder.Rounded;
+		permissionPanel.BorderStyle = new Style(Color.Green);
+		permissionPanel.Header = new PanelHeader("[bold green] PERMISSIONS [/]");
 
-        var fileTypesNoDupes = GlobalsUtils.FileTypes.Distinct().ToList();
+		/*
+		 *  FILES EXTENSIONS
+		 */
 
-        var mostUsedExtension = GlobalsUtils.FileTypes
-            .GroupBy(x => x)
-            .OrderByDescending(g => g.Count())
-            .Select(g => g.Key)
-            .FirstOrDefault() ?? "N/A";
+		var fileTypesNoDupes = GlobalsUtils.FileTypes.Distinct().ToList();
 
-        var extensionsPanel = new Panel(
-            $"[bold green]File extensions:[/] {string.Join(", ", fileTypesNoDupes)}\n" +
-            $"[bold green]Most used extension:[/] {mostUsedExtension.TrimStart('.')}");
+		var mostUsedExtension = GlobalsUtils.FileTypes
+			.GroupBy(x => x)
+			.OrderByDescending(g => g.Count())
+			.Select(g => g.Key)
+			.FirstOrDefault() ?? "N/A";
 
-        extensionsPanel.Border = BoxBorder.Rounded;
-        extensionsPanel.BorderStyle = new Style(Color.Green);
-        extensionsPanel.Header = new PanelHeader("[bold green] EXTENSIONS [/]");
+		var extensionsPanel = new Panel(
+			$"[bold green]File extensions:[/] {string.Join(", ", fileTypesNoDupes)}\n" +
+			$"[bold green]Most used extension:[/] {mostUsedExtension.TrimStart('.')}");
 
-        /*
-         *  GRID
-         */
+		extensionsPanel.Border = BoxBorder.Rounded;
+		extensionsPanel.BorderStyle = new Style(Color.Green);
+		extensionsPanel.Header = new PanelHeader("[bold green] EXTENSIONS [/]");
 
-        var infoColumns = new Grid();
+		/*
+		 *  GRID
+		 */
 
-        infoColumns.AddColumn();
-        infoColumns.AddColumn();
-        infoColumns.AddColumn();
+		var infoColumns = new Grid();
 
-        infoColumns.AddRow(infoPanel, permissionPanel, extensionsPanel);
+		infoColumns.AddColumn();
+		infoColumns.AddColumn();
+		infoColumns.AddColumn();
 
-        AnsiConsole.Write(infoColumns);
+		infoColumns.AddRow(infoPanel, permissionPanel, extensionsPanel);
 
-        if (GlobalsUtils.Verbose)
-        {
-            var filesPanel =
-                new Panel($"[bold green]{string.Join(", ", GlobalsUtils.Files)}[/] ");
+		AnsiConsole.Write(infoColumns);
 
-            filesPanel.Border = BoxBorder.Rounded;
-            filesPanel.BorderStyle = new Style(Color.Green);
-            filesPanel.Header = new PanelHeader("[bold green] FILES [/]");
+		if (GlobalsUtils.Verbose)
+		{
+			var filesPanel =
+				new Panel($"[bold green]{string.Join(", ", GlobalsUtils.Files)}[/] ");
 
-            AnsiConsole.Write(filesPanel);
-        }
-    }
+			filesPanel.Border = BoxBorder.Rounded;
+			filesPanel.BorderStyle = new Style(Color.Green);
+			filesPanel.Header = new PanelHeader("[bold green] FILES [/]");
 
-    public static void Main(string[] args)
-    {
-        var currentDirectory = Directory.GetCurrentDirectory();
-        bool hasDirectory = false;
+			AnsiConsole.Write(filesPanel);
+		}
+	}
 
-        foreach (string arg in args)
-        {
-            switch (arg)
-            {
-                case "-r":
-                case "--Recursive":
-                    GlobalsUtils.Recursive = true;
-                    break;
+	public static void Main(string[] args)
+	{
+		var currentDirectory = Directory.GetCurrentDirectory();
+		bool hasDirectory = false;
 
-                case "-v":
-                case "--Verbose":
-                    GlobalsUtils.Verbose = true;
-                    break;
+		foreach (string arg in args)
+		{
+			switch (arg)
+			{
+				case "-r":
+				case "--Recursive":
+					GlobalsUtils.Recursive = true;
+					break;
 
-                case "-h":
-                case "--help":
-                    HelpUtils.PrintHelp();
-                    return;
+				case "-v":
+				case "--Verbose":
+					GlobalsUtils.Verbose = true;
+					break;
 
-                default:
-                    if (Directory.Exists(arg))
-                    {
-                        PrintDirectoryInfo(arg);
-                        hasDirectory = true;
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Invalid input, skipping {arg}");
-                    }
-                    break;
-            }
-        }
+				case "-h":
+				case "--help":
+					HelpUtils.PrintHelp();
+					return;
 
-        if (!hasDirectory)
-        {
-            PrintDirectoryInfo(currentDirectory);
-        }
-    }
+				default:
+					if (Directory.Exists(arg))
+					{
+						PrintDirectoryInfo(arg);
+						hasDirectory = true;
+					}
+					else
+					{
+						Console.WriteLine($"Invalid input, skipping {arg}");
+					}
+					break;
+			}
+		}
+
+		if (!hasDirectory)
+		{
+			PrintDirectoryInfo(currentDirectory);
+		}
+	}
 }

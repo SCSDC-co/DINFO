@@ -40,6 +40,8 @@ public static class DirectoryHelper
         GlobalsUtils.TotalSizeB += dirSize;
 
         GlobalsUtils.TotalSizeMB = GlobalsUtils.TotalSizeB / 1000000.0;
+
+        GlobalsUtils.TotalSizeGB = GlobalsUtils.TotalSizeB / 1000000000.0;
     }
 
     public static double SizeToReturn()
@@ -53,6 +55,11 @@ public static class DirectoryHelper
         {
             GlobalsUtils.SizeExtension = "B";
             return GlobalsUtils.TotalSizeB;
+        }
+        else if (GlobalsUtils.TotalSizeB >= 1000000000.0)
+        {
+            GlobalsUtils.SizeExtension = "GB";
+            return GlobalsUtils.TotalSizeGB;
         }
         else
         {
