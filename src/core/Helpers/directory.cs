@@ -39,31 +39,31 @@ public static class DirectoryHelper
 
         GlobalsUtils.TotalSizeB += dirSize;
 
-        GlobalsUtils.TotalSizeMB = GlobalsUtils.TotalSizeB / 1000000.0;
+        GlobalsUtils.TotalSizeKB = GlobalsUtils.TotalSizeB / 1024.0;
+        GlobalsUtils.TotalSizeMB = GlobalsUtils.TotalSizeB / 1024.0 / 1024.0;
+        GlobalsUtils.TotalSizeGB = GlobalsUtils.TotalSizeB / 1024.0 / 1024.0 / 1024.0;
 
-        GlobalsUtils.TotalSizeGB = GlobalsUtils.TotalSizeB / 1000000000.0;
     }
 
     public static double SizeToReturn()
     {
-        if (GlobalsUtils.TotalSizeB >= 1000000.0)
+        switch (GlobalsUtils.TotalSizeB)
         {
-            GlobalsUtils.SizeExtension = "MB";
-            return GlobalsUtils.TotalSizeMB;
-        }
-        else if (GlobalsUtils.TotalSizeB <= 1000000.0)
-        {
-            GlobalsUtils.SizeExtension = "B";
-            return GlobalsUtils.TotalSizeB;
-        }
-        else if (GlobalsUtils.TotalSizeB >= 1000000000.0)
-        {
-            GlobalsUtils.SizeExtension = "GB";
-            return GlobalsUtils.TotalSizeGB;
-        }
-        else
-        {
-            return 0;
+            case >= 1000000000L:
+                GlobalsUtils.SizeExtension = "GB";
+                return GlobalsUtils.TotalSizeGB;
+
+            case >= 1000000L:
+                GlobalsUtils.SizeExtension = "MB";
+                return GlobalsUtils.TotalSizeMB;
+
+            case >= 1000L:
+                GlobalsUtils.SizeExtension = "KB";
+                return GlobalsUtils.TotalSizeKB;
+
+            default:
+                GlobalsUtils.SizeExtension = "B";
+                return GlobalsUtils.TotalSizeB;
         }
     }
 

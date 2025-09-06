@@ -7,6 +7,7 @@ public static class GlobalsUtils
     public static int TotalFiles = 0;
     public static int TotalDirs = 0;
     public static long TotalSizeB = 0;
+    public static double TotalSizeKB = 0;
     public static double TotalSizeMB = 0;
     public static double TotalSizeGB = 0;
     public static bool Recursive = false;
