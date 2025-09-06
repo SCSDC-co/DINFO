@@ -52,29 +52,19 @@ public static class Program
 
         var fileTypesNoDupes = GlobalsUtils.FileTypes.Distinct().ToList();
 
-        var extensionsPanel = new Panel(
-            $"[bold green]File extensions:[/] {string.Join(", ", fileTypesNoDupes)}");
-
-        extensionsPanel.Border = BoxBorder.Rounded;
-        extensionsPanel.BorderStyle = new Style(Color.Green);
-        extensionsPanel.Header = new PanelHeader("[bold green] EXTENSIONS [/]");
-
-        /*
-         *  MOST USED EXTENSIONS
-         */
-
         var mostUsedExtension = GlobalsUtils.FileTypes
             .GroupBy(x => x)
             .OrderByDescending(g => g.Count())
             .Select(g => g.Key)
             .FirstOrDefault() ?? "N/A";
 
-        var mostUsedExtensionPanel = new Panel(
+        var extensionsPanel = new Panel(
+            $"[bold green]File extensions:[/] {string.Join(", ", fileTypesNoDupes)}\n" +
             $"[bold green]Most used extension:[/] {mostUsedExtension.TrimStart('.')}");
 
-        mostUsedExtensionPanel.Border = BoxBorder.Rounded;
-        mostUsedExtensionPanel.BorderStyle = new Style(Color.Green);
-        mostUsedExtensionPanel.Header = new PanelHeader("[bold green] MOST USED FILETYPE [/]");
+        extensionsPanel.Border = BoxBorder.Rounded;
+        extensionsPanel.BorderStyle = new Style(Color.Green);
+        extensionsPanel.Header = new PanelHeader("[bold green] EXTENSIONS [/]");
 
         /*
          *  GRID
@@ -85,9 +75,8 @@ public static class Program
         infoColumns.AddColumn();
         infoColumns.AddColumn();
         infoColumns.AddColumn();
-        infoColumns.AddColumn();
 
-        infoColumns.AddRow(infoPanel, permissionPanel, extensionsPanel, mostUsedExtensionPanel);
+        infoColumns.AddRow(infoPanel, permissionPanel, extensionsPanel);
 
         AnsiConsole.Write(infoColumns);
 
