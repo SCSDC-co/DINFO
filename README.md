@@ -1,60 +1,105 @@
 <div align="center">
 
-# DINFO (Directory Info)
+# Dinfo
 
-**DINFO** is a simple C# console application that provides an overview of files in a directory.
-Currently, it can count the number of lines in one or more files passed as arguments. Future updates will add more detailed file and directory information.
+**Dinfo** is a C# tool that provides detailed information about a directory.
+It uses **Spectre.Console** to create a clean and colorful TUI, showing files, lines, size, permissions, and file type statistics.
 
 </div>
 
-## Features
+## 🚀 Features
 
-- Count lines in one or more files.
-- Supports multiple file paths as command-line arguments.
-- Lightweight and easy to use.
+- Counts the number of **files** and **directories**.
+- Counts the number of **lines of code** in files.
+- Shows the **total size** of the directory.
+- Displays **permissions** of the directory.
+- Lists all **file extensions** and shows the **most used extension**.
+- Supports **recursive** processing of subdirectories (`-r`).
+- **Verbose mode** (`-v`) for more detailed information.
+- Elegant text-based interface with borders, tables, and colors via **Spectre.Console**.
 
-## Usage
+---
 
-1. Clone the repository or download the executable.
-2. Open a terminal and navigate to the folder containing the program.
-3. Run the program with one or more file paths as arguments:
+## 💻 Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/SCSDC-co/DINFO.git
+   ```
+
+2. Build with .NET:
+
+   ```bash
+   dotnet build # you need to be in src/tui for running this command
+   ```
+
+3. Run the tool:
+
+   ```bash
+   dotnet run -- [options] [directory] # same for this one
+   ```
+
+---
+
+## 📖 Usage
 
 ```bash
-dotnet run Program.cs AnotherFile.txt
+dinfo [options] [directory]
 ```
 
-Or, if you have the compiled executable:
+**Description:**
+Dinfo is a simple tool to count lines of files and provide stats on a directory.
+
+**Options:**
+
+| Option            | Description                         |
+| ----------------- | ----------------------------------- |
+| `-h, --help`      | Print the help message.             |
+| `-r, --Recursive` | Recursively process subdirectories. |
+| `-v, --Verbose`   | Print verbose information.          |
+
+**Example:**
 
 ```bash
-Dinfo Program.cs AnotherFile.txt
+# Count lines in the current directory
+dinfo
+
+# Count lines recursively in all subdirectories
+dinfo -r C:\Projects\MyFolder
+
+# Count lines with verbose output
+dinfo -v C:\Projects\MyFolder
 ```
 
-The program will output the number of lines in each file. For example:
+---
 
-```bash
-Lines of Program.cs: 21
-```
+## 🖼️ Example Output
 
-## Requirements
+![Example Output](.github/assets/example-output.png)
 
-- .NET 6.0 SDK or later
+---
 
-## Roadmap
+## ⚡ Technologies
 
-Here’s what is planned for **Dinfo**:
+- [C#](https://docs.microsoft.com/en-us/dotnet/csharp/)
+- [Spectre.Console](https://spectreconsole.net/) - for TUI and colored output
 
-- [ ] **Detect file types**  
-       Identify the type of each file (e.g., C#, Python, etc.) to give better insight into the directory content.
+---
 
-- [x] **Scan entire directories**  
-       Recursively scan an entire directory and display the line count for all files.
+## 📝 Notes
 
-- [ ] **File statistics overview**  
-       Show the total number of files in a directory and determine the most used programming language.
+- Dinfo is designed to be **lightweight, fast, and simple**.
+- Ideal for developers who want to **count lines of code** or get a quick overview of a directory.
 
-- [ ] **TUI (Text User Interface)**  
-       Create a visually appealing and interactive terminal interface for easier navigation and data visualization.
+---
 
-## License
+## 🤝 Contributing
 
-This project is licensed under the GPL-3.0 License.
+Contributions are welcome! Open a **pull request** or create an **issue** for suggestions or bug reports.
+
+---
+
+## 📜 License
+
+This project is licensed under the **GNU GPL v3.0**. See the [LICENSE](LICENSE) file for details.
