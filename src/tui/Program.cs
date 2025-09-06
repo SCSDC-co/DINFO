@@ -59,13 +59,35 @@ public static class Program
         extensionsPanel.BorderStyle = new Style(Color.Green);
         extensionsPanel.Header = new PanelHeader("[bold green] EXTENSIONS [/]");
 
+        /*
+         *  MOST USED EXTENSIONS
+         */
+
+        var mostUsedExtension = GlobalsUtils.FileTypes
+            .GroupBy(x => x)
+            .OrderByDescending(g => g.Count())
+            .Select(g => g.Key)
+            .FirstOrDefault() ?? "N/A";
+
+        var mostUsedExtensionPanel = new Panel(
+            $"[bold green]Most used extension:[/] {mostUsedExtension.TrimStart('.')}");
+
+        mostUsedExtensionPanel.Border = BoxBorder.Rounded;
+        mostUsedExtensionPanel.BorderStyle = new Style(Color.Green);
+        mostUsedExtensionPanel.Header = new PanelHeader("[bold green] MOST USED FILETYPE [/]");
+
+        /*
+         *  GRID
+         */
+
         var infoColumns = new Grid();
 
         infoColumns.AddColumn();
         infoColumns.AddColumn();
         infoColumns.AddColumn();
+        infoColumns.AddColumn();
 
-        infoColumns.AddRow(infoPanel, permissionPanel, extensionsPanel);
+        infoColumns.AddRow(infoPanel, permissionPanel, extensionsPanel, mostUsedExtensionPanel);
 
         AnsiConsole.Write(infoColumns);
 
