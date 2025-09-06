@@ -1,6 +1,6 @@
 <div align="center">
 
-# Dinfo
+# DINFO (Directory Info)
 
 **Dinfo** is a C# tool that provides detailed information about a directory.
 It uses **Spectre.Console** to create a clean and colorful TUI, showing files, lines, size, permissions, and file type statistics.
