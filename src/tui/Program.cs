@@ -50,8 +50,10 @@ public static class Program
          *  FILES EXTENSIONS
          */
 
+        var fileTypesNoDupes = GlobalsUtils.FileTypes.Distinct().ToList();
+
         var extensionsPanel = new Panel(
-            $"[bold green]File extensions:[/] {string.Join(", ", GlobalsUtils.FileTypes)}");
+            $"[bold green]File extensions:[/] {string.Join(", ", fileTypesNoDupes)}");
 
         extensionsPanel.Border = BoxBorder.Rounded;
         extensionsPanel.BorderStyle = new Style(Color.Green);
