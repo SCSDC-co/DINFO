@@ -1,4 +1,5 @@
 using dinfo.core.Helpers.FilesTools;
+using dinfo.core.Helpers.GitTools;
 using dinfo.core.Utils.Globals;
 using System.Security.AccessControl;
 using System.Security.Principal;
@@ -14,8 +15,23 @@ public static class DirectoryHelper
 
         string[] fileEntries = Directory.GetFiles(targetDirectory);
 
+        GitHelper.FindGitRoot(targetDirectory);
+        var gitIgnorePath = Path.Combine((GlobalsUtils.GitRootDirectory).Replace("\\", "/"), ".gitignore");
+
         foreach (string fileName in fileEntries)
         {
+            var fileInfo = new FileInfo(fileName);
+
+            if (!GlobalsUtils.IgnoreGitignore)
+            {
+                var IsIgnored = GitHelper.IsFileIgnore(gitIgnorePath, fileInfo);
+
+                if (IsIgnored)
+                {
+                    continue;
+                }
+            }
+
             GlobalsUtils.TotalFiles++;
             GlobalsUtils.TotalLines += await FilesHelper.CountLines(fileName);
             GlobalsUtils.Files.Add(fileName);
@@ -32,6 +48,9 @@ public static class DirectoryHelper
         {
             foreach (string subdirectory in subdirectoryEntries)
             {
+                if (Path.GetFileName(subdirectory).Equals(".git", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
                 await ProcessDirectory(subdirectory);
             }
         }

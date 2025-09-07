@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="GitReader" Version="1.16.0" />
+    <PackageReference Include="MAB.DotIgnore" Version="3.0.2" />
   </ItemGroup>
 
 </Project>

@@ -1,11 +1,37 @@
 using GitReader;
 using GitReader.Structures;
+using MAB.DotIgnore;
 using dinfo.core.Utils.Globals;
 
 namespace dinfo.core.Helpers.GitTools;
 
 public static class GitHelper
 {
+    public static bool IsFileIgnore(string path, FileInfo fileName)
+    {
+        var parser = new IgnoreList(path);
+
+        return parser.IsIgnored(fileName);
+    }
+
+    public static void FindGitRoot(string targetDirectory)
+    {
+        while (!string.IsNullOrEmpty(targetDirectory))
+        {
+            if (Directory.Exists(Path.Combine(targetDirectory, ".git")))
+            {
+                GlobalsUtils.GitRootDirectory = targetDirectory;
+                return;
+            }
+
+            var parentDir = Directory.GetParent(targetDirectory);
+            targetDirectory = parentDir != null ? parentDir.FullName : string.Empty;
+        }
+
+        GlobalsUtils.GitRootDirectory = string.Empty;
+    }
+
+
     public static async Task GetGitInfo(string targetDirectory)
     {
         try

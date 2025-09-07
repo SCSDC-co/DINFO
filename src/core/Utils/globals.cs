@@ -15,6 +15,7 @@ public static class GlobalsUtils
     public static bool Recursive = false;
     public static bool Verbose = false;
     public static bool IsRepo = false;
+    public static bool IgnoreGitignore = false;
     public static List<string> Files = [];
     public static List<string> FileTypes = [];
     public static List<string> Encodings = [];
@@ -25,4 +26,5 @@ public static class GlobalsUtils
     public static string GitSubject = "N/A";
     public static string TargetDirectory = "";
     public static string LastModifiedFile = "N/A";
+    public static string GitRootDirectory = "";
 }

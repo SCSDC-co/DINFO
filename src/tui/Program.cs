@@ -25,6 +25,11 @@ public static class Program
 					GlobalsUtils.Verbose = true;
 					break;
 
+				case "-ig":
+				case "--IgnoreGitignore":
+					GlobalsUtils.IgnoreGitignore = true;
+					break;
+
 				case "-h":
 				case "--help":
 					HelpUtils.PrintHelp();
