@@ -1,6 +1,5 @@
 ﻿using dinfo.tui.Helpers.tui;
 using dinfo.core.Utils.Globals;
-using dinfo.core.Utils.Help;
 
 namespace dinfo.tui;
 
@@ -32,7 +31,7 @@ public static class Program
 
 				case "-h":
 				case "--help":
-					HelpUtils.PrintHelp();
+					TuiHelper.PrintHelp();
 					return;
 
 				default:

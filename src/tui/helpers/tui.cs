@@ -1,7 +1,5 @@
 using dinfo.core.Helpers.DirTools;
-using dinfo.core.Helpers.FilesTools;
 using dinfo.core.Utils.Globals;
-using dinfo.core.Utils.Help;
 using Spectre.Console;
 
 namespace dinfo.tui.Helpers.tui;
@@ -122,5 +120,33 @@ public static class TuiHelper
 
             AnsiConsole.Write(filesPanel);
         }
+    }
+
+    public static void PrintHelp()
+    {
+        var optionsTableHelp = new Table();
+
+        optionsTableHelp.AddColumn("[bold green]OPTION[/]");
+        optionsTableHelp.AddColumn("[bold green]DESCRIPTION[/]");
+
+        optionsTableHelp.AddRow("[bold green]-r   --Recursive[/]  ", "Recursively list all files and directories.");
+        optionsTableHelp.AddRow("[bold green]-v   --Verbose[/]  ", "Enable verbose output.");
+        optionsTableHelp.AddRow("[bold green]-ig  --Ignore-Gitignore[/]  ", "Ignore .gitignore files.");
+        optionsTableHelp.AddRow("[bold green]-h   --help[/]  ", "Show help information.");
+
+        optionsTableHelp.Border = TableBorder.None;
+
+        var headerPanelHelp = new Panel(new Rows(
+            new Markup("[bold green]USAGE:[/] dinfo [[options]] [[directory]]\n"),
+            new Markup("[bold green]DESCRIPTION:[/]\n     Display information about the specified directory and its contents.\n"),
+            optionsTableHelp
+        ));
+
+
+        headerPanelHelp.Border = BoxBorder.Rounded;
+        headerPanelHelp.BorderStyle = new Style(Color.Green);
+        headerPanelHelp.Header = new PanelHeader("[bold green] HELP [/]");
+
+        AnsiConsole.Write(headerPanelHelp);
     }
 }
