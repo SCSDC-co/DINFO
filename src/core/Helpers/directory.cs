@@ -57,12 +57,6 @@ public static class DirectoryHelper
             GlobalsUtils.BiggestFileSize = biggestFile.Length;
         }
 
-        if (dirSize > GlobalsUtils.BiggestFileSize)
-        {
-            GlobalsUtils.BiggestFileSize = dirSize;
-            GlobalsUtils.BiggestFile = targetDirectory;
-        }
-
         GlobalsUtils.TotalSizeB += dirSize;
 
         GlobalsUtils.TotalSizeKB = GlobalsUtils.TotalSizeB / 1024.0;
