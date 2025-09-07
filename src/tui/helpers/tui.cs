@@ -87,7 +87,8 @@ public static class TuiHelper
         var extensionsPanel = new Panel(
             $"[bold green]File extensions:[/] {string.Join(", ", fileTypesNoDupes)}\n" +
             $"[bold green]Most used extension:[/] {mostUsedExtension.TrimStart('.')}\n" +
-            $"[bold green]Biggest file:[/] {GlobalsUtils.BiggestFile} ({GlobalsUtils.BiggestFileSize} B)"
+            $"[bold green]Biggest file:[/] {GlobalsUtils.BiggestFile} ({GlobalsUtils.BiggestFileSize} B)\n" +
+            $"[bold green]File encodings:[/] {string.Join(", ", GlobalsUtils.Encodings.Distinct())}"
         );
 
         extensionsPanel.Border = BoxBorder.Rounded;

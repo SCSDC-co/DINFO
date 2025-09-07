@@ -17,6 +17,7 @@ public static class GlobalsUtils
     public static bool IsRepo = false;
     public static List<string> Files = [];
     public static List<string> FileTypes = [];
+    public static List<string> Encodings = [];
     public static string GitBranchName = "N/A";
     public static string GitHash = "N/A";
     public static string GitAuthor = "N/A";

@@ -19,6 +19,7 @@ public static class DirectoryHelper
             GlobalsUtils.TotalFiles++;
             GlobalsUtils.TotalLines += await FilesHelper.CountLines(fileName);
             GlobalsUtils.Files.Add(fileName);
+            GlobalsUtils.Encodings.Add(FilesHelper.GetEncoding(fileName).WebName);
 
             FilesHelper.GetFileType(fileName);
         }
