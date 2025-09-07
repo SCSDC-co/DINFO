@@ -24,4 +24,5 @@ public static class GlobalsUtils
     public static string GitCommitter = "N/A";
     public static string GitSubject = "N/A";
     public static string TargetDirectory = "";
+    public static string LastModifiedFile = "N/A";
 }

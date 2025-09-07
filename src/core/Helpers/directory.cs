@@ -24,6 +24,8 @@ public static class DirectoryHelper
             FilesHelper.GetFileType(fileName);
         }
 
+        FilesHelper.GetLastModifiedFile(targetDirectory);
+
         string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
 
         if (GlobalsUtils.Recursive)

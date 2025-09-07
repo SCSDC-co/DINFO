@@ -1,4 +1,5 @@
 using dinfo.core.Helpers.DirTools;
+using dinfo.core.Helpers.FilesTools;
 using dinfo.core.Utils.Globals;
 using dinfo.core.Utils.Help;
 using Spectre.Console;
@@ -88,6 +89,7 @@ public static class TuiHelper
             $"[bold green]File extensions:[/] {string.Join(", ", fileTypesNoDupes)}\n" +
             $"[bold green]Most used extension:[/] {mostUsedExtension.TrimStart('.')}\n" +
             $"[bold green]Biggest file:[/] {GlobalsUtils.BiggestFile} ({GlobalsUtils.BiggestFileSize} B)\n" +
+            $"[bold green]Last modified file:[/] {GlobalsUtils.LastModifiedFile}\n" +
             $"[bold green]File encodings:[/] {string.Join(", ", GlobalsUtils.Encodings.Distinct())}"
         );
 

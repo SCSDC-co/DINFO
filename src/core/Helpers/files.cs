@@ -69,4 +69,19 @@ public static class FilesHelper
         }
     }
 
+    public static void GetLastModifiedFile(string targetDirectory)
+    {
+        var files = new DirectoryInfo(targetDirectory).EnumerateFiles().ToArray();
+
+        if (files.Length == 0)
+        {
+            GlobalsUtils.LastModifiedFile = "N/A";
+            return;
+        }
+
+        GlobalsUtils.LastModifiedFile = files
+            .OrderBy(fi => fi.LastWriteTime)
+            .Last()
+            .FullName;
+    }
 }
