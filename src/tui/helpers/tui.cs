@@ -126,8 +126,8 @@ public static class TuiHelper
     {
         var optionsTableHelp = new Table();
 
-        optionsTableHelp.AddColumn("[bold green]OPTION[/]");
-        optionsTableHelp.AddColumn("[bold green]DESCRIPTION[/]");
+        optionsTableHelp.AddColumn("[bold green]OPTION:[/]");
+        optionsTableHelp.AddColumn("[bold green]DESCRIPTION:[/]");
 
         optionsTableHelp.AddRow("[bold green]-r   --Recursive[/]  ", "Recursively list all files and directories.");
         optionsTableHelp.AddRow("[bold green]-v   --Verbose[/]  ", "Enable verbose output.");
@@ -137,7 +137,7 @@ public static class TuiHelper
         optionsTableHelp.Border = TableBorder.None;
 
         var headerPanelHelp = new Panel(new Rows(
-            new Markup("[bold green]USAGE:[/] dinfo [[options]] [[directory]]\n"),
+            new Markup("[bold green]USAGE:[/]\n     dinfo [[options]] [[directory]]\n"),
             new Markup("[bold green]DESCRIPTION:[/]\n     Display information about the specified directory and its contents.\n"),
             optionsTableHelp
         ));
