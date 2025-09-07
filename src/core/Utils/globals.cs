@@ -12,9 +12,10 @@ public static class GlobalsUtils
     public static double TotalSizeGB = 0;
     public static bool Recursive = false;
     public static bool Verbose = false;
+    public static bool IsRepo = false;
     public static List<string> Files = [];
     public static List<string> FileTypes = [];
-    public static string GitName = "N/A";
+    public static string GitBranchName = "N/A";
     public static string GitHash = "N/A";
     public static string GitAuthor = "N/A";
     public static string GitCommitter = "N/A";

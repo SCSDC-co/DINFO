@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
 using dinfo.core.Helpers.DirTools;
 using dinfo.core.Utils.Globals;
 using dinfo.core.Utils.Help;
@@ -8,6 +9,39 @@ namespace dinfo.tui;
 
 public static class Program
 {
+	public static async Task<Panel> BuildGitPanel(string targetDirectory)
+	{
+		if (GlobalsUtils.IsRepo)
+		{
+
+			await dinfo.core.Helpers.GitTools.GitHelper.GetGitInfo(targetDirectory);
+
+			var gitPanel = new Panel(
+				$"[bold green]Git Branch Name:[/] {GlobalsUtils.GitBranchName}\n" +
+				$"[bold green]Git Hash:[/] {GlobalsUtils.GitHash}\n" +
+				$"[bold green]Git Author:[/] {GlobalsUtils.GitAuthor}\n" +
+				$"[bold green]Git Committer:[/] {GlobalsUtils.GitCommitter}\n" +
+				$"[bold green]Git Subject:[/] {GlobalsUtils.GitSubject}\n"
+			);
+
+			gitPanel.Border = BoxBorder.Rounded;
+			gitPanel.BorderStyle = new Style(Color.Green);
+			gitPanel.Header = new PanelHeader("[bold green] GIT [/]");
+
+			return gitPanel;
+		}
+		else
+		{
+			var gitPanel = new Panel("[bold red]Not a git repository[/]");
+
+			gitPanel.Border = BoxBorder.Rounded;
+			gitPanel.BorderStyle = new Style(Color.Red);
+			gitPanel.Header = new PanelHeader("[bold red] GIT [/]");
+
+			return gitPanel;
+		}
+	}
+
 	public static async Task PrintDirectoryInfo(string targetDirectory)
 	{
 		await DirectoryHelper.ProcessDirectory(targetDirectory);
@@ -69,23 +103,6 @@ public static class Program
 		extensionsPanel.Header = new PanelHeader("[bold green] EXTENSIONS [/]");
 
 		/*
-		 *  GIT
-		 */
-
-		await dinfo.core.Helpers.GitTools.GitHelper.GetGitInfo(targetDirectory);
-
-		var gitPanel = new Panel(
-			$"[bold green]Git Name:[/] {GlobalsUtils.GitName}\n" +
-			$"[bold green]Git Hash:[/] {GlobalsUtils.GitHash}\n" +
-			$"[bold green]Git Author:[/] {GlobalsUtils.GitAuthor}\n" +
-			$"[bold green]Git Committer:[/] {GlobalsUtils.GitCommitter}\n" +
-			$"[bold green]Git Subject:[/] {GlobalsUtils.GitSubject}");
-
-		gitPanel.Border = BoxBorder.Rounded;
-		gitPanel.BorderStyle = new Style(Color.Green);
-		gitPanel.Header = new PanelHeader("[bold green] GIT [/]");
-
-		/*
 		 *  GRID
 		 */
 
@@ -96,7 +113,7 @@ public static class Program
 		infoColumns.AddColumn();
 		infoColumns.AddColumn();
 
-		infoColumns.AddRow(infoPanel, permissionPanel, extensionsPanel, gitPanel);
+		infoColumns.AddRow(infoPanel, permissionPanel, extensionsPanel, await BuildGitPanel(targetDirectory));
 
 		AnsiConsole.Write(infoColumns);
 

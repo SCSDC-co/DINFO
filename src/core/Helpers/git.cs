@@ -8,23 +8,32 @@ public static class GitHelper
 {
     public static async Task GetGitInfo(string targetDirectory)
     {
-        GlobalsUtils.TargetDirectory = targetDirectory;
-
-        using StructuredRepository repository =
-            await Repository.Factory.OpenStructureAsync(
-                targetDirectory
-            );
-
-        if (repository.Head is Branch head)
+        try
         {
-            GlobalsUtils.GitName = head.Name;
+            GlobalsUtils.TargetDirectory = targetDirectory;
 
-            Commit commit = await head.GetHeadCommitAsync();
+            using StructuredRepository repository =
+                await Repository.Factory.OpenStructureAsync(
+                    targetDirectory
+                );
 
-            GlobalsUtils.GitHash = (commit.Hash).ToString();
-            GlobalsUtils.GitAuthor = (commit.Author).ToString();
-            GlobalsUtils.GitCommitter = (commit.Committer).ToString();
-            GlobalsUtils.GitSubject = (commit.Subject).ToString();
+            if (repository.Head is Branch head)
+            {
+                GlobalsUtils.GitBranchName = head.Name;
+
+                Commit commit = await head.GetHeadCommitAsync();
+
+                GlobalsUtils.GitHash = (commit.Hash).ToString();
+                GlobalsUtils.GitAuthor = (commit.Author).ToString();
+                GlobalsUtils.GitCommitter = (commit.Committer).ToString();
+                GlobalsUtils.GitSubject = (commit.Subject).ToString();
+            }
+
+            GlobalsUtils.IsRepo = true;
+        }
+        catch (Exception)
+        {
+            // Ignore errors (e.g., not a git repository)
         }
     }
 }
