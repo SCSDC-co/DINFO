@@ -26,7 +26,7 @@ public static class Program
 					break;
 
 				case "-ig":
-				case "--IgnoreGitignore":
+				case "--Ignore-Gitignore":
 					GlobalsUtils.IgnoreGitignore = true;
 					break;
 
