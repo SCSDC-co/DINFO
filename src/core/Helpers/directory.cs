@@ -22,7 +22,7 @@ public static class DirectoryHelper
         {
             var fileInfo = new FileInfo(fileName);
 
-            if (!GlobalsUtils.IgnoreGitignore)
+            if (!GlobalsUtils.IgnoreGitignore && File.Exists(gitIgnorePath))
             {
                 var IsIgnored = GitHelper.IsFileIgnore(gitIgnorePath, fileInfo);
 
@@ -32,12 +32,25 @@ public static class DirectoryHelper
                 }
             }
 
-            GlobalsUtils.TotalFiles++;
-            GlobalsUtils.TotalLines += await FilesHelper.CountLines(fileName);
-            GlobalsUtils.Files.Add(fileName);
-            GlobalsUtils.Encodings.Add(FilesHelper.GetEncoding(fileName).WebName);
+            try
+            {
+                GlobalsUtils.TotalFiles++;
+                GlobalsUtils.TotalLines += await FilesHelper.CountLines(fileName);
+                GlobalsUtils.Files.Add(fileName);
+                GlobalsUtils.Encodings.Add(FilesHelper.GetEncoding(fileName).WebName);
 
-            FilesHelper.GetFileType(fileName);
+                FilesHelper.GetFileType(fileName);
+            }
+            catch (IOException)
+            {
+                Console.WriteLine($"[SKIPPED] {fileName} (file locked by system)");
+                continue;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                Console.WriteLine($"[SKIPPED] {fileName} (access denied)");
+                continue;
+            }
         }
 
         FilesHelper.GetLastModifiedFile(targetDirectory);
