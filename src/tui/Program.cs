@@ -1,4 +1,5 @@
-﻿using dinfo.core.Helpers.DirTools;
+﻿using System.Threading.Tasks;
+using dinfo.core.Helpers.DirTools;
 using dinfo.core.Utils.Globals;
 using dinfo.core.Utils.Help;
 using Spectre.Console;
@@ -7,9 +8,9 @@ namespace dinfo.tui;
 
 public static class Program
 {
-	public static void PrintDirectoryInfo(string targetDirectory)
+	public static async Task PrintDirectoryInfo(string targetDirectory)
 	{
-		DirectoryHelper.ProcessDirectory(targetDirectory);
+		await DirectoryHelper.ProcessDirectory(targetDirectory);
 
 		/*
 		 *  HEADER
@@ -94,7 +95,7 @@ public static class Program
 		}
 	}
 
-	public static void Main(string[] args)
+	public static async Task Main(string[] args)
 	{
 		var currentDirectory = Directory.GetCurrentDirectory();
 		bool hasDirectory = false;
@@ -121,7 +122,7 @@ public static class Program
 				default:
 					if (Directory.Exists(arg))
 					{
-						PrintDirectoryInfo(arg);
+						await PrintDirectoryInfo(arg);
 						hasDirectory = true;
 					}
 					else
@@ -134,7 +135,7 @@ public static class Program
 
 		if (!hasDirectory)
 		{
-			PrintDirectoryInfo(currentDirectory);
+			await PrintDirectoryInfo(currentDirectory);
 		}
 	}
 }

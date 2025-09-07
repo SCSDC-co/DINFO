@@ -7,7 +7,7 @@ namespace dinfo.core.Helpers.DirTools;
 
 public static class DirectoryHelper
 {
-    public static void ProcessDirectory(string targetDirectory)
+    public async static Task ProcessDirectory(string targetDirectory)
     {
         GlobalsUtils.TotalDirs++;
         GetDirectorySize(targetDirectory);
@@ -17,7 +17,7 @@ public static class DirectoryHelper
         foreach (string fileName in fileEntries)
         {
             GlobalsUtils.TotalFiles++;
-            GlobalsUtils.TotalLines += FilesHelper.CountLines(fileName);
+            GlobalsUtils.TotalLines += await FilesHelper.CountLines(fileName);
             GlobalsUtils.Files.Add(fileName);
 
             FilesHelper.GetFileType(fileName);
@@ -26,10 +26,12 @@ public static class DirectoryHelper
         string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
 
         if (GlobalsUtils.Recursive)
+        {
             foreach (string subdirectory in subdirectoryEntries)
             {
-                ProcessDirectory(subdirectory);
+                await ProcessDirectory(subdirectory);
             }
+        }
     }
 
     public static void GetDirectorySize(string targetDirectory)
@@ -42,7 +44,6 @@ public static class DirectoryHelper
         GlobalsUtils.TotalSizeKB = GlobalsUtils.TotalSizeB / 1024.0;
         GlobalsUtils.TotalSizeMB = GlobalsUtils.TotalSizeB / 1024.0 / 1024.0;
         GlobalsUtils.TotalSizeGB = GlobalsUtils.TotalSizeB / 1024.0 / 1024.0 / 1024.0;
-
     }
 
     public static double SizeToReturn()
