@@ -11,17 +11,16 @@ public static class Program
 {
 	public static async Task<Panel> BuildGitPanel(string targetDirectory)
 	{
+		await dinfo.core.Helpers.GitTools.GitHelper.GetGitInfo(targetDirectory);
+
 		if (GlobalsUtils.IsRepo)
 		{
-
-			await dinfo.core.Helpers.GitTools.GitHelper.GetGitInfo(targetDirectory);
-
 			var gitPanel = new Panel(
 				$"[bold green]Git Branch Name:[/] {GlobalsUtils.GitBranchName}\n" +
 				$"[bold green]Git Hash:[/] {GlobalsUtils.GitHash}\n" +
 				$"[bold green]Git Author:[/] {GlobalsUtils.GitAuthor}\n" +
 				$"[bold green]Git Committer:[/] {GlobalsUtils.GitCommitter}\n" +
-				$"[bold green]Git Subject:[/] {GlobalsUtils.GitSubject}\n"
+				$"[bold green]Git Subject:[/] {GlobalsUtils.GitSubject}"
 			);
 
 			gitPanel.Border = BoxBorder.Rounded;
