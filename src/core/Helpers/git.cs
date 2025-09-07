@@ -1,0 +1,30 @@
+using GitReader;
+using GitReader.Structures;
+using dinfo.core.Utils.Globals;
+
+namespace dinfo.core.Helpers.GitTools;
+
+public static class GitHelper
+{
+    public static async Task GetGitInfo(string targetDirectory)
+    {
+        GlobalsUtils.TargetDirectory = targetDirectory;
+
+        using StructuredRepository repository =
+            await Repository.Factory.OpenStructureAsync(
+                targetDirectory
+            );
+
+        if (repository.Head is Branch head)
+        {
+            GlobalsUtils.GitName = head.Name;
+
+            Commit commit = await head.GetHeadCommitAsync();
+
+            GlobalsUtils.GitHash = (commit.Hash).ToString();
+            GlobalsUtils.GitAuthor = (commit.Author).ToString();
+            GlobalsUtils.GitCommitter = (commit.Committer).ToString();
+            GlobalsUtils.GitSubject = (commit.Subject).ToString();
+        }
+    }
+}

@@ -69,6 +69,23 @@ public static class Program
 		extensionsPanel.Header = new PanelHeader("[bold green] EXTENSIONS [/]");
 
 		/*
+		 *  GIT
+		 */
+
+		await dinfo.core.Helpers.GitTools.GitHelper.GetGitInfo(targetDirectory);
+
+		var gitPanel = new Panel(
+			$"[bold green]Git Name:[/] {GlobalsUtils.GitName}\n" +
+			$"[bold green]Git Hash:[/] {GlobalsUtils.GitHash}\n" +
+			$"[bold green]Git Author:[/] {GlobalsUtils.GitAuthor}\n" +
+			$"[bold green]Git Committer:[/] {GlobalsUtils.GitCommitter}\n" +
+			$"[bold green]Git Subject:[/] {GlobalsUtils.GitSubject}");
+
+		gitPanel.Border = BoxBorder.Rounded;
+		gitPanel.BorderStyle = new Style(Color.Green);
+		gitPanel.Header = new PanelHeader("[bold green] GIT [/]");
+
+		/*
 		 *  GRID
 		 */
 
@@ -77,8 +94,9 @@ public static class Program
 		infoColumns.AddColumn();
 		infoColumns.AddColumn();
 		infoColumns.AddColumn();
+		infoColumns.AddColumn();
 
-		infoColumns.AddRow(infoPanel, permissionPanel, extensionsPanel);
+		infoColumns.AddRow(infoPanel, permissionPanel, extensionsPanel, gitPanel);
 
 		AnsiConsole.Write(infoColumns);
 

@@ -14,4 +14,10 @@ public static class GlobalsUtils
     public static bool Verbose = false;
     public static List<string> Files = [];
     public static List<string> FileTypes = [];
+    public static string GitName = "N/A";
+    public static string GitHash = "N/A";
+    public static string GitAuthor = "N/A";
+    public static string GitCommitter = "N/A";
+    public static string GitSubject = "N/A";
+    public static string TargetDirectory = "";
 }
