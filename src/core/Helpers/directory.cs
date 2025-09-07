@@ -39,6 +39,30 @@ public static class DirectoryHelper
         long dirSize =
             Directory.GetFiles(targetDirectory).Sum(f => new FileInfo(f).Length);
 
+        var files = Directory.GetFiles(targetDirectory);
+
+        if (files.Length == 0)
+        {
+            GlobalsUtils.BiggestFile = "N/A";
+            GlobalsUtils.BiggestFileSize = 0;
+        }
+        else
+        {
+            var biggestFile = files
+                .Select(f => new FileInfo(f))
+                .OrderByDescending(f => f.Length)
+                .First();
+
+            GlobalsUtils.BiggestFile = biggestFile.FullName;
+            GlobalsUtils.BiggestFileSize = biggestFile.Length;
+        }
+
+        if (dirSize > GlobalsUtils.BiggestFileSize)
+        {
+            GlobalsUtils.BiggestFileSize = dirSize;
+            GlobalsUtils.BiggestFile = targetDirectory;
+        }
+
         GlobalsUtils.TotalSizeB += dirSize;
 
         GlobalsUtils.TotalSizeKB = GlobalsUtils.TotalSizeB / 1024.0;

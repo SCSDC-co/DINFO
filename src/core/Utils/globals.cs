@@ -10,6 +10,8 @@ public static class GlobalsUtils
     public static double TotalSizeKB = 0;
     public static double TotalSizeMB = 0;
     public static double TotalSizeGB = 0;
+    public static string BiggestFile = "N/A";
+    public static long BiggestFileSize = 0;
     public static bool Recursive = false;
     public static bool Verbose = false;
     public static bool IsRepo = false;
