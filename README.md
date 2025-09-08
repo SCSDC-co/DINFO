@@ -65,14 +65,14 @@ OPTIONS
 **Example:**
 
 ```bash
-# Count lines in the current directory
+# Get the information about the current directory
 dinfo
 
-# Count lines recursively in all subdirectories
-dinfo -r C:\Projects\MyFolder
+# Get the information about a specific directory with rucursive processing
+dinfo C:\Projects\MyFolder -r
 
-# Count lines with verbose output
-dinfo -v C:\Projects\MyFolder
+# Get the information about a specific directory with verbose output
+dinfo C:\Projects\MyFolder -v
 ```
 
 ---
