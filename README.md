@@ -24,40 +24,45 @@ It uses **Spectre.Console** to create a clean and colorful TUI, showing files, l
 
 1. Clone the repository:
 
-   ```bash
-   git clone https://github.com/SCSDC-co/DINFO.git
-   ```
+    ```bash
+    git clone https://github.com/SCSDC-co/DINFO.git
+    ```
 
 2. Build with .NET:
 
-   ```bash
-   dotnet build # you need to be in src/tui for running this command
-   ```
+    ```bash
+    dotnet build # you need to be in src/tui for running this command
+    ```
 
 3. Run the tool:
 
-   ```bash
-   dotnet run -- [options] [directory] # same for this one
-   ```
+    ```bash
+    dotnet run -- [options] [directory] # same for this one
+    ```
 
 ---
 
-## 📖 Usage
+## ❓ Help Page
 
-```bash
-dinfo [options] [directory]
-```
+### 📖 Usage
 
-**Description:**
-Dinfo is a simple tool to count lines of files and provide stats on a directory.
+dotnet dinfo.tui.dll <targetdirectory> [options]
 
-**Options:**
+### 📝 Description
 
-| Option            | Description                         |
-| ----------------- | ----------------------------------- |
-| `-h, --help`      | Print the help message.             |
-| `-r, --Recursive` | Recursively process subdirectories. |
-| `-v, --Verbose`   | Print verbose information.          |
+Display information about the specified directory and its contents.
+
+### 🔑 Parameters
+
+targetdirectory The Directory to be analyzed. Default: Current directory.
+
+### ⚙️ Options
+
+-r|--recursive Recursively list all files and directories. Default: "False".
+-v|--verbose Enable verbose output. Default: "False".
+-i|--ignore-gitignore Ignore .gitignore files. Default: "False".
+-h|--help Shows help text.
+--version Shows version information.
 
 **Example:**
 
@@ -84,6 +89,7 @@ dinfo -v C:\Projects\MyFolder
 
 - [C#](https://docs.microsoft.com/en-us/dotnet/csharp/)
 - [Spectre.Console](https://spectreconsole.net/) - for TUI and colored output
+- [CliFx](https://github.com/Tyrrrz/CliFx) - for command-line parsing
 
 ---
 
