@@ -44,25 +44,23 @@ It uses **Spectre.Console** to create a clean and colorful TUI, showing files, l
 
 ## ❓ Help Page
 
-### 📖 Usage
+```bash
+USAGE
+  dotnet dinfo.tui.dll <targetdirectory> [options]
 
-dotnet dinfo.tui.dll <targetdirectory> [options]
+DESCRIPTION
+  Display information about the specified directory and its contents.
 
-### 📝 Description
+PARAMETERS
+  targetdirectory   The Directory to be analyzed. Default: Current directory.
 
-Display information about the specified directory and its contents.
-
-### 🔑 Parameters
-
-targetdirectory The Directory to be analyzed. Default: Current directory.
-
-### ⚙️ Options
-
--r|--recursive Recursively list all files and directories. Default: "False".
--v|--verbose Enable verbose output. Default: "False".
--i|--ignore-gitignore Ignore .gitignore files. Default: "False".
--h|--help Shows help text.
---version Shows version information.
+OPTIONS
+  -r|--recursive    Recursively list all files and directories. Default: "False".
+  -v|--verbose      Enable verbose output. Default: "False".
+  -i|--ignore-gitignore  Ignore .gitignore files. Default: "False".
+  -h|--help         Shows help text.
+  --version         Shows version information.
+```
 
 **Example:**
 
