@@ -7,8 +7,8 @@ using dinfo.tui.Helpers.Tui;
 [Command(Description = "Display information about the specified directory and its contents.")]
 public class DinfoCommand : ICommand
 {
-    [CommandParameter(0, Description = "The Directory to be analyzed.")]
-    public string Directory { get; set; } = ".";
+    [CommandParameter(0, Description = "The Directory to be analyzed.", IsRequired = false)]
+    public string DirectoryCli { get; set; } = Directory.GetCurrentDirectory();
 
     [CommandOption("recursive", 'r', Description = "Recursively list all files and directories.")]
     public bool RecursiveCli { get; set; } = false;
@@ -25,7 +25,7 @@ public class DinfoCommand : ICommand
         GlobalsUtils.Verbose = VerboseCli;
         GlobalsUtils.IgnoreGitignore = IgnoreGitIgnoreCli;
 
-        var dir = Directory;
+        var dir = DirectoryCli;
 
         await TuiHelper.PrintDirectoryInfo(dir);
     }
