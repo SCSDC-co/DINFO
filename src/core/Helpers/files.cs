@@ -36,6 +36,26 @@ public static class FilesHelper
             GlobalsUtils.FileTypes.Add(ext);
         }
     }
+
+    public static string GetFileTypeSingleFile(string fileName)
+    {
+        string name = Path.GetFileName(fileName);
+
+        if (name.StartsWith("."))
+        {
+            return "N/A";
+        }
+
+        string ext = Path.GetExtension(name);
+
+        if (!string.IsNullOrEmpty(ext))
+        {
+            return ext;
+        }
+
+        return "N/A";
+    }
+
     public static Encoding GetEncoding(string fileName)
     {
         var bom = new byte[4];
@@ -83,5 +103,25 @@ public static class FilesHelper
             .OrderBy(fi => fi.LastWriteTime)
             .Last()
             .FullName;
+    }
+
+    public static async Task ProcessFile(string fileName)
+    {
+
+        try
+        {
+            GlobalsUtils.TotalFiles++;
+            GlobalsUtils.TotalLines += await CountLines(fileName);
+            GlobalsUtils.Files.Add(fileName);
+            GlobalsUtils.Encodings.Add(GetEncoding(fileName).WebName);
+        }
+        catch (IOException)
+        {
+            Console.WriteLine($"[SKIPPED] {fileName} (file locked by system)");
+        }
+        catch (UnauthorizedAccessException)
+        {
+            Console.WriteLine($"[SKIPPED] {fileName} (access denied)");
+        }
     }
 }

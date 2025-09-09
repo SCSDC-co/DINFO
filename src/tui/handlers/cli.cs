@@ -30,3 +30,28 @@ public class DinfoCommand : ICommand
         await TuiHelper.PrintDirectoryInfo(dir);
     }
 }
+
+[Command("file", Description = "Display information about the specified file.")]
+public class FileCommand : ICommand
+{
+    [CommandParameter(0, Description = "The File to be analyzed.", IsRequired = true)]
+    public string[] TargetFile { get; set; } = Array.Empty<string>();
+
+    public async ValueTask ExecuteAsync(IConsole console)
+    {
+        int numberOfCycles = 0;
+        var numberOfFiles = TargetFile.Length;
+
+        foreach (var TargetFile in TargetFile)
+        {
+            await TuiHelper.PrintFileInfo(TargetFile);
+
+            numberOfCycles++;
+        }
+
+        if (numberOfFiles == numberOfCycles)
+        {
+            TuiHelper.PrintSummary();
+        }
+    }
+}
