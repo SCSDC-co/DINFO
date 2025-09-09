@@ -60,12 +60,16 @@ public static class TuiHelper
 
 		var perms = DirectoryHelper.GetDirectoryPermissions(targetDirectory);
 
+		int linesOfCode = GlobalsUtils.TotalLines - GlobalsUtils.TotalLinesComments;
+
 		var infoPanel = new Panel(
 			$"[bold green]Number of files:[/] {GlobalsUtils.TotalFiles}\n"
-				+ $"[bold green]Number of lines:[/] {GlobalsUtils.TotalLines}\n"
-				+ $"[bold green]Number of directories:[/] {GlobalsUtils.TotalDirs}\n"
-				+ $"[bold green]Permissions:[/] {perms}\n"
-				+ $"[bold green]Total size:[/] {DirectoryHelper.SizeToReturn()} {GlobalsUtils.SizeExtension}"
+			+ $"[bold green]Number of lines:[/] {GlobalsUtils.TotalLines}\n"
+			+ $"[bold green]Commentes:[/] {GlobalsUtils.TotalLinesComments}\n"
+			+ $"[bold green]Code:[/] {linesOfCode}\n"
+			+ $"[bold green]Number of directories:[/] {GlobalsUtils.TotalDirs}\n"
+			+ $"[bold green]Permissions:[/] {perms}\n"
+			+ $"[bold green]Total size:[/] {DirectoryHelper.SizeToReturn()} {GlobalsUtils.SizeExtension}"
 		);
 
 		infoPanel.Border = BoxBorder.Rounded;
@@ -145,10 +149,16 @@ public static class TuiHelper
 		 *  INFO
 		 */
 
+		var lines = await FilesHelper.CountLines(targetFile);
+		var comments = await FilesHelper.GetCommentsLines(targetFile);
+		var code = lines - comments;
+
 		var infoPanel = new Panel(
-				$"[bold green]Number of lines:[/] {(await FilesHelper.CountLines(targetFile)).ToString()}\n"
-				+ $"[bold green]File encodings:[/] {string.Join(", ", GlobalsUtils.Encodings.Distinct())}\n"
-				+ $"[bold green]File types:[/] {FilesHelper.GetFileTypeSingleFile(targetFile)}"
+			$"[bold green]Number of lines:[/] {lines.ToString()}\n"
+			+ $"[bold green]Commentes:[/] {comments}\n"
+			+ $"[bold green]Code:[/] {code}\n"
+			+ $"[bold green]File encodings:[/] {string.Join(", ", GlobalsUtils.Encodings.Distinct())}\n"
+			+ $"[bold green]File types:[/] {FilesHelper.GetFileTypeSingleFile(targetFile)}"
 		);
 
 		infoPanel.Border = BoxBorder.Rounded;
@@ -174,6 +184,8 @@ public static class TuiHelper
 		var summaryPanel = new Panel(
 			$"[bold green]Files:[/] {string.Join(", ", GlobalsUtils.Files)}\n"
 			+ $"[bold green]Total lines:[/] {GlobalsUtils.TotalLines}\n"
+			+ $"[bold green]Commentes:[/] {GlobalsUtils.TotalLinesComments}\n"
+			+ $"[bold green]Code:[/] {GlobalsUtils.TotalLinesCode}\n"
 			+ $"[bold green]File encodings:[/] {string.Join(", ", GlobalsUtils.Encodings.Distinct())}\n"
 			+ $"[bold green]File types:[/] {string.Join(", ", (GlobalsUtils.FileTypes).Distinct())}"
 		);

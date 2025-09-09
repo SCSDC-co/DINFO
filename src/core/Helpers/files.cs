@@ -1,5 +1,4 @@
-using System;
-using System.IO;
+using System.Text.RegularExpressions;
 using System.Text;
 
 using dinfo.core.Utils.Globals;
@@ -10,14 +9,53 @@ public static class FilesHelper
 {
     public static async Task<int> CountLines(string fileName)
     {
-        if (!File.Exists(fileName))
-        {
-            throw new FileNotFoundException($"File not found: {fileName}");
-        }
-
         IEnumerable<string> lines = await File.ReadAllLinesAsync(fileName);
 
         return lines.Count();
+    }
+
+    public static async Task<int> GetCommentsLines(string fileName)
+    {
+        var slashComment = new Regex(@"^\s*//");
+        var hashComment = new Regex(@"^\s*#");
+        var multiLineCommentStart = new Regex(@"^\s*/\*");
+        var multiLineCommentEnd = new Regex(@"^\s*\*/");
+        var multiLineMarkupStart = new Regex(@"^\s*<!--");
+        var multiLineMarkupEnd = new Regex(@"^\s*-->$");
+        var dashComment = new Regex(@"^\s*--");
+        var semicolonComment = new Regex(@"^\s*;");
+
+        IEnumerable<string> lines = await File.ReadAllLinesAsync(fileName);
+
+        bool inMultiLineComment = false;
+        int commentLines = 0;
+
+        foreach (var line in lines)
+        {
+            var trimmedLine = line.Trim();
+
+            if (inMultiLineComment)
+            {
+                commentLines++;
+                if (multiLineCommentEnd.IsMatch(trimmedLine) || multiLineMarkupEnd.IsMatch(trimmedLine))
+                {
+                    inMultiLineComment = false;
+                }
+            }
+            else if (multiLineCommentStart.IsMatch(trimmedLine) || multiLineMarkupStart.IsMatch(trimmedLine))
+            {
+                commentLines++;
+                inMultiLineComment = true;
+            }
+            else if (slashComment.IsMatch(trimmedLine) || hashComment.IsMatch(trimmedLine) || dashComment.IsMatch(trimmedLine) || semicolonComment.IsMatch(trimmedLine))
+            {
+                commentLines++;
+            }
+        }
+
+        GlobalsUtils.TotalLinesComments += commentLines;
+
+        return commentLines;
     }
 
     public static void GetFileType(string fileName)

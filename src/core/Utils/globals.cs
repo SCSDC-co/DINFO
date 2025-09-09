@@ -4,6 +4,8 @@ public static class GlobalsUtils
 {
     public static string SizeExtension = "";
     public static int TotalLines = 0;
+    public static int TotalLinesComments = 0;
+    public static int TotalLinesCode => TotalLines - TotalLinesComments;
     public static int TotalFiles = 0;
     public static int TotalDirs = 0;
     public static long TotalSizeB = 0;
