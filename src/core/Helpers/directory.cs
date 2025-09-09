@@ -40,6 +40,7 @@ public static class DirectoryHelper
                 GlobalsUtils.Encodings.Add(FilesHelper.GetEncoding(fileName).WebName);
 
                 FilesHelper.GetFileType(fileName);
+                await FilesHelper.GetCommentsLines(fileName);
             }
             catch (IOException)
             {
