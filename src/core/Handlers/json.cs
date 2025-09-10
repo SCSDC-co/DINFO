@@ -1,0 +1,88 @@
+using System.Text.Json;
+using dinfo.core.Helpers.DirTools;
+using dinfo.core.Helpers.GitTools;
+using dinfo.core.Utils.Globals;
+
+namespace dinfo.core.Handlers.Json;
+
+public class DirectoryJson
+{
+    public string Path { get; set; } = "N/A";
+    public string BiggestFile { get; set; } = "N/A";
+    public string LatestModifiedFile { get; set; } = "N/A";
+    public string Size { get; set; } = "N/A";
+    public string Permissions { get; set; } = "N/A";
+    public string MostUsedExtension { get; set; } = "N/A";
+    public List<string> FileType { get; set; } = ["N/A"];
+    public List<string> Encoding { get; set; } = ["N/A"];
+    public int Files { get; set; }
+    public int Directories { get; set; }
+    public int Comments { get; set; }
+    public int Code { get; set; }
+    public int Lines { get; set; }
+    public required Dictionary<string, GitJson> Git { get; set; }
+}
+
+public class GitJson
+{
+    public string GitBranchName { get; set; } = "N/A";
+    public string GitHash { get; set; } = "N/A";
+    public string GitAuthor { get; set; } = "N/A";
+    public string GitCommitter { get; set; } = "N/A";
+    public string GitSubject { get; set; } = "N/A";
+}
+
+public static class JsonHandler
+{
+    public static async Task SaveJson(string targetDirectory, string pathJson)
+    {
+        await DirectoryHelper.ProcessDirectory(targetDirectory);
+        await GitHelper.GetGitInfo(targetDirectory);
+
+        string directorySize =
+            (DirectoryHelper.SizeToReturn()).ToString() + " " + GlobalsUtils.SizeExtension;
+
+        var mostUsedExtension =
+            GlobalsUtils
+                .FileTypes.GroupBy(x => x)
+                .OrderByDescending(g => g.Count())
+                .Select(g => g.Key)
+                .FirstOrDefault()
+            ?? "N/A";
+
+        var perms = DirectoryHelper.GetDirectoryPermissions(targetDirectory);
+
+        var json = new DirectoryJson
+        {
+            Path = targetDirectory,
+            BiggestFile = GlobalsUtils.BiggestFile,
+            LatestModifiedFile = GlobalsUtils.LastModifiedFile,
+            FileType = GlobalsUtils.FileTypes.Distinct().ToList(),
+            MostUsedExtension = mostUsedExtension.TrimStart('.'),
+            Encoding = GlobalsUtils.Encodings,
+            Files = GlobalsUtils.TotalFiles,
+            Size = directorySize,
+            Permissions = perms,
+            Lines = GlobalsUtils.TotalLines,
+            Code = GlobalsUtils.TotalLinesCode,
+            Comments = GlobalsUtils.TotalLinesComments,
+            Directories = GlobalsUtils.TotalDirs,
+            Git = new Dictionary<string, GitJson>
+            {
+                ["Repo"] = new GitJson
+                {
+                    GitBranchName = GlobalsUtils.GitBranchName,
+                    GitHash = GlobalsUtils.GitHash,
+                    GitAuthor = GlobalsUtils.GitAuthor,
+                    GitCommitter = GlobalsUtils.GitCommitter,
+                    GitSubject = GlobalsUtils.GitSubject,
+                },
+            },
+        };
+
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        string jsonString = JsonSerializer.Serialize(json, options);
+
+        File.WriteAllText(pathJson, jsonString);
+    }
+}

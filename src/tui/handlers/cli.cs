@@ -1,8 +1,10 @@
 using CliFx;
 using CliFx.Attributes;
 using CliFx.Infrastructure;
+using dinfo.core.Handlers.Json;
 using dinfo.core.Utils.Globals;
 using dinfo.tui.Helpers.Tui;
+using Spectre.Console;
 
 [Command(Description = "Display information about the specified directory and its contents.")]
 public class DinfoCommand : ICommand
@@ -19,15 +21,41 @@ public class DinfoCommand : ICommand
     [CommandOption("ignore-gitignore", 'i', Description = "Ignore .gitignore files.")]
     public bool IgnoreGitIgnoreCli { get; set; } = false;
 
+    [CommandOption("output", 'o', Description = "Output format and name.")]
+    public string? OutputCli { get; set; }
+
+    [CommandOption("no-tui", 'n', Description = "Disable TUI")]
+    public bool NoTuiCli { get; set; } = false;
+
     public async ValueTask ExecuteAsync(IConsole console)
     {
         GlobalsUtils.Recursive = RecursiveCli;
         GlobalsUtils.Verbose = VerboseCli;
         GlobalsUtils.IgnoreGitignore = IgnoreGitIgnoreCli;
+        GlobalsUtils.NoTui = NoTuiCli;
 
         var dir = TargetDirectory;
 
-        await TuiHelper.PrintDirectoryInfo(dir);
+        if (!GlobalsUtils.NoTui)
+        {
+            await TuiHelper.PrintDirectoryInfo(dir);
+        }
+
+        if (OutputCli == null)
+        {
+            await console.Output.WriteLineAsync("You need to specify an output format");
+        }
+        else if (OutputCli.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+        {
+            await JsonHandler.SaveJson(dir, OutputCli);
+
+            var savedPanel = new Panel($"[bold green]JSON file saved in:[/] {OutputCli}");
+
+            savedPanel.Border = BoxBorder.Rounded;
+            savedPanel.BorderStyle = new Style(Color.Green);
+
+            AnsiConsole.Write(savedPanel);
+        }
     }
 }
 

@@ -18,6 +18,7 @@ public static class GlobalsUtils
     public static bool Verbose = false;
     public static bool IsRepo = false;
     public static bool IgnoreGitignore = false;
+    public static bool NoTui = false;
     public static List<string> Files = [];
     public static List<string> FileTypes = [];
     public static List<string> Encodings = [];
