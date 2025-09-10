@@ -1,5 +1,6 @@
 using System.Text.Json;
 using dinfo.core.Helpers.DirTools;
+using dinfo.core.Helpers.FilesTools;
 using dinfo.core.Helpers.GitTools;
 using dinfo.core.Utils.Globals;
 
@@ -32,9 +33,19 @@ public class GitJson
     public string GitSubject { get; set; } = "N/A";
 }
 
+public class FileJson
+{
+    public string FileName { get; set; } = "N/A";
+    public string Lines { get; set; } = "N/A";
+    public string Comments { get; set; } = "N/A";
+    public string Code { get; set; } = "N/A";
+    public List<string> Encoding { get; set; } = ["N/A"];
+    public string FileType { get; set; } = "N/A";
+}
+
 public static class JsonHandler
 {
-    public static async Task SaveJson(string targetDirectory, string pathJson)
+    public static async Task DirectorySaveJson(string targetDirectory, string pathJson)
     {
         await DirectoryHelper.ProcessDirectory(targetDirectory);
         await GitHelper.GetGitInfo(targetDirectory);
@@ -78,6 +89,30 @@ public static class JsonHandler
                     GitSubject = GlobalsUtils.GitSubject,
                 },
             },
+        };
+
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        string jsonString = JsonSerializer.Serialize(json, options);
+
+        File.WriteAllText(pathJson, jsonString);
+    }
+
+    public static async Task FileSaveJson(string targetFile, string pathJson)
+    {
+        await FilesHelper.ProcessFile(targetFile);
+
+        var lines = await FilesHelper.CountLines(targetFile);
+        var comments = await FilesHelper.GetCommentsLines(targetFile);
+        var code = lines - comments;
+
+        var json = new FileJson
+        {
+            FileName = targetFile,
+            Lines = lines.ToString(),
+            Comments = comments.ToString(),
+            Code = code.ToString(),
+            Encoding = GlobalsUtils.Encodings.Distinct().ToList(),
+            FileType = FilesHelper.GetFileTypeSingleFile(targetFile),
         };
 
         var options = new JsonSerializerOptions { WriteIndented = true };

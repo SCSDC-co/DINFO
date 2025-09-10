@@ -47,7 +47,7 @@ public class DinfoCommand : ICommand
         }
         else if (OutputCli.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
         {
-            await JsonHandler.SaveJson(dir, OutputCli);
+            await JsonHandler.DirectorySaveJson(dir, OutputCli);
 
             var savedPanel = new Panel($"[bold green]JSON file saved in:[/] {OutputCli}");
 
@@ -63,23 +63,37 @@ public class DinfoCommand : ICommand
 public class FileCommand : ICommand
 {
     [CommandParameter(0, Description = "The File to be analyzed.", IsRequired = true)]
-    public string[] TargetFile { get; set; } = Array.Empty<string>();
+    public required string TargetFile { get; set; }
+
+    [CommandOption("output", 'o', Description = "Output format and name.")]
+    public string? OutputCli { get; set; }
+
+    [CommandOption("no-tui", 'n', Description = "Disable TUI")]
+    public bool NoTuiCli { get; set; } = false;
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
-        int numberOfCycles = 0;
-        var numberOfFiles = TargetFile.Length;
+        GlobalsUtils.NoTui = NoTuiCli;
 
-        foreach (var TargetFile in TargetFile)
+        if (!GlobalsUtils.NoTui)
         {
             await TuiHelper.PrintFileInfo(TargetFile);
-
-            numberOfCycles++;
         }
 
-        if (numberOfFiles == numberOfCycles)
+        if (OutputCli == null)
         {
-            TuiHelper.PrintSummary();
+            await console.Output.WriteLineAsync("You need to specify an output format");
+        }
+        else if (OutputCli.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+        {
+            await JsonHandler.FileSaveJson(TargetFile, OutputCli);
+
+            var savedPanel = new Panel($"[bold green]JSON file saved in:[/] {OutputCli}");
+
+            savedPanel.Border = BoxBorder.Rounded;
+            savedPanel.BorderStyle = new Style(Color.Green);
+
+            AnsiConsole.Write(savedPanel);
         }
     }
 }
