@@ -41,20 +41,21 @@ public class DinfoCommand : ICommand
             await TuiHelper.PrintDirectoryInfo(dir);
         }
 
-        if (OutputCli == null)
+        if (OutputCli != null)
         {
-            await console.Output.WriteLineAsync("You need to specify an output format");
-        }
-        else if (OutputCli.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
-        {
-            await JsonHandler.DirectorySaveJson(dir, OutputCli);
+            if (OutputCli.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+            {
+                await JsonHandler.DirectorySaveJson(dir, OutputCli);
 
-            var savedPanel = new Panel($"[bold green]JSON file saved in:[/] {OutputCli}");
-
-            savedPanel.Border = BoxBorder.Rounded;
-            savedPanel.BorderStyle = new Style(Color.Green);
-
-            AnsiConsole.Write(savedPanel);
+                var savedPanel = new Panel($"[bold green]JSON file saved in:[/] {OutputCli}");
+                savedPanel.Border = BoxBorder.Rounded;
+                savedPanel.BorderStyle = new Style(Color.Green);
+                AnsiConsole.Write(savedPanel);
+            }
+            else
+            {
+                AnsiConsole.MarkupLine("[bold red]The output must be a .json file[/]");
+            }
         }
     }
 }
@@ -80,20 +81,21 @@ public class FileCommand : ICommand
             await TuiHelper.PrintFileInfo(TargetFile);
         }
 
-        if (OutputCli == null)
+        if (OutputCli != null)
         {
-            await console.Output.WriteLineAsync("You need to specify an output format");
-        }
-        else if (OutputCli.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
-        {
-            await JsonHandler.FileSaveJson(TargetFile, OutputCli);
+            if (OutputCli.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+            {
+                await JsonHandler.FileSaveJson(TargetFile, OutputCli);
 
-            var savedPanel = new Panel($"[bold green]JSON file saved in:[/] {OutputCli}");
-
-            savedPanel.Border = BoxBorder.Rounded;
-            savedPanel.BorderStyle = new Style(Color.Green);
-
-            AnsiConsole.Write(savedPanel);
+                var savedPanel = new Panel($"[bold green]JSON file saved in:[/] {OutputCli}");
+                savedPanel.Border = BoxBorder.Rounded;
+                savedPanel.BorderStyle = new Style(Color.Green);
+                AnsiConsole.Write(savedPanel);
+            }
+            else
+            {
+                AnsiConsole.MarkupLine("[bold red]The output must be a .json file[/]");
+            }
         }
     }
 }
