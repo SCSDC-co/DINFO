@@ -58,6 +58,17 @@ public static class FilesHelper
         return commentLines;
     }
 
+    public static async Task<int> GetBlankLines(string fileName)
+    {
+        IEnumerable<string> lines = await File.ReadAllLinesAsync(fileName);
+
+        int blankLines = lines.Count(line => string.IsNullOrWhiteSpace(line));
+
+        GlobalsUtils.TotalBlankLines += blankLines;
+
+        return blankLines;
+    }
+
     public static void GetFileType(string fileName)
     {
         string name = Path.GetFileName(fileName);
@@ -145,11 +156,12 @@ public static class FilesHelper
 
     public static async Task ProcessFile(string fileName)
     {
-
         try
         {
             GlobalsUtils.TotalFiles++;
             GlobalsUtils.TotalLines += await CountLines(fileName);
+            await GetCommentsLines(fileName);
+            await GetBlankLines(fileName);
             GlobalsUtils.Files.Add(fileName);
             GlobalsUtils.Encodings.Add(GetEncoding(fileName).WebName);
         }

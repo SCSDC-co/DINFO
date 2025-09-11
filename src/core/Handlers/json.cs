@@ -19,6 +19,7 @@ public class DirectoryJson
     public int Files { get; set; }
     public int Directories { get; set; }
     public int Comments { get; set; }
+    public int Blank { get; set; }
     public int Code { get; set; }
     public int Lines { get; set; }
     public required Dictionary<string, GitJson> Git { get; set; }
@@ -36,9 +37,10 @@ public class GitJson
 public class FileJson
 {
     public string FileName { get; set; } = "N/A";
-    public string Lines { get; set; } = "N/A";
-    public string Comments { get; set; } = "N/A";
-    public string Code { get; set; } = "N/A";
+    public int Lines { get; set; } = 0;
+    public int Comments { get; set; } = 0;
+    public int Blanks { get; set; } = 0;
+    public int Code { get; set; } = 0;
     public List<string> Encoding { get; set; } = ["N/A"];
     public string FileType { get; set; } = "N/A";
 }
@@ -47,8 +49,11 @@ public static class JsonHandler
 {
     public static async Task DirectorySaveJson(string targetDirectory, string pathJson)
     {
-        await DirectoryHelper.ProcessDirectory(targetDirectory);
-        await GitHelper.GetGitInfo(targetDirectory);
+        if (GlobalsUtils.NoTui)
+        {
+            await DirectoryHelper.ProcessDirectory(targetDirectory);
+            await GitHelper.GetGitInfo(targetDirectory);
+        }
 
         string directorySize =
             (DirectoryHelper.SizeToReturn()).ToString() + " " + GlobalsUtils.SizeExtension;
@@ -77,6 +82,7 @@ public static class JsonHandler
             Lines = GlobalsUtils.TotalLines,
             Code = GlobalsUtils.TotalLinesCode,
             Comments = GlobalsUtils.TotalLinesComments,
+            Blank = GlobalsUtils.TotalBlankLines,
             Directories = GlobalsUtils.TotalDirs,
             Git = new Dictionary<string, GitJson>
             {
@@ -99,18 +105,23 @@ public static class JsonHandler
 
     public static async Task FileSaveJson(string targetFile, string pathJson)
     {
-        await FilesHelper.ProcessFile(targetFile);
+        if (GlobalsUtils.NoTui)
+        {
+            await FilesHelper.ProcessFile(targetFile);
+        }
 
         var lines = await FilesHelper.CountLines(targetFile);
         var comments = await FilesHelper.GetCommentsLines(targetFile);
-        var code = lines - comments;
+        var blank = await FilesHelper.GetBlankLines(targetFile);
+        var code = lines - (comments + blank);
 
         var json = new FileJson
         {
             FileName = targetFile,
-            Lines = lines.ToString(),
-            Comments = comments.ToString(),
-            Code = code.ToString(),
+            Lines = lines,
+            Comments = comments,
+            Code = code,
+            Blanks = blank,
             Encoding = GlobalsUtils.Encodings.Distinct().ToList(),
             FileType = FilesHelper.GetFileTypeSingleFile(targetFile),
         };

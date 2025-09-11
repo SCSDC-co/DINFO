@@ -60,12 +60,13 @@ public static class TuiHelper
 
         var perms = DirectoryHelper.GetDirectoryPermissions(targetDirectory);
 
-        int linesOfCode = GlobalsUtils.TotalLines - GlobalsUtils.TotalLinesComments;
+        int linesOfCode = GlobalsUtils.TotalLines - (GlobalsUtils.TotalLinesComments + GlobalsUtils.TotalBlankLines);
 
         var infoPanel = new Panel(
             $"[bold green]Number of files:[/] {GlobalsUtils.TotalFiles}\n"
                 + $"[bold green]Number of lines:[/] {GlobalsUtils.TotalLines}\n"
                 + $"[bold green]Commentes:[/] {GlobalsUtils.TotalLinesComments}\n"
+                + $"[bold green]Blank lines:[/] {GlobalsUtils.TotalBlankLines}\n"
                 + $"[bold green]Code:[/] {linesOfCode}\n"
                 + $"[bold green]Number of directories:[/] {GlobalsUtils.TotalDirs}\n"
                 + $"[bold green]Permissions:[/] {perms}\n"
@@ -151,11 +152,13 @@ public static class TuiHelper
 
         var lines = await FilesHelper.CountLines(targetFile);
         var comments = await FilesHelper.GetCommentsLines(targetFile);
-        var code = lines - comments;
+        var blanks = await FilesHelper.GetBlankLines(targetFile);
+        var code = lines - (comments + blanks);
 
         var infoPanel = new Panel(
             $"[bold green]Number of lines:[/] {lines.ToString()}\n"
                 + $"[bold green]Commentes:[/] {comments}\n"
+                + $"[bold green]Blank lines:[/] {blanks}\n"
                 + $"[bold green]Code:[/] {code}\n"
                 + $"[bold green]File encoding:[/] {string.Join(", ", GlobalsUtils.Encodings.Distinct())}\n"
                 + $"[bold green]File type:[/] {FilesHelper.GetFileTypeSingleFile(targetFile)}"

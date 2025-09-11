@@ -41,6 +41,7 @@ public static class DirectoryHelper
 
                 FilesHelper.GetFileType(fileName);
                 await FilesHelper.GetCommentsLines(fileName);
+                await FilesHelper.GetBlankLines(fileName);
             }
             catch (IOException)
             {
