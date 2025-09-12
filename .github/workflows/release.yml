@@ -32,7 +32,6 @@ jobs:
                     -r ${{ matrix.runtime }} \
                     --self-contained true \
                     /p:PublishSingleFile=true \
-                    /p:PublishTrimmed=false \
                     -o publish/self-contained/${{ matrix.runtime }}
                   mv publish/self-contained/${{ matrix.runtime }}/dinfo publish/self-contained/${{ matrix.runtime }}/dinfo-${{ matrix.runtime }}-self-contained
 
