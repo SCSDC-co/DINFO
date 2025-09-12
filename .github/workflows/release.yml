@@ -8,9 +8,6 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                runtime: [linux-x64, win-x64, osx-x64]
 
         steps:
             - name: Checkout repository
@@ -29,31 +26,23 @@ jobs:
               run: |
                   dotnet publish ./src/tui/dinfo.tui.csproj \
                     -c Release \
-                    -r ${{ matrix.runtime }} \
+                    -r linux-x64 \
                     --self-contained true \
                     /p:PublishSingleFile=true \
-                    -o publish/self-contained/${{ matrix.runtime }}
+                    -o publish/self-contained/linux-x64
 
-                  if [[ "${{ matrix.runtime }}" == "win-x64" ]]; then
-                    mv publish/self-contained/${{ matrix.runtime }}/dinfo.exe publish/self-contained/${{ matrix.runtime }}/dinfo-${{ matrix.runtime }}-self-contained.exe
-                  else
-                    mv publish/self-contained/${{ matrix.runtime }}/dinfo publish/self-contained/${{ matrix.runtime }}/dinfo-${{ matrix.runtime }}-self-contained
-                  fi
+                  mv publish/self-contained/linux-x64/dinfo publish/self-contained/linux-x64/dinfo-linux-x64-self-contained
 
             # --- Framework-dependent build ---
             - name: Publish Framework-dependent
               run: |
                   dotnet publish ./src/tui/dinfo.tui.csproj \
                     -c Release \
-                    -r ${{ matrix.runtime }} \
+                    -r linux-x64 \
                     --self-contained false \
-                    -o publish/framework-dependent/${{ matrix.runtime }}
+                    -o publish/framework-dependent/linux-x64
 
-                  if [[ "${{ matrix.runtime }}" == "win-x64" ]]; then
-                    mv publish/framework-dependent/${{ matrix.runtime }}/dinfo.exe publish/framework-dependent/${{ matrix.runtime }}/dinfo-${{ matrix.runtime }}-framework-dependent.exe
-                  else
-                    mv publish/framework-dependent/${{ matrix.runtime }}/dinfo publish/framework-dependent/${{ matrix.runtime }}/dinfo-${{ matrix.runtime }}-framework-dependent
-                  fi
+                  mv publish/framework-dependent/linux-x64/dinfo publish/framework-dependent/linux-x64/dinfo-linux-x64-framework-dependent
 
             # --- Create GitHub Release ---
             - name: Create Release
@@ -72,7 +61,7 @@ jobs:
               uses: softprops/action-gh-release@v1
               with:
                   files: |
-                      publish/self-contained/${{ matrix.runtime }}/dinfo-${{ matrix.runtime }}-self-contained*
-                      publish/framework-dependent/${{ matrix.runtime }}/dinfo-${{ matrix.runtime }}-framework-dependent*
+                      publish/self-contained/linux-x64/dinfo-linux-x64-self-contained
+                      publish/framework-dependent/linux-x64/dinfo-linux-x64-framework-dependent
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
