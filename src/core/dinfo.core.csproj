@@ -11,6 +11,7 @@
   <ItemGroup>
     <PackageReference Include="GitReader" Version="1.16.0" />
     <PackageReference Include="MAB.DotIgnore" Version="3.0.2" />
+    <PackageReference Include="YamlDotNet" Version="16.3.0" />
   </ItemGroup>
 
 </Project>
