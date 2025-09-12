@@ -33,17 +33,6 @@ jobs:
 
                   mv publish/self-contained/linux-x64/dinfo publish/self-contained/linux-x64/dinfo-linux-x64-self-contained
 
-            # --- Framework-dependent build ---
-            - name: Publish Framework-dependent
-              run: |
-                  dotnet publish ./src/tui/dinfo.tui.csproj \
-                    -c Release \
-                    -r linux-x64 \
-                    --self-contained false \
-                    -o publish/framework-dependent/linux-x64
-
-                  mv publish/framework-dependent/linux-x64/dinfo publish/framework-dependent/linux-x64/dinfo-linux-x64-framework-dependent
-
             # --- Create GitHub Release ---
             - name: Create Release
               id: create_release
@@ -62,6 +51,5 @@ jobs:
               with:
                   files: |
                       publish/self-contained/linux-x64/dinfo-linux-x64-self-contained
-                      publish/framework-dependent/linux-x64/dinfo-linux-x64-framework-dependent
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
