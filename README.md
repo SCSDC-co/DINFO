@@ -5,18 +5,23 @@
 **Dinfo** is a C# tool that provides detailed information about a directory.
 It uses **Spectre.Console** to create a clean and colorful TUI, showing files, lines, size, permissions, and file type statistics.
 
+![GitHub release](https://img.shields.io/github/v/release/SCSDC-co/DINFO)
+![License](https://img.shields.io/github/license/SCSDC-co/DINFO)
+![CI](https://github.com/SCSDC-co/DINFO/actions/workflows/release.yml/badge.svg)
+
 </div>
 
 ## 🚀 Features
 
 - Counts the number of **files** and **directories**.
-- Counts the number of **lines of code** in files.
+- Counts the number of **lines of code, comment and blank lines** in files.
 - Shows the **total size** of the directory.
 - Displays **permissions** of the directory.
 - Lists all **file extensions** and shows the **most used extension**.
 - Supports **recursive** processing of subdirectories (`-r`).
 - **Verbose mode** (`-v`) for more detailed information.
 - Elegant text-based interface with borders, tables, and colors via **Spectre.Console**.
+- Save the output in a **.json** or **.yaml** file.
 
 ---
 
@@ -45,21 +50,32 @@ It uses **Spectre.Console** to create a clean and colorful TUI, showing files, l
 ## ❓ Help Page
 
 ```bash
+dinfo.tui v1.0.0
+
 USAGE
-  dotnet dinfo.tui.dll <targetdirectory> [options]
+  dinfo.tui <targetdirectory> [options]
+  dinfo.tui [command] [...]
 
 DESCRIPTION
   Display information about the specified directory and its contents.
 
 PARAMETERS
-  targetdirectory   The Directory to be analyzed. Default: Current directory.
+  targetdirectory   The Directory to be analyzed. Default: Current Directory.
 
 OPTIONS
   -r|--recursive    Recursively list all files and directories. Default: "False".
   -v|--verbose      Enable verbose output. Default: "False".
   -i|--ignore-gitignore  Ignore .gitignore files. Default: "False".
+  -o|--output       Specify if you want the output in a file. Default: "False".
+  -f|--file-format  Specify the output file (formats: json, yaml). Default: "output.json".
+  -n|--no-tui       Disable TUI Default: "False".
   -h|--help         Shows help text.
   --version         Shows version information.
+
+COMMANDS
+  file              Display information about the specified file.
+
+You can run `dinfo.tui [command] --help` to show help on a specific command.
 ```
 
 **Example:**
@@ -73,6 +89,12 @@ dinfo C:\Projects\MyFolder -r
 
 # Get the information about a specific directory with verbose output
 dinfo C:\Projects\MyFolder -v
+
+# Save the output in ./output.json
+dinfo C:\Projects\MyFolder -o
+
+# Save the output in C:\dinfo-outputs\output1.json
+dinfo C:\Projects\MyFolder -o -f C:\dinfo-outputs\output1.json
 ```
 
 ---
@@ -85,9 +107,12 @@ dinfo C:\Projects\MyFolder -v
 
 ## ⚡ Technologies
 
-- [C#](https://docs.microsoft.com/en-us/dotnet/csharp/)
+- [C#](https://docs.microsoft.com/en-us/dotnet/csharp/) - the main language of the program
 - [Spectre.Console](https://spectreconsole.net/) - for TUI and colored output
 - [CliFx](https://github.com/Tyrrrz/CliFx) - for command-line parsing
+- [GitReader](https://github.com/kekyo/GitReader) - for getting git informations
+- [MAB.DotIgnore](https://github.com/markashleybell/MAB.DotIgnore) - for .gitignore parsing
+- [YamlDotNet](https://github.com/aaubry/YamlDotNet) - for yaml serialization and parsing
 
 ---
 
