@@ -22,7 +22,10 @@ public class DinfoCommand : ICommand
     [CommandOption("ignore-gitignore", 'i', Description = "Ignore .gitignore files.")]
     public bool IgnoreGitIgnoreCli { get; set; } = false;
 
-    [CommandOption("output", 'o', Description = "Specify if and where you want to save the output in a file (formats: json, yaml).")]
+    [CommandOption("output", 'o', Description = "Specify if you want the output in a file.")]
+    public bool OutputToFileCli { get; set; } = false;
+
+    [CommandOption("file-format", 'f', Description = "Specify the output file (formats: json, yaml).")]
     public string OutputCli { get; set; } = "output.json";
 
     [CommandOption("no-tui", 'n', Description = "Disable TUI")]
@@ -42,27 +45,38 @@ public class DinfoCommand : ICommand
             await TuiHelper.PrintDirectoryInfo(dir);
         }
 
-        if (OutputCli.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+        if (OutputToFileCli)
         {
-            await JsonHandler.DirectorySaveJson(dir, OutputCli);
+            if (OutputCli.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+            {
+                await JsonHandler.DirectorySaveJson(dir, OutputCli);
 
-            var savedPanel = new Panel($"[bold green]JSON file saved in:[/] {OutputCli}");
-            savedPanel.Border = BoxBorder.Rounded;
-            savedPanel.BorderStyle = new Style(Color.Green);
-            AnsiConsole.Write(savedPanel);
-        }
-        else if (OutputCli.EndsWith(".yaml", StringComparison.OrdinalIgnoreCase))
-        {
-            await YamlHandler.DirectorySaveYaml(dir, OutputCli);
+                var savedPanel = new Panel($"[bold green]JSON file saved in:[/] {OutputCli}");
 
-            var savedPanel = new Panel($"[bold green]YAML file saved in:[/] {OutputCli}");
-            savedPanel.Border = BoxBorder.Rounded;
-            savedPanel.BorderStyle = new Style(Color.Green);
-            AnsiConsole.Write(savedPanel);
+                savedPanel.Border = BoxBorder.Rounded;
+                savedPanel.BorderStyle = new Style(Color.Green);
+
+                AnsiConsole.Write(savedPanel);
+            }
+            else if (OutputCli.EndsWith(".yaml", StringComparison.OrdinalIgnoreCase))
+            {
+                await YamlHandler.DirectorySaveYaml(dir, OutputCli);
+
+                var savedPanel = new Panel($"[bold green]YAML file saved in:[/] {OutputCli}");
+
+                savedPanel.Border = BoxBorder.Rounded;
+                savedPanel.BorderStyle = new Style(Color.Green);
+
+                AnsiConsole.Write(savedPanel);
+            }
+            else
+            {
+                AnsiConsole.MarkupLine("[bold red]The output must be a .json/.yaml file[/]");
+            }
         }
         else
         {
-            AnsiConsole.MarkupLine("[bold red]The output must be a .json/.yaml file[/]");
+            AnsiConsole.MarkupLine("[bold green]Output will not be saved in a file[/]");
         }
     }
 }
@@ -73,7 +87,10 @@ public class FileCommand : ICommand
     [CommandParameter(0, Description = "The File to be analyzed.", IsRequired = true)]
     public required string TargetFile { get; set; }
 
-    [CommandOption("output", 'o', Description = "Specify if and where you want to save the output in a file (formats: json, yaml).")]
+    [CommandOption("output", 'o', Description = "Specify if you want the output in a file.")]
+    public bool OutputToFileCli { get; set; } = false;
+
+    [CommandOption("file-format", 'f', Description = "Specify the output file (formats: json, yaml).")]
     public string OutputCli { get; set; } = "output.json";
 
     [CommandOption("no-tui", 'n', Description = "Disable TUI")]
@@ -88,27 +105,38 @@ public class FileCommand : ICommand
             await TuiHelper.PrintFileInfo(TargetFile);
         }
 
-        if (OutputCli.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+        if (OutputToFileCli)
         {
-            await JsonHandler.FileSaveJson(TargetFile, OutputCli);
+            if (OutputCli.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+            {
+                await JsonHandler.FileSaveJson(TargetFile, OutputCli);
 
-            var savedPanel = new Panel($"[bold green]JSON file saved in:[/] {OutputCli}");
-            savedPanel.Border = BoxBorder.Rounded;
-            savedPanel.BorderStyle = new Style(Color.Green);
-            AnsiConsole.Write(savedPanel);
-        }
-        else if (OutputCli.EndsWith(".yaml", StringComparison.OrdinalIgnoreCase))
-        {
-            await YamlHandler.FileSaveYaml(TargetFile, OutputCli);
+                var savedPanel = new Panel($"[bold green]JSON file saved in:[/] {OutputCli}");
 
-            var savedPanel = new Panel($"[bold green]YAML file saved in:[/] {OutputCli}");
-            savedPanel.Border = BoxBorder.Rounded;
-            savedPanel.BorderStyle = new Style(Color.Green);
-            AnsiConsole.Write(savedPanel);
+                savedPanel.Border = BoxBorder.Rounded;
+                savedPanel.BorderStyle = new Style(Color.Green);
+
+                AnsiConsole.Write(savedPanel);
+            }
+            else if (OutputCli.EndsWith(".yaml", StringComparison.OrdinalIgnoreCase))
+            {
+                await YamlHandler.FileSaveYaml(TargetFile, OutputCli);
+
+                var savedPanel = new Panel($"[bold green]YAML file saved in:[/] {OutputCli}");
+
+                savedPanel.Border = BoxBorder.Rounded;
+                savedPanel.BorderStyle = new Style(Color.Green);
+
+                AnsiConsole.Write(savedPanel);
+            }
+            else
+            {
+                AnsiConsole.MarkupLine("[bold red]The output must be a .json/.yaml file[/]");
+            }
         }
         else
         {
-            AnsiConsole.MarkupLine("[bold red]The output must be a .json file[/]");
+            AnsiConsole.MarkupLine("[bold green]Output will not be saved in a file[/]");
         }
     }
 }

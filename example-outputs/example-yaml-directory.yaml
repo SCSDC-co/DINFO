@@ -1,0 +1,49 @@
+path: D:\Programmazione\C#\DINFO
+biggestFile: D:\Programmazione\C#\DINFO\src\tui\obj\Debug\net9.0\refint\dinfo.tui.dll
+latestModifiedFile: D:\Programmazione\C#\DINFO\src\tui\obj\Debug\net9.0\refint\dinfo.tui.dll
+size: 2,8401575088500977 MB
+permissions: 'Everyone: Allow FullControl'
+mostUsedExtension: cs
+fileType:
+- .sln
+- .md
+- .png
+- .json
+- .yaml
+- .csproj
+- .cs
+encoding:
+- utf-8
+- utf-8
+- utf-8
+- utf-8
+- utf-8
+- utf-8
+- utf-8
+- utf-8
+- utf-8
+- utf-8
+- utf-8
+- utf-8
+- utf-8
+- utf-8
+- utf-8
+- utf-8
+- utf-8
+- utf-8
+- utf-8
+- utf-8
+- utf-8
+files: 21
+directories: 38
+comments: 64
+blank: 357
+code: 1972
+lines: 2393
+git:
+  Repo:
+    gitBranchName: main
+    gitHash: 0a98b443db3b637d3563d509a5ad55c10accee32
+    gitAuthor: Giuliano <giulianodeamicis2009@gmail.com> Fri Sep 12 15:41:23 2025 +0200
+    gitCommitter: Giuliano <giulianodeamicis2009@gmail.com> Fri Sep 12 15:41:23 2025 +0200
+    gitSubject: 'feat: added yaml serializer'

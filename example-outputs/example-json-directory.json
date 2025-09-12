@@ -1,0 +1,50 @@
+{
+  "Path": "D:\\Programmazione\\C#\\DINFO",
+  "BiggestFile": "D:\\Programmazione\\C#\\DINFO\\src\\tui\\obj\\Debug\\net9.0\\refint\\dinfo.tui.dll",
+  "LatestModifiedFile": "D:\\Programmazione\\C#\\DINFO\\src\\tui\\obj\\Debug\\net9.0\\refint\\dinfo.tui.dll",
+  "Size": "2,838362693786621 MB",
+  "Permissions": "Everyone: Allow FullControl",
+  "MostUsedExtension": "cs",
+  "FileType": [
+    ".sln",
+    ".md",
+    ".png",
+    ".csproj",
+    ".cs"
+  ],
+  "Encoding": [
+    "utf-8",
+    "utf-8",
+    "utf-8",
+    "utf-8",
+    "utf-8",
+    "utf-8",
+    "utf-8",
+    "utf-8",
+    "utf-8",
+    "utf-8",
+    "utf-8",
+    "utf-8",
+    "utf-8",
+    "utf-8",
+    "utf-8",
+    "utf-8",
+    "utf-8",
+    "utf-8"
+  ],
+  "Files": 18,
+  "Directories": 38,
+  "Comments": 64,
+  "Blank": 356,
+  "Code": 1900,
+  "Lines": 2320,
+  "Git": {
+    "Repo": {
+      "GitBranchName": "main",
+      "GitHash": "0a98b443db3b637d3563d509a5ad55c10accee32",
+      "GitAuthor": "Giuliano \u003Cgiulianodeamicis2009@gmail.com\u003E Fri Sep 12 15:41:23 2025 \u002B0200",
+      "GitCommitter": "Giuliano \u003Cgiulianodeamicis2009@gmail.com\u003E Fri Sep 12 15:41:23 2025 \u002B0200",
+      "GitSubject": "feat: added yaml serializer"
+    }
+  }
+}
