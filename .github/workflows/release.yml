@@ -33,7 +33,12 @@ jobs:
                     --self-contained true \
                     /p:PublishSingleFile=true \
                     -o publish/self-contained/${{ matrix.runtime }}
-                  mv publish/self-contained/${{ matrix.runtime }}/dinfo publish/self-contained/${{ matrix.runtime }}/dinfo-${{ matrix.runtime }}-self-contained
+
+                  if [[ "${{ matrix.runtime }}" == "win-x64" ]]; then
+                    mv publish/self-contained/${{ matrix.runtime }}/dinfo.exe publish/self-contained/${{ matrix.runtime }}/dinfo-${{ matrix.runtime }}-self-contained.exe
+                  else
+                    mv publish/self-contained/${{ matrix.runtime }}/dinfo publish/self-contained/${{ matrix.runtime }}/dinfo-${{ matrix.runtime }}-self-contained
+                  fi
 
             # --- Framework-dependent build ---
             - name: Publish Framework-dependent
@@ -43,7 +48,12 @@ jobs:
                     -r ${{ matrix.runtime }} \
                     --self-contained false \
                     -o publish/framework-dependent/${{ matrix.runtime }}
-                  mv publish/framework-dependent/${{ matrix.runtime }}/dinfo publish/framework-dependent/${{ matrix.runtime }}/dinfo-${{ matrix.runtime }}-framework-dependent
+
+                  if [[ "${{ matrix.runtime }}" == "win-x64" ]]; then
+                    mv publish/framework-dependent/${{ matrix.runtime }}/dinfo.exe publish/framework-dependent/${{ matrix.runtime }}/dinfo-${{ matrix.runtime }}-framework-dependent.exe
+                  else
+                    mv publish/framework-dependent/${{ matrix.runtime }}/dinfo publish/framework-dependent/${{ matrix.runtime }}/dinfo-${{ matrix.runtime }}-framework-dependent
+                  fi
 
             # --- Create GitHub Release ---
             - name: Create Release
@@ -62,7 +72,7 @@ jobs:
               uses: softprops/action-gh-release@v1
               with:
                   files: |
-                      publish/self-contained/${{ matrix.runtime }}/dinfo-${{ matrix.runtime }}-self-contained
-                      publish/framework-dependent/${{ matrix.runtime }}/dinfo-${{ matrix.runtime }}-framework-dependent
+                      publish/self-contained/${{ matrix.runtime }}/dinfo-${{ matrix.runtime }}-self-contained*
+                      publish/framework-dependent/${{ matrix.runtime }}/dinfo-${{ matrix.runtime }}-framework-dependent*
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
