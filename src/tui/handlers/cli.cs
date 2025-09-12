@@ -21,11 +21,8 @@ public class DinfoCommand : ICommand
     [CommandOption("ignore-gitignore", 'i', Description = "Ignore .gitignore files.")]
     public bool IgnoreGitIgnoreCli { get; set; } = false;
 
-    [CommandOption("output", 'o', Description = "Specify if you want to save the output in a file.")]
-    public bool OutputCli { get; set; } = false;
-
-    [CommandOption("output-file", 'f', Description = "Output format and name.")]
-    public string OutputFileCli { get; set; } = "output.json";
+    [CommandOption("output", 'o', Description = "Specify if and where you want to save the output in a file (formats: json).")]
+    public string OutputCli { get; set; } = "output.json";
 
     [CommandOption("no-tui", 'n', Description = "Disable TUI")]
     public bool NoTuiCli { get; set; } = false;
@@ -44,21 +41,18 @@ public class DinfoCommand : ICommand
             await TuiHelper.PrintDirectoryInfo(dir);
         }
 
-        if (OutputCli)
+        if (OutputCli.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
         {
-            if (OutputFileCli.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
-            {
-                await JsonHandler.DirectorySaveJson(dir, OutputFileCli);
+            await JsonHandler.DirectorySaveJson(dir, OutputCli);
 
-                var savedPanel = new Panel($"[bold green]JSON file saved in:[/] {OutputFileCli}");
-                savedPanel.Border = BoxBorder.Rounded;
-                savedPanel.BorderStyle = new Style(Color.Green);
-                AnsiConsole.Write(savedPanel);
-            }
-            else
-            {
-                AnsiConsole.MarkupLine("[bold red]The output must be a .json file[/]");
-            }
+            var savedPanel = new Panel($"[bold green]JSON file saved in:[/] {OutputCli}");
+            savedPanel.Border = BoxBorder.Rounded;
+            savedPanel.BorderStyle = new Style(Color.Green);
+            AnsiConsole.Write(savedPanel);
+        }
+        else
+        {
+            AnsiConsole.MarkupLine("[bold red]The output must be a .json file[/]");
         }
     }
 }
@@ -70,10 +64,7 @@ public class FileCommand : ICommand
     public required string TargetFile { get; set; }
 
     [CommandOption("output", 'o', Description = "Output format and name.")]
-    public bool OutputCli { get; set; } = false;
-
-    [CommandOption("output-file", 'f', Description = "Output format and name.")]
-    public string OutputFileCli { get; set; } = "output.json";
+    public string OutputCli { get; set; } = "output.json";
 
     [CommandOption("no-tui", 'n', Description = "Disable TUI")]
     public bool NoTuiCli { get; set; } = false;
@@ -87,21 +78,18 @@ public class FileCommand : ICommand
             await TuiHelper.PrintFileInfo(TargetFile);
         }
 
-        if (OutputCli)
+        if (OutputCli.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
         {
-            if (OutputFileCli.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
-            {
-                await JsonHandler.FileSaveJson(TargetFile, OutputFileCli);
+            await JsonHandler.FileSaveJson(TargetFile, OutputCli);
 
-                var savedPanel = new Panel($"[bold green]JSON file saved in:[/] {OutputFileCli}");
-                savedPanel.Border = BoxBorder.Rounded;
-                savedPanel.BorderStyle = new Style(Color.Green);
-                AnsiConsole.Write(savedPanel);
-            }
-            else
-            {
-                AnsiConsole.MarkupLine("[bold red]The output must be a .json file[/]");
-            }
+            var savedPanel = new Panel($"[bold green]JSON file saved in:[/] {OutputCli}");
+            savedPanel.Border = BoxBorder.Rounded;
+            savedPanel.BorderStyle = new Style(Color.Green);
+            AnsiConsole.Write(savedPanel);
+        }
+        else
+        {
+            AnsiConsole.MarkupLine("[bold red]The output must be a .json file[/]");
         }
     }
 }
