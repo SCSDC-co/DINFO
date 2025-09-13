@@ -24,17 +24,17 @@ jobs:
             - name: Restore dependencies
               run: dotnet restore ./src/tui/dinfo.tui.csproj
 
-            # --- Framework-dependent build ---
-            - name: Publish Framework-dependent
+            # --- Self-Contained build ---
+            - name: Publish Self-Contained
               run: |
                   dotnet publish ./src/tui/dinfo.tui.csproj \
                     -c Release \
                     -r linux-x64 \
                     --self-contained true \
                     /p:PublishSingleFile=false \
-                    -o publish/framework-dependent/linux-x64
+                    -o publish/self-contained/linux-x64
 
-                  mv publish/framework-dependent/linux-x64/dinfo publish/framework-dependent/linux-x64/dinfo-linux-x64-framework-dependent
+                  mv publish/self-contained/linux-x64/dinfo publish/self-contained/linux-x64/dinfo-linux-x64-self-contained
 
             # --- Create GitHub Release ---
             - name: Create Release
