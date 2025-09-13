@@ -24,18 +24,6 @@ jobs:
             - name: Restore dependencies
               run: dotnet restore ./src/tui/dinfo.tui.csproj
 
-            # --- Self-contained build ---
-            - name: Publish Self-contained
-              run: |
-                  dotnet publish ./src/tui/dinfo.tui.csproj \
-                    -c Release \
-                    -r linux-x64 \
-                    --self-contained true \
-                    /p:PublishSingleFile=false \
-                    -o publish/self-contained/linux-x64
-
-                  mv publish/self-contained/linux-x64/dinfo publish/self-contained/linux-x64/dinfo-linux-x64-self-contained
-
             # --- Framework-dependent build ---
             - name: Publish Framework-dependent
               run: |
