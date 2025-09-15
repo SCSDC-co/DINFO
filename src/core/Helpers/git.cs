@@ -1,7 +1,7 @@
+using dinfo.core.Utils.Globals;
 using GitReader;
 using GitReader.Structures;
 using MAB.DotIgnore;
-using dinfo.core.Utils.Globals;
 
 namespace dinfo.core.Helpers.GitTools;
 
@@ -31,17 +31,15 @@ public static class GitHelper
         GlobalsUtils.GitRootDirectory = string.Empty;
     }
 
-
-    public static async Task GetGitInfo(string targetDirectory)
+    public static async Task GetGitInfoAsync(string targetDirectory)
     {
         try
         {
             GlobalsUtils.TargetDirectory = targetDirectory;
 
-            using StructuredRepository repository =
-                await Repository.Factory.OpenStructureAsync(
-                    targetDirectory
-                );
+            using StructuredRepository repository = await Repository.Factory.OpenStructureAsync(
+                targetDirectory
+            );
 
             if (repository.Head is Branch head)
             {

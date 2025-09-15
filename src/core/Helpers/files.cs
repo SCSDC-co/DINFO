@@ -1,20 +1,19 @@
-using System.Text.RegularExpressions;
 using System.Text;
-
+using System.Text.RegularExpressions;
 using dinfo.core.Utils.Globals;
 
 namespace dinfo.core.Helpers.FilesTools;
 
 public static class FilesHelper
 {
-    public static async Task<int> CountLines(string fileName)
+    public static async Task<int> CountLinesAsync(string fileName)
     {
         IEnumerable<string> lines = await File.ReadAllLinesAsync(fileName);
 
         return lines.Count();
     }
 
-    public static async Task<int> GetCommentsLines(string fileName)
+    public static async Task<int> GetCommentsLinesAsync(string fileName)
     {
         var slashComment = new Regex(@"^\s*//");
         var hashComment = new Regex(@"^\s*#");
@@ -37,17 +36,28 @@ public static class FilesHelper
             if (inMultiLineComment)
             {
                 commentLines++;
-                if (multiLineCommentEnd.IsMatch(trimmedLine) || multiLineMarkupEnd.IsMatch(trimmedLine))
+                if (
+                    multiLineCommentEnd.IsMatch(trimmedLine)
+                    || multiLineMarkupEnd.IsMatch(trimmedLine)
+                )
                 {
                     inMultiLineComment = false;
                 }
             }
-            else if (multiLineCommentStart.IsMatch(trimmedLine) || multiLineMarkupStart.IsMatch(trimmedLine))
+            else if (
+                multiLineCommentStart.IsMatch(trimmedLine)
+                || multiLineMarkupStart.IsMatch(trimmedLine)
+            )
             {
                 commentLines++;
                 inMultiLineComment = true;
             }
-            else if (slashComment.IsMatch(trimmedLine) || hashComment.IsMatch(trimmedLine) || dashComment.IsMatch(trimmedLine) || semicolonComment.IsMatch(trimmedLine))
+            else if (
+                slashComment.IsMatch(trimmedLine)
+                || hashComment.IsMatch(trimmedLine)
+                || dashComment.IsMatch(trimmedLine)
+                || semicolonComment.IsMatch(trimmedLine)
+            )
             {
                 commentLines++;
             }
@@ -58,7 +68,7 @@ public static class FilesHelper
         return commentLines;
     }
 
-    public static async Task<int> GetBlankLines(string fileName)
+    public static async Task<int> GetBlankLinesAsync(string fileName)
     {
         IEnumerable<string> lines = await File.ReadAllLinesAsync(fileName);
 
@@ -113,14 +123,20 @@ public static class FilesHelper
             file.ReadExactlyAsync(bom, 0, Math.Min(4, (int)file.Length));
         }
 
-        if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf) return Encoding.UTF8;
-        if (bom[0] == 0xff && bom[1] == 0xfe && bom[2] == 0 && bom[3] == 0) return Encoding.UTF32;
-        if (bom[0] == 0xff && bom[1] == 0xfe) return Encoding.Unicode;
-        if (bom[0] == 0xfe && bom[1] == 0xff) return Encoding.BigEndianUnicode;
-        if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff) return new UTF32Encoding(true, true);
+        if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf)
+            return Encoding.UTF8;
+        if (bom[0] == 0xff && bom[1] == 0xfe && bom[2] == 0 && bom[3] == 0)
+            return Encoding.UTF32;
+        if (bom[0] == 0xff && bom[1] == 0xfe)
+            return Encoding.Unicode;
+        if (bom[0] == 0xfe && bom[1] == 0xff)
+            return Encoding.BigEndianUnicode;
+        if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff)
+            return new UTF32Encoding(true, true);
 
         var allBytes = File.ReadAllBytes(fileName);
-        if (IsUtf8(allBytes)) return Encoding.UTF8;
+        if (IsUtf8(allBytes))
+            return Encoding.UTF8;
 
         return Encoding.ASCII;
     }
@@ -148,20 +164,17 @@ public static class FilesHelper
             return;
         }
 
-        GlobalsUtils.LastModifiedFile = files
-            .OrderBy(fi => fi.LastWriteTime)
-            .Last()
-            .FullName;
+        GlobalsUtils.LastModifiedFile = files.OrderBy(fi => fi.LastWriteTime).Last().FullName;
     }
 
-    public static async Task ProcessFile(string fileName)
+    public static async Task ProcessFileAsync(string fileName)
     {
         try
         {
             GlobalsUtils.TotalFiles++;
-            GlobalsUtils.TotalLines += await CountLines(fileName);
-            await GetCommentsLines(fileName);
-            await GetBlankLines(fileName);
+            GlobalsUtils.TotalLines += await CountLinesAsync(fileName);
+            await GetCommentsLinesAsync(fileName);
+            await GetBlankLinesAsync(fileName);
             GlobalsUtils.Files.Add(fileName);
             GlobalsUtils.Encodings.Add(GetEncoding(fileName).WebName);
         }

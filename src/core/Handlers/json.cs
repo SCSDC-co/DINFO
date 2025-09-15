@@ -47,12 +47,12 @@ public class FileJson
 
 public static class JsonHandler
 {
-    public static async Task DirectorySaveJson(string targetDirectory, string pathJson)
+    public static async Task DirectorySaveJsonAsync(string targetDirectory, string pathJson)
     {
         if (GlobalsUtils.NoTui)
         {
-            await DirectoryHelper.ProcessDirectory(targetDirectory);
-            await GitHelper.GetGitInfo(targetDirectory);
+            await DirectoryHelper.ProcessDirectoryAsync(targetDirectory);
+            await GitHelper.GetGitInfoAsync(targetDirectory);
         }
 
         string directorySize =
@@ -103,16 +103,16 @@ public static class JsonHandler
         File.WriteAllText(pathJson, jsonString);
     }
 
-    public static async Task FileSaveJson(string targetFile, string pathJson)
+    public static async Task FileSaveJsonAsync(string targetFile, string pathJson)
     {
         if (GlobalsUtils.NoTui)
         {
-            await FilesHelper.ProcessFile(targetFile);
+            await FilesHelper.ProcessFileAsync(targetFile);
         }
 
-        var lines = await FilesHelper.CountLines(targetFile);
-        var comments = await FilesHelper.GetCommentsLines(targetFile);
-        var blank = await FilesHelper.GetBlankLines(targetFile);
+        var lines = await FilesHelper.CountLinesAsync(targetFile);
+        var comments = await FilesHelper.GetCommentsLinesAsync(targetFile);
+        var blank = await FilesHelper.GetBlankLinesAsync(targetFile);
         var code = lines - (comments + blank);
 
         var json = new FileJson

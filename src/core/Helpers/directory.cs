@@ -1,14 +1,14 @@
+using System.Security.AccessControl;
+using System.Security.Principal;
 using dinfo.core.Helpers.FilesTools;
 using dinfo.core.Helpers.GitTools;
 using dinfo.core.Utils.Globals;
-using System.Security.AccessControl;
-using System.Security.Principal;
 
 namespace dinfo.core.Helpers.DirTools;
 
 public static class DirectoryHelper
 {
-    public async static Task ProcessDirectory(string targetDirectory)
+    public static async Task ProcessDirectoryAsync(string targetDirectory)
     {
         GlobalsUtils.TotalDirs++;
         GetDirectorySize(targetDirectory);
@@ -16,7 +16,10 @@ public static class DirectoryHelper
         string[] fileEntries = Directory.GetFiles(targetDirectory);
 
         GitHelper.FindGitRoot(targetDirectory);
-        var gitIgnorePath = Path.Combine((GlobalsUtils.GitRootDirectory).Replace("\\", "/"), ".gitignore");
+        var gitIgnorePath = Path.Combine(
+            (GlobalsUtils.GitRootDirectory).Replace("\\", "/"),
+            ".gitignore"
+        );
 
         foreach (string fileName in fileEntries)
         {
@@ -35,13 +38,13 @@ public static class DirectoryHelper
             try
             {
                 GlobalsUtils.TotalFiles++;
-                GlobalsUtils.TotalLines += await FilesHelper.CountLines(fileName);
+                GlobalsUtils.TotalLines += await FilesHelper.CountLinesAsync(fileName);
                 GlobalsUtils.Files.Add(fileName);
                 GlobalsUtils.Encodings.Add(FilesHelper.GetEncoding(fileName).WebName);
 
                 FilesHelper.GetFileType(fileName);
-                await FilesHelper.GetCommentsLines(fileName);
-                await FilesHelper.GetBlankLines(fileName);
+                await FilesHelper.GetCommentsLinesAsync(fileName);
+                await FilesHelper.GetBlankLinesAsync(fileName);
             }
             catch (IOException)
             {
@@ -63,18 +66,20 @@ public static class DirectoryHelper
         {
             foreach (string subdirectory in subdirectoryEntries)
             {
-                if (Path.GetFileName(subdirectory).Equals(".git", StringComparison.OrdinalIgnoreCase))
+                if (
+                    Path.GetFileName(subdirectory)
+                        .Equals(".git", StringComparison.OrdinalIgnoreCase)
+                )
                     continue;
 
-                await ProcessDirectory(subdirectory);
+                await ProcessDirectoryAsync(subdirectory);
             }
         }
     }
 
     public static void GetDirectorySize(string targetDirectory)
     {
-        long dirSize =
-            Directory.GetFiles(targetDirectory).Sum(f => new FileInfo(f).Length);
+        long dirSize = Directory.GetFiles(targetDirectory).Sum(f => new FileInfo(f).Length);
 
         var files = Directory.GetFiles(targetDirectory);
 
@@ -158,7 +163,7 @@ public static class DirectoryHelper
                 var unixMode = File.GetUnixFileMode(path);
                 return unixMode.ToString();
 #else
-        return "Unix permissions not available on this .NET version";
+                return "Unix permissions not available on this .NET version";
 #endif
             }
             catch (Exception ex)

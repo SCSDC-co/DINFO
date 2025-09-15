@@ -1,9 +1,9 @@
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 using dinfo.core.Helpers.DirTools;
 using dinfo.core.Helpers.FilesTools;
 using dinfo.core.Helpers.GitTools;
 using dinfo.core.Utils.Globals;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace dinfo.core.Handlers.Yaml;
 
@@ -48,12 +48,12 @@ public class FileYaml
 
 public static class YamlHandler
 {
-    public static async Task DirectorySaveYaml(string targetDirectory, string pathYaml)
+    public static async Task DirectorySaveYamlAsync(string targetDirectory, string pathYaml)
     {
         if (GlobalsUtils.NoTui)
         {
-            await DirectoryHelper.ProcessDirectory(targetDirectory);
-            await GitHelper.GetGitInfo(targetDirectory);
+            await DirectoryHelper.ProcessDirectoryAsync(targetDirectory);
+            await GitHelper.GetGitInfoAsync(targetDirectory);
         }
 
         string directorySize =
@@ -106,16 +106,16 @@ public static class YamlHandler
         File.WriteAllText(pathYaml, yamlString);
     }
 
-    public static async Task FileSaveYaml(string targetFile, string pathYaml)
+    public static async Task FileSaveYamlAsync(string targetFile, string pathYaml)
     {
         if (GlobalsUtils.NoTui)
         {
-            await FilesHelper.ProcessFile(targetFile);
+            await FilesHelper.ProcessFileAsync(targetFile);
         }
 
-        var lines = await FilesHelper.CountLines(targetFile);
-        var comments = await FilesHelper.GetCommentsLines(targetFile);
-        var blank = await FilesHelper.GetBlankLines(targetFile);
+        var lines = await FilesHelper.CountLinesAsync(targetFile);
+        var comments = await FilesHelper.GetCommentsLinesAsync(targetFile);
+        var blank = await FilesHelper.GetBlankLinesAsync(targetFile);
         var code = lines - (comments + blank);
 
         var yaml = new FileYaml
