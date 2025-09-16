@@ -7,7 +7,7 @@ It uses **Spectre.Console** to create a clean and colorful TUI, showing files, l
 
 ![GitHub release](https://img.shields.io/github/v/release/SCSDC-co/DINFO)
 ![License](https://img.shields.io/github/license/SCSDC-co/DINFO)
-![CI](https://github.com/SCSDC-co/DINFO/actions/workflows/release.yml/badge.svg)
+![CD](https://github.com/SCSDC-co/DINFO/actions/workflows/release-zip-linux.yml/badge.svg)
 
 </div>
 
@@ -27,6 +27,8 @@ It uses **Spectre.Console** to create a clean and colorful TUI, showing files, l
 
 ## 💻 Installation
 
+### 🔧 Manual
+
 1. Clone the repository:
 
     ```bash
@@ -42,7 +44,16 @@ It uses **Spectre.Console** to create a clean and colorful TUI, showing files, l
 3. Run the tool:
 
     ```bash
-    dotnet run -- [options] [directory] # same for this one
+    dotnet run -- [directory] [options]  # same for this one
+    ```
+
+### 📦 Package
+
+1. You Can install the package with an AUR helper like `yay` or `paru`.
+
+    ```bash
+    yay -S dinfo
+    paru -S dinfo
     ```
 
 ---
