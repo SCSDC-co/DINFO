@@ -1,6 +1,6 @@
 using System.Security.AccessControl;
 using System.Security.Principal;
-using dinfo.core.Handlers.TomlConfiguration;
+using dinfo.core.Handlers.ConfigTools;
 using dinfo.core.Helpers.FilesTools;
 using dinfo.core.Helpers.GitTools;
 using dinfo.core.Utils.Globals;
@@ -23,14 +23,14 @@ public static class DirectoryHelper
             ".gitignore"
         );
 
-        ConfigFileHandler.FindTomlRoot(targetDirectory);
+        ConfigHelper.FindConfigFile(targetDirectory);
 
         string configFilePath = Path.Combine(
             (GlobalsUtils.ConfigFilePath).Replace("\\", "/"),
             "dinfo.toml"
         );
 
-        ConfigFileHandler.DeserializeConfigFile(configFilePath);
+        ConfigHelper.DeserializeConfigFile(GlobalsUtils.ConfigFilePath);
 
         foreach (string fileName in fileEntries)
         {

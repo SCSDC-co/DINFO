@@ -1,45 +1,46 @@
-using System.Runtime.Serialization;
 using dinfo.core.Utils.Globals;
-using Tomlyn;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
-namespace dinfo.core.Handlers.TomlConfiguration;
+namespace dinfo.core.Handlers.ConfigTools;
 
-public class ConfigFile
+public class YamlConfigStructure
 {
-    [DataMember(Name = "Config")]
-    public ConfigSection Config { get; set; } = new();
+    [YamlMember(Alias = "recursive")]
+    public bool Recursive { get; set; } = false;
 
-    [DataMember(Name = "Ignore")]
-    public IgnoreSection Ignore { get; set; } = new();
+    [YamlMember(Alias = "verbose")]
+    public bool Verbose { get; set; } = false;
+
+    [YamlMember(Alias = "ignore_gitignore")]
+    public bool IgnoreGitignore { get; set; } = false;
+
+    [YamlMember(Alias = "no_tui")]
+    public bool NoTui { get; set; } = false;
+
+    [YamlMember(Alias = "ignored_files_or_directory")]
+    public IgnoreFilesOrDirectory IgnoredFilesOrDirectory { get; set; } = new();
 }
 
-public class ConfigSection
+public class IgnoreFilesOrDirectory
 {
-    public bool RecursiveConfig { get; set; } = false;
-    public bool GitignoreConfig { get; set; } = false;
-    public bool VerboseConfig { get; set; } = false;
-    public bool NoTuiConfig { get; set; } = false;
-    public bool IgnoreGitignoreConfig { get; set; } = false;
+    [YamlMember(Alias = "ignored_files")]
+    public List<string> IgnoredFiles { get; set; } = new();
+
+    [YamlMember(Alias = "ignored_directory")]
+    public List<string> IgnoredDirectory { get; set; } = new();
 }
 
-public class IgnoreSection
+public static class ConfigHelper
 {
-    [DataMember(Name = "DirectoryPaths")]
-    public List<string> DirectoryPaths { get; set; } = new();
-
-    [DataMember(Name = "FilePaths")]
-    public List<string> FilePaths { get; set; } = new();
-}
-
-public class ConfigFileHandler
-{
-    public static void FindTomlRoot(string targetDirectory)
+    public static void FindConfigFile(string targetDirectory)
     {
         while (!string.IsNullOrEmpty(targetDirectory))
         {
-            if (Directory.Exists(Path.Combine(targetDirectory, ".git")))
+            if ((Directory.Exists(Path.Combine(targetDirectory, ".git"))) ||
+                 File.Exists(Path.Combine(targetDirectory, "dinfo.yaml")))
             {
-                GlobalsUtils.ConfigFilePath = targetDirectory;
+                GlobalsUtils.ConfigFilePath = Path.Combine(targetDirectory, "dinfo.yaml");
                 return;
             }
 
@@ -52,16 +53,21 @@ public class ConfigFileHandler
 
     public static void DeserializeConfigFile(string configFilePath)
     {
-        string configContent = File.ReadAllText(configFilePath);
+        var deserializer = new DeserializerBuilder()
+            .WithNamingConvention(UnderscoredNamingConvention.Instance)
+            .IgnoreUnmatchedProperties()
+            .Build();
 
-        var config = Toml.ToModel<ConfigFile>(configContent);
+        var configContent = File.ReadAllText(configFilePath);
 
-        GlobalsUtils.Recursive = config.Config.RecursiveConfig;
-        GlobalsUtils.IgnoreGitignore = config.Config.IgnoreGitignoreConfig;
-        GlobalsUtils.NoTui = config.Config.NoTuiConfig;
-        GlobalsUtils.Verbose = config.Config.VerboseConfig;
+        var config = deserializer.Deserialize<YamlConfigStructure>(configContent);
 
-        GlobalsUtils.IgnoredFiles = config.Ignore.FilePaths;
-        GlobalsUtils.IgnoredDirectories = config.Ignore.DirectoryPaths;
+        GlobalsUtils.Recursive = config.Recursive;
+        GlobalsUtils.Verbose = config.Verbose;
+        GlobalsUtils.IgnoreGitignore = config.IgnoreGitignore;
+        GlobalsUtils.NoTui = config.NoTui;
+
+        GlobalsUtils.IgnoredDirectories = config.IgnoredFilesOrDirectory.IgnoredDirectory;
+        GlobalsUtils.IgnoredFiles = config.IgnoredFilesOrDirectory.IgnoredFiles;
     }
 }
