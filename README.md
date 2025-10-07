@@ -7,7 +7,7 @@ It uses **Spectre.Console** to create a clean and colorful TUI, showing files, l
 
 ![GitHub release](https://img.shields.io/github/v/release/SCSDC-co/DINFO?style=for-the-badge)
 ![License](https://img.shields.io/github/license/SCSDC-co/DINFO?style=for-the-badge)
-![CD](https://github.com/SCSDC-co/DINFO/actions/workflows/release-zip-linux.yml/badge.svg?style=for-the-badge)
+![CD](https://img.shields.io/github/actions/workflow/status/SCSDC-co/DINFO/release-zip-linux.yml?branch=main&style=for-the-badge&logo=github&logoColor=white)
 
 </div>
 
