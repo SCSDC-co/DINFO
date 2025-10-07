@@ -1,4 +1,4 @@
-name: Release
+name: Release Zip Linux
 
 on:
     push:
@@ -63,3 +63,4 @@ jobs:
                       publish/self-contained/dinfo-linux-x64-self-contained.zip
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
