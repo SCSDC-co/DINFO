@@ -5,9 +5,9 @@
 **Dinfo** is a C# tool that provides detailed information about a directory.
 It uses **Spectre.Console** to create a clean and colorful TUI, showing files, lines, size, permissions, and file type statistics.
 
-![GitHub release](https://img.shields.io/github/v/release/SCSDC-co/DINFO)
-![License](https://img.shields.io/github/license/SCSDC-co/DINFO)
-![CD](https://github.com/SCSDC-co/DINFO/actions/workflows/release-zip-linux.yml/badge.svg)
+![GitHub release](https://img.shields.io/github/v/release/SCSDC-co/DINFO?style=for-the-badge)
+![License](https://img.shields.io/github/license/SCSDC-co/DINFO?style=for-the-badge)
+![CD](https://img.shields.io/github/actions/workflow/status/SCSDC-co/DINFO/release-zip-linux.yml?branch=master&style=for-the-badge&logo=github&logoColor=white)
 
 </div>
 
@@ -22,6 +22,8 @@ It uses **Spectre.Console** to create a clean and colorful TUI, showing files, l
 - **Verbose mode** (`-v`) for more detailed information.
 - Elegant text-based interface with borders, tables, and colors via **Spectre.Console**.
 - Save the output in a **.json** or **.yaml** file.
+- **Config file support**: now you can use a dinfo.yaml file to specify options.
+- **Ignore files and directories**: specify patterns in the config file to automatically skip certain files or folders (using regex!).
 
 ---
 
@@ -110,9 +112,29 @@ dinfo C:\Projects\MyFolder -o -f C:\dinfo-outputs\output1.json
 
 ---
 
-## 🖼️ Example Output (verbose)
+## 🖼️ Exampls Output (verbose)
 
 ![Example Output](.github/assets/example-output.png)
+
+---
+
+## 🛠️ Configuration example:
+
+```yaml
+# dinfo.yaml
+recursive: true
+verbose: true
+ignore_gitignore: false
+
+ignored_files_or_directories:
+  ignored_files:
+    - "README.md"
+    - "*.log"
+
+  ignored_directories:
+    - "node_modules"
+    - ".git"
+```
 
 ---
 

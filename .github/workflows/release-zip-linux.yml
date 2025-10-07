@@ -1,7 +1,9 @@
-name: Release
+name: Release Zip Linux
 
 on:
     push:
+        branches:
+            - "master"
         tags:
             - "v*"
 

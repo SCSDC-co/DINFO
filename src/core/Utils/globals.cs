@@ -23,6 +23,8 @@ public static class GlobalsUtils
     public static List<string> Files = [];
     public static List<string> FileTypes = [];
     public static List<string> Encodings = [];
+    public static List<string> IgnoredDirectories = [];
+    public static List<string> IgnoredFiles = [];
     public static string GitBranchName = "N/A";
     public static string GitHash = "N/A";
     public static string GitAuthor = "N/A";
@@ -31,4 +33,5 @@ public static class GlobalsUtils
     public static string TargetDirectory = "";
     public static string LastModifiedFile = "N/A";
     public static string GitRootDirectory = "";
+    public static string ConfigFilePath = "";
 }

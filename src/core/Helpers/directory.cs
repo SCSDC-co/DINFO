@@ -1,8 +1,10 @@
 using System.Security.AccessControl;
 using System.Security.Principal;
+using dinfo.core.Handlers.ConfigTools;
 using dinfo.core.Helpers.FilesTools;
 using dinfo.core.Helpers.GitTools;
 using dinfo.core.Utils.Globals;
+using System.Text.RegularExpressions;
 
 namespace dinfo.core.Helpers.DirTools;
 
@@ -16,14 +18,34 @@ public static class DirectoryHelper
         string[] fileEntries = Directory.GetFiles(targetDirectory);
 
         GitHelper.FindGitRoot(targetDirectory);
+
         var gitIgnorePath = Path.Combine(
             (GlobalsUtils.GitRootDirectory).Replace("\\", "/"),
             ".gitignore"
         );
 
+        ConfigHelper.FindConfigFile(targetDirectory);
+
+        ConfigHelper.DeserializeConfigFile(GlobalsUtils.ConfigFilePath);
+
         foreach (string fileName in fileEntries)
         {
             var fileInfo = new FileInfo(fileName);
+
+            string relativePath = string.IsNullOrEmpty(GlobalsUtils.TargetDirectory)
+                ? ""
+                : Path.GetRelativePath(GlobalsUtils.TargetDirectory, fileName);
+
+            bool isIgnored = GlobalsUtils.IgnoredFiles.Any(pattern =>
+            {
+                string regexPattern = "^" + Regex.Escape(pattern).Replace("\\*", ".*") + "$";
+                return Regex.IsMatch(fileName, regexPattern, RegexOptions.IgnoreCase);
+            });
+
+            if (isIgnored)
+            {
+                continue;
+            }
 
             if (!GlobalsUtils.IgnoreGitignore && File.Exists(gitIgnorePath))
             {
@@ -60,19 +82,37 @@ public static class DirectoryHelper
 
         FilesHelper.GetLastModifiedFile(targetDirectory);
 
-        string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
+        string[] subDirectoryEntries = Directory.GetDirectories(targetDirectory);
 
         if (GlobalsUtils.Recursive)
         {
-            foreach (string subdirectory in subdirectoryEntries)
+            foreach (string subDirectory in subDirectoryEntries)
             {
                 if (
-                    Path.GetFileName(subdirectory)
+                    Path.GetFileName(subDirectory)
                         .Equals(".git", StringComparison.OrdinalIgnoreCase)
                 )
+                {
                     continue;
+                }
 
-                await ProcessDirectoryAsync(subdirectory);
+                string relativePath = string.IsNullOrEmpty(GlobalsUtils.TargetDirectory)
+                    ? ""
+                    : Path.GetRelativePath(GlobalsUtils.TargetDirectory, subDirectory);
+
+                bool isIgnoredDir = GlobalsUtils.IgnoredDirectories.Any(pattern =>
+                {
+                    string regexPattern = "^" + Regex.Escape(pattern).Replace("\\*", ".*") + "$";
+                    string dirName = new DirectoryInfo(subDirectory).Name;
+                    return Regex.IsMatch(dirName, regexPattern, RegexOptions.IgnoreCase);
+                });
+
+                if (isIgnoredDir)
+                {
+                    continue;
+                }
+
+                await ProcessDirectoryAsync(subDirectory);
             }
         }
     }

@@ -101,6 +101,7 @@ public static class YamlHandler
         var serializer = new SerializerBuilder()
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
             .Build();
+
         var yamlString = serializer.Serialize(yaml);
 
         File.WriteAllText(pathYaml, yamlString);

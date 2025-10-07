@@ -1,0 +1,8 @@
+recursive: true
+verbose: true
+
+ignored_files_or_directories:
+    ignored_directories:
+    - "aur-dinfo"
+    - "example-outputs"
+    - ".github"
