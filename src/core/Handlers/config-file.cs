@@ -18,7 +18,7 @@ public class YamlConfigStructure
     [YamlMember(Alias = "no_tui")]
     public bool NoTui { get; set; } = false;
 
-    [YamlMember(Alias = "ignored_files_or_directory")]
+    [YamlMember(Alias = "ignored_files_or_directories")]
     public IgnoreFilesOrDirectory IgnoredFilesOrDirectory { get; set; } = new();
 }
 
@@ -27,7 +27,7 @@ public class IgnoreFilesOrDirectory
     [YamlMember(Alias = "ignored_files")]
     public List<string> IgnoredFiles { get; set; } = new();
 
-    [YamlMember(Alias = "ignored_directory")]
+    [YamlMember(Alias = "ignored_directories")]
     public List<string> IgnoredDirectory { get; set; } = new();
 }
 
@@ -37,11 +37,21 @@ public static class ConfigHelper
     {
         while (!string.IsNullOrEmpty(targetDirectory))
         {
-            if ((Directory.Exists(Path.Combine(targetDirectory, ".git"))) ||
-                 File.Exists(Path.Combine(targetDirectory, "dinfo.yaml")))
+            var configPath = Path.Combine(targetDirectory, "dinfo.yaml");
+
+            if (File.Exists(configPath))
             {
-                GlobalsUtils.ConfigFilePath = Path.Combine(targetDirectory, "dinfo.yaml");
+                GlobalsUtils.ConfigFilePath = configPath;
                 return;
+            }
+
+            if (Directory.Exists(Path.Combine(targetDirectory, ".git")))
+            {
+                if (File.Exists(configPath))
+                {
+                    GlobalsUtils.ConfigFilePath = configPath;
+                    return;
+                }
             }
 
             var parentDir = Directory.GetParent(targetDirectory);
@@ -53,13 +63,15 @@ public static class ConfigHelper
 
     public static void DeserializeConfigFile(string configFilePath)
     {
+        if (string.IsNullOrEmpty(configFilePath) || !File.Exists(configFilePath))
+            return;
+
         var deserializer = new DeserializerBuilder()
             .WithNamingConvention(UnderscoredNamingConvention.Instance)
             .IgnoreUnmatchedProperties()
             .Build();
 
         var configContent = File.ReadAllText(configFilePath);
-
         var config = deserializer.Deserialize<YamlConfigStructure>(configContent);
 
         GlobalsUtils.Recursive = config.Recursive;

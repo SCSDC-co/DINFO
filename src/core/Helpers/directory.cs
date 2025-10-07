@@ -4,6 +4,7 @@ using dinfo.core.Handlers.ConfigTools;
 using dinfo.core.Helpers.FilesTools;
 using dinfo.core.Helpers.GitTools;
 using dinfo.core.Utils.Globals;
+using System.Text.RegularExpressions;
 
 namespace dinfo.core.Helpers.DirTools;
 
@@ -25,22 +26,21 @@ public static class DirectoryHelper
 
         ConfigHelper.FindConfigFile(targetDirectory);
 
-        string configFilePath = Path.Combine(
-            (GlobalsUtils.ConfigFilePath).Replace("\\", "/"),
-            "dinfo.toml"
-        );
-
         ConfigHelper.DeserializeConfigFile(GlobalsUtils.ConfigFilePath);
 
         foreach (string fileName in fileEntries)
         {
             var fileInfo = new FileInfo(fileName);
 
-            string relativePath = Path.GetRelativePath(GlobalsUtils.TargetDirectory, fileName);
+            string relativePath = string.IsNullOrEmpty(GlobalsUtils.TargetDirectory)
+                ? ""
+                : Path.GetRelativePath(GlobalsUtils.TargetDirectory, fileName);
 
             bool isIgnored = GlobalsUtils.IgnoredFiles.Any(pattern =>
-                relativePath.StartsWith(pattern, StringComparison.OrdinalIgnoreCase)
-            );
+            {
+                string regexPattern = "^" + Regex.Escape(pattern).Replace("\\*", ".*") + "$";
+                return Regex.IsMatch(fileName, regexPattern, RegexOptions.IgnoreCase);
+            });
 
             if (isIgnored)
             {
@@ -96,16 +96,18 @@ public static class DirectoryHelper
                     continue;
                 }
 
-                string relativePath = Path.GetRelativePath(
-                    GlobalsUtils.TargetDirectory,
-                    subDirectory
-                );
+                string relativePath = string.IsNullOrEmpty(GlobalsUtils.TargetDirectory)
+                    ? ""
+                    : Path.GetRelativePath(GlobalsUtils.TargetDirectory, subDirectory);
 
-                bool isIgnored = GlobalsUtils.IgnoredDirectories.Any(pattern =>
-                    relativePath.StartsWith(pattern, StringComparison.OrdinalIgnoreCase)
-                );
+                bool isIgnoredDir = GlobalsUtils.IgnoredDirectories.Any(pattern =>
+                {
+                    string regexPattern = "^" + Regex.Escape(pattern).Replace("\\*", ".*") + "$";
+                    string dirName = new DirectoryInfo(subDirectory).Name;
+                    return Regex.IsMatch(dirName, regexPattern, RegexOptions.IgnoreCase);
+                });
 
-                if (isIgnored)
+                if (isIgnoredDir)
                 {
                     continue;
                 }
