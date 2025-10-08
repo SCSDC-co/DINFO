@@ -11,7 +11,7 @@ using Spectre.Console;
 public class DinfoCommand : ICommand
 {
     [CommandParameter(0, Description = "The Directory to be analyzed.", IsRequired = false)]
-    public string TargetDirectory { get; set; } = Directory.GetCurrentDirectory();
+    public string TargetDirectory { get; set; } = Environment.CurrentDirectory;
 
     [CommandOption("recursive", 'r', Description = "Recursively list all files and directories.")]
     public bool RecursiveCli { get; set; } = false;
