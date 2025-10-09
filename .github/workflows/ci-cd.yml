@@ -66,7 +66,7 @@ jobs:
               uses: actions/upload-artifact@v4.6.2
               with:
                   name: wix-script
-                  path: { build-installer.wix.wixproj, package.wxs }
+                  path: *.w*x*
 
             - name: Create Release
               id: create_release
