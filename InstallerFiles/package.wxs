@@ -1,7 +1,19 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
-  <Package Id="org.scsdc.dinfo" Name="DINFO"
-           Manufacturer="SCSDC" Version="1.0.0">
-    <File Source="dinfo.exe" />
-    <Environment Id="PATH" Name="PATH" Value="[%PATH];[ProgramFiles6432Folder]\SCSDC DINFO" Permanent="yes" Part="all" Action="set" System="no" />
-  </Package>
+  <Product Id="*" Name="DINFO" Manufacturer="SCSDC" Version="1.0.0.0" UpgradeCode="C7CF091A-3D07-48E2-9B04-5A2724B70BA3">
+    <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine" />
+
+    <Directory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="SCSDC DINFO">
+        <Component Id="MainExecutable" Guid="BF15D765-A772-42D0-BFDC-EDA14EB5AB77">
+          <File Source="dinfo.exe" />
+          <Environment Id="PathUpdate" Name="PATH" Value="[INSTALLFOLDER]" Action="set" Part="last" Permanent="yes" System="yes" />
+        </Component>
+      </Directory>
+    </Directory>
+
+    <Feature Id="ProductFeature" Title="DINFO" Level="1">
+      <ComponentRef Id="MainExecutable" />
+    </Feature>
+  </Product>
 </Wix>
+
