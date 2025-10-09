@@ -67,18 +67,6 @@ jobs:
                   name: nsi-script
                   path: build-installer.nsi
 
-    release-linux:
-        runs-on: ubuntu-latest
-        permissions:
-            contents: write
-        needs: build-linux-windows
-        steps:
-            - name: Download build
-              uses: actions/download-artifact@v4.3.0
-              with:
-                  name: dinfo-linux
-
-            # --- Create GitHub Release ---
             - name: Create Release
               id: create_release
               uses: actions/create-release@v1
@@ -89,6 +77,17 @@ jobs:
                   prerelease: false
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    release-linux:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        needs: build-linux-windows
+        steps:
+            - name: Download build
+              uses: actions/download-artifact@v4.3.0
+              with:
+                  name: dinfo-linux
 
             # --- Upload binaries ---
             - name: Upload Release Assets
@@ -120,10 +119,11 @@ jobs:
               with:
                   name: nsi-script
 
-            - name: Install NSIS
-              uses: repolevedavaj/install-nsis@v1.0.1
-              with:
-                  nsis-version: "3.11"
+            - name: Download and install NSIS
+              run: wget "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.11/nsis-3.11-setup.exe?ts=gAAAAABo5_2iGI_0gVEVZyxmYxQNTZ24mS4-CRzXAnDTotb8QRLRCaZL57yq2VQZA8Ryh8t-bSQGDNTe-ukRygoGFIUgzI8oBw%3D%3D&r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fnsis%2Ffiles%2FNSIS%25203%2F3.11%2Fnsis-3.11-setup.exe%2Fdownload%3Fuse_mirror%3Dnetix%26download" && ./nsis-3.11-setup.exe /S
+
+            - name: Download and install NSIS EnVar Plugin
+              run: wget "https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip" && tar xvf EnVar_plugin.zip && mv -v EnVar_Plugin/Plugins/* "C:\Program Files (x86)\NSIS\Plugins\"
 
             - name: Build installer
               uses: joncloud/makensis-action@v5.0
