@@ -133,7 +133,7 @@ jobs:
                   $nsisRoot = "$env:LOCALAPPDATA\Programs\NSIS"
                   $pluginDest = Join-Path $nsisRoot "Plugins\amd64-unicode"
                   if (!(Test-Path $pluginDest)) { New-Item -ItemType Directory -Force -Path $pluginDest | Out-Null }
-                  Copy-Item -Path "EnVar_Plugin\Plugins\amd64-unicode\EnVar.dll" -Destination $pluginDest -Force
+                  Copy-Item -Path "EnVarPlugin\Plugins\amd64-unicode\EnVar.dll" -Destination $pluginDest -Force
 
             - name: Build installer
               uses: joncloud/makensis-action@v5.0
