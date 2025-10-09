@@ -121,10 +121,18 @@ jobs:
                   name: nsi-script
 
             - name: Download and install NSIS
-              run: winget install -e --id NSIS.NSIS --accept-package-agreements --accept-source-agreements
+              run: winget install -e --id NSIS.NSIS --accept-package-agreements --accept-source-agreements --silent
 
-            - name: Download and install NSIS EnVar Plugin
-              run: Invoke-WebRequest "https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip" -OutFile envar.zip && Expand-Archive -Path envar.zip -DestinationPath envar && cp -v envar/Plugins/amd64-unicode/* "C:/Program Files (x86)/NSIS/Plugins/amd64-unicode/"
+            - name: Download EnVar Plugin
+              run: |
+                  Invoke-WebRequest -Uri "https://nsis.sourceforge.io/mediawiki/images/d/d9/EnVar_plugin.zip" -OutFile "EnVar_plugin.zip"
+                  Expand-Archive EnVar_plugin.zip -DestinationPath EnVarPlugin
+            - name: Install EnVar Plugin
+              run: |
+                  $nsisRoot = "$env:LOCALAPPDATA\Programs\NSIS"
+                  $pluginDest = Join-Path $nsisRoot "Plugins\x86-unicode"
+                  if (!(Test-Path $pluginDest)) { New-Item -ItemType Directory -Force -Path $pluginDest | Out-Null }
+                  Copy-Item -Path "EnVarPlugin\Plugins\EnVar.dll" -Destination $pluginDest -Force
 
             - name: Build installer
               uses: joncloud/makensis-action@v5.0
