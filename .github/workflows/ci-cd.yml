@@ -137,8 +137,8 @@ jobs:
               with:
                   dotnet-version: "9.0.x"
 
-            - name: Copy installer scripts
-              run: cp InstallerFiles/*.w*x* .
+            #            - name: Copy installer scripts
+            #              run: cp InstallerFiles/*.w*x* .
 
             - name: Build installer
               run: dotnet build
