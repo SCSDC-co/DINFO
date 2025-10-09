@@ -1,0 +1,138 @@
+name: Run builds and deploy/create release
+
+on:
+    push:
+        tags:
+            - "v*"
+    workflow_dispatch:
+
+jobs:
+    build-linux-windows:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Setup .NET
+              uses: actions/setup-dotnet@v3
+              with:
+                  dotnet-version: "9.0.x"
+
+            - name: Restore dependencies
+              run: dotnet restore ./src/tui/dinfo.tui.csproj
+
+            # --- Self-Contained build ---
+            - name: Publish Self-Contained Linux Package
+              run: |
+                  dotnet publish ./src/tui/dinfo.tui.csproj \
+                    -c Release \
+                    -r linux-x64 \
+                    --self-contained true \
+                    /p:PublishSingleFile=false \
+                    -o publish/self-contained/linux-x64
+
+                  mv publish/self-contained/linux-x64/dinfo \
+                  dinfo-linux-x64-self-contained
+
+            - name: Publish Self-Contained Windows Package
+              run: |
+                  dotnet publish ./src/tui/dinfo.tui.csproj \
+                    -c Release \
+                    -r win-x64 \
+                    --self-contained true \
+                    /p:PublishSingleFile=false \
+                    -o publish/self-contained/win-x64
+
+                  mv publish/self-contained/win-x64/dinfo.exe \
+                  dinfo-win-x64-self-contained.exe
+            
+            - name: Upload Linux Artifacts
+              uses: actions/upload-artifact@v4.6.2
+              with:
+                name: dinfo-linux
+                path: dinfo-linux-x64-self-contained
+                
+            - name: Upload Windows Artifacts
+              uses: actions/upload-artifact@v4.6.2
+              with:
+                name: dinfo-win
+                path: dinfo-win-x64-self-contained.exe
+
+            - name: Move NSI Script from release folder to root
+              run: mv -v release/build-installer.nsi .
+                
+            - name: Upload NSI Script from repo
+              uses: actions/upload-artifact@v4.6.2
+              with:
+                name: nsi-script
+                path: build-installer.nsi
+                
+    release-linux:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - name: Download build
+              uses: actions/download-artifact@v5.0.0
+              with:
+                  name: dinfo-linux
+              
+            # --- Create GitHub Release ---
+            - name: Create Release
+              id: create_release
+              uses: actions/create-release@v1
+              with:
+                  tag_name: ${{ github.ref_name }}
+                  release_name: Release ${{ github.ref_name }}
+                  draft: false
+                  prerelease: false
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            # --- Upload binaries ---
+            - name: Upload Release Assets
+              uses: softprops/action-gh-release@v1
+              with:
+                  files: |
+                      dinfo-linux-x64-self-contained
+              env:
+
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    release-windows:
+        runs-on: windows-latest
+        permissions:
+            contents: write
+        steps:
+            - name: Download build
+              uses: actions/download-artifact@v5.0.0
+              with:
+                  name: dinfo-win
+
+            - name: Copy program to dinfo file
+              run: cp -v dinfo-win-x64-self-contained.exe dinfo.exe
+
+            - name: Download NSI Script
+              uses: actions/download-artifact@v5.0.0
+              with:
+                  name: nsi-script
+            
+            - name: Install NSIS
+              uses: repolevedavaj/install-nsis@v1.0.1
+              with:
+                nsis-version: '3.11'
+                
+            - name: Build installer
+              uses: joncloud/makensis-action@v5.0
+              with:
+                script-file: 'build-installer.nsi'
+
+            - name: Upload Release Assets
+              uses: softprops/action-gh-release@v1
+              with:
+                  files: |
+                      dinfo-win-x64-self-contained.exe
+                      win-installer.exe
+              env:
+
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
