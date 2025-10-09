@@ -148,6 +148,6 @@ jobs:
               with:
                   files: |
                       dinfo-win-x64-self-contained.exe
-                      win-installer.exe
+                      win-installer.msi
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
