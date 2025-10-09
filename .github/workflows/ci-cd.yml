@@ -102,7 +102,6 @@ jobs:
         runs-on: windows-latest
         needs:
             - build-linux-windows
-            - release-linux
         permissions:
             contents: write
         steps:
