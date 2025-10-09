@@ -60,13 +60,15 @@ jobs:
                   path: dinfo-win-x64-self-contained.exe
 
             - name: Move NSI Script from release folder to root
-              run: mv -v release/build-installer.nsi .
+              run: mv -v InstallerFiles/build-installer.wix.* . && mv -v InstallerFiles/package.wxs .
 
             - name: Upload NSI Script from repo
               uses: actions/upload-artifact@v4.6.2
               with:
-                  name: nsi-script
-                  path: build-installer.nsi
+                  name: wix-script
+                  path:
+                      - build-installer.wix.wixproj
+                      - package.wxs
 
             - name: Create Release
               id: create_release
@@ -114,29 +116,34 @@ jobs:
             - name: Copy program to dinfo file
               run: cp -v dinfo-win-x64-self-contained.exe dinfo.exe
 
-            - name: Download NSI Script
+            - name: Download WiX Script
               uses: actions/download-artifact@v5.0.0
               with:
-                  name: nsi-script
+                  name: wix-script
 
-            - name: Download and install NSIS
-              run: winget install -e --id NSIS.NSIS --accept-package-agreements --accept-source-agreements --silent && echo "C:\Program Files (x86)\NSIS" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+            - name: Download and install WiX
+              run: winget install -e --id isWiX.isWiX --accept-package-agreements --accept-source-agreements --silent && echo "C:\Program Files (x86)\NSIS" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
-            - name: Download EnVar Plugin
-              run: |
-                  Invoke-WebRequest -Uri "https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip" -OutFile "EnVar_plugin.zip"
-                  Expand-Archive EnVar_plugin.zip -DestinationPath EnVarPlugin
+            #- name: Download EnVar Plugin
+            #  run: |
+            #      Invoke-WebRequest -Uri "https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip" -OutFile "EnVar_plugin.zip"
+            #      Expand-Archive EnVar_plugin.zip -DestinationPath EnVarPlugin
 
-            - name: Install EnVar Plugin
-              run: |
-                  $nsisRoot = "C:/Program Files (x86)/NSIS/"
-                  $pluginDest = Join-Path $nsisRoot "Plugins\x86-unicode"
-                  if (!(Test-Path $pluginDest)) { New-Item -ItemType Directory -Force -Path $pluginDest | Out-Null }
-                  echo Copy-Item -Path 'EnVarPlugin\Plugins\x86-unicode\EnVar.dll' -Destination $pluginDest -Force > cp_envar.ps1
-                  Start-Process PowerShell -Verb runAs -ArgumentList "-command ./cp_envar.ps1"
+            #- name: Install EnVar Plugin
+            #  run: |
+            #      $nsisRoot = "C:/Program Files (x86)/NSIS/"
+            #      $pluginDest = Join-Path $nsisRoot "Plugins\x86-unicode"
+            #      if (!(Test-Path $pluginDest)) { New-Item -ItemType Directory -Force -Path $pluginDest | Out-Null }
+            #      echo Copy-Item -Path 'EnVarPlugin\Plugins\x86-unicode\EnVar.dll' -Destination $pluginDest -Force > cp_envar.ps1
+            #      Start-Process PowerShell -Verb runAs -ArgumentList "-command ./cp_envar.ps1"
+
+            - name: Setup .NET
+              uses: actions/setup-dotnet@v3
+              with:
+                  dotnet-version: "9.0.x"
 
             - name: Build installer
-              run: makensis build-installer.nsi
+              run: dotnet build
 
             - name: Upload Release Assets
               uses: softprops/action-gh-release@v1

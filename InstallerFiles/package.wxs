@@ -1,0 +1,7 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Id="org.scsdc-co.dinfo" Name="DINFO"
+           Manufacturer="SCSDC" Version="1.0.0">
+    <File Source="dinfo.exe" />
+    <Environment Id="PATH" Name="PATH" Value="[%PATH];[ProgramFiles6432Folder]\SCSDC DINFO" Permanent="yes" Part="all" Action="set" System="no" />
+  </Package>
+</Wix>
