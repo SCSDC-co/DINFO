@@ -1,17 +1,14 @@
-name: Release Zip Linux
+name: Run builds and deploy/create release
 
 on:
     push:
         tags:
             - "v*"
+    workflow_dispatch:
 
 jobs:
-    build:
+    build-linux:
         runs-on: ubuntu-latest
-
-        permissions:
-            contents: write
-
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
@@ -36,13 +33,21 @@ jobs:
 
                   mv publish/self-contained/linux-x64/dinfo \
                   publish/self-contained/linux-x64/dinfo-linux-x64-self-contained
-
-            # --- Create zip ---
-            - name: Create zip
-              run: |
-                  zip -r publish/self-contained/dinfo-linux-x64-self-contained.zip \
-                  publish/self-contained/linux-x64/*
-
+            - name: Upload Artifacts
+              uses: actions/upload-artifact@v4.6.2
+              with:
+                name: dinfo-linux
+                path: publish/self-contained/linux-x64/dinfo-linux-x64-self-contained
+    release-linux:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - name: Download build
+              uses: actions/download-artifact@v5.0.0
+              with:
+                  name: dinfo-linux
+              
             # --- Create GitHub Release ---
             - name: Create Release
               id: create_release
@@ -60,6 +65,7 @@ jobs:
               uses: softprops/action-gh-release@v1
               with:
                   files: |
-                      publish/self-contained/dinfo-linux-x64-self-contained.zip
+                      dinfo-linux-x64-self-contained
               env:
+
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
