@@ -136,9 +136,7 @@ jobs:
                   Copy-Item -Path "EnVarPlugin\Plugins\amd64-unicode\EnVar.dll" -Destination $pluginDest -Force
 
             - name: Build installer
-              uses: joncloud/makensis-action@v5.0
-              with:
-                  script-file: "build-installer.nsi"
+              run: makensis.exe build-installer.nsi
 
             - name: Upload Release Assets
               uses: softprops/action-gh-release@v1
