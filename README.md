@@ -159,6 +159,16 @@ ignored_files_or_directories:
 ## 🤝 Contributing
 
 Contributions are welcome! Open a **pull request** or create an **issue** for suggestions or bug reports.
+[CODE OF CONDUCT](CODE_OF_CONDUCT.md)
+
+---
+
+## Roadmap
+
+[ ] Adding more output types:
+    [ ] html
+    [ ] database
+[ ] Adding a tree making system of the directory via flags
 
 ---
 
