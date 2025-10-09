@@ -159,7 +159,6 @@ ignored_files_or_directories:
 ## 🤝 Contributing
 
 Contributions are welcome! Open a **pull request** or create an **issue** for suggestions or bug reports.
-[CODE OF CONDUCT](CODE_OF_CONDUCT.md)
 
 ---
 
