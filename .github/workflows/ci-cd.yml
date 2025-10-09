@@ -125,7 +125,7 @@ jobs:
 
             - name: Download EnVar Plugin
               run: |
-                  Invoke-WebRequest -Uri "https://nsis.sourceforge.io/mediawiki/images/d/d9/EnVar_plugin.zip" -OutFile "EnVar_plugin.zip"
+                  Invoke-WebRequest -Uri "https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip" -OutFile "EnVar_plugin.zip"
                   Expand-Archive EnVar_plugin.zip -DestinationPath EnVarPlugin
             - name: Install EnVar Plugin
               run: |
