@@ -7,7 +7,7 @@ on:
     workflow_dispatch:
 
 jobs:
-    build-linux:
+    build-linux-windows:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repository
@@ -22,7 +22,7 @@ jobs:
               run: dotnet restore ./src/tui/dinfo.tui.csproj
 
             # --- Self-Contained build ---
-            - name: Publish Self-Contained
+            - name: Publish Self-Contained Linux Package
               run: |
                   dotnet publish ./src/tui/dinfo.tui.csproj \
                     -c Release \
@@ -32,12 +32,41 @@ jobs:
                     -o publish/self-contained/linux-x64
 
                   mv publish/self-contained/linux-x64/dinfo \
-                  publish/self-contained/linux-x64/dinfo-linux-x64-self-contained
-            - name: Upload Artifacts
+                  dinfo-linux-x64-self-contained
+
+            - name: Publish Self-Contained Windows Package
+              run: |
+                  dotnet publish ./src/tui/dinfo.tui.csproj \
+                    -c Release \
+                    -r win-x64 \
+                    --self-contained true \
+                    /p:PublishSingleFile=false \
+                    -o publish/self-contained/win-x64
+
+                  mv publish/self-contained/win-x64/dinfo.exe \
+                  dinfo-win-x64-self-contained.exe
+            
+            - name: Upload Linux Artifacts
               uses: actions/upload-artifact@v4.6.2
               with:
                 name: dinfo-linux
-                path: publish/self-contained/linux-x64/dinfo-linux-x64-self-contained
+                path: dinfo-linux-x64-self-contained
+                
+            - name: Upload Windows Artifacts
+              uses: actions/upload-artifact@v4.6.2
+              with:
+                name: dinfo-win
+                path: dinfo-win-x64-self-contained.exe
+
+            - name: Move NSI Script from release folder to root
+              run: mv -v release/build-installer.nsi .
+                
+            - name: Upload NSI Script from repo
+              uses: actions/upload-artifact@v4.6.2
+              with:
+                name: nsi-script
+                path: build-installer.nsi
+                
     release-linux:
         runs-on: ubuntu-latest
         permissions:
@@ -66,6 +95,43 @@ jobs:
               with:
                   files: |
                       dinfo-linux-x64-self-contained
+              env:
+
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    release-windows:
+        runs-on: windows-latest
+        permissions:
+            contents: write
+        steps:
+            - name: Download build
+              uses: actions/download-artifact@v5.0.0
+              with:
+                  name: dinfo-win
+
+            - name: Copy program to dinfo file
+              run: cp -v dinfo-win-x64-self-contained.exe dinfo.exe
+
+            - name: Download NSI Script
+              uses: actions/download-artifact@v5.0.0
+              with:
+                  name: nsi-script
+            
+            - name: Install NSIS
+              uses: repolevedavaj/install-nsis@v1.0.1
+              with:
+                nsis-version: '3.11'
+                
+            - name: Build installer
+              uses: joncloud/makensis-action@v5.0
+              with:
+                script-file: 'build-installer.nsi'
+
+            - name: Upload Release Assets
+              uses: softprops/action-gh-release@v1
+              with:
+                  files: |
+                      dinfo-win-x64-self-contained.exe
+                      win-installer.exe
               env:
 
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
