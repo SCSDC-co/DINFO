@@ -45,13 +45,13 @@ jobs:
 
                   mv publish/self-contained/win-x64/dinfo.exe \
                   dinfo-win-x64-self-contained.exe
-            
+
             - name: Upload Linux Artifacts
               uses: actions/upload-artifact@v4.6.2
               with:
                 name: dinfo-linux
                 path: dinfo-linux-x64-self-contained
-                
+
             - name: Upload Windows Artifacts
               uses: actions/upload-artifact@v4.6.2
               with:
@@ -60,23 +60,23 @@ jobs:
 
             - name: Move NSI Script from release folder to root
               run: mv -v release/build-installer.nsi .
-                
+
             - name: Upload NSI Script from repo
               uses: actions/upload-artifact@v4.6.2
               with:
                 name: nsi-script
                 path: build-installer.nsi
-                
+
     release-linux:
         runs-on: ubuntu-latest
         permissions:
             contents: write
         steps:
             - name: Download build
-              uses: actions/download-artifact@v5.0.0
+              uses: actions/download-artifact@v4.3.0
               with:
                   name: dinfo-linux
-              
+
             # --- Create GitHub Release ---
             - name: Create Release
               id: create_release
@@ -104,7 +104,7 @@ jobs:
             contents: write
         steps:
             - name: Download build
-              uses: actions/download-artifact@v5.0.0
+              uses: actions/download-artifact@v4.3.0
               with:
                   name: dinfo-win
 
@@ -115,12 +115,12 @@ jobs:
               uses: actions/download-artifact@v5.0.0
               with:
                   name: nsi-script
-            
+
             - name: Install NSIS
               uses: repolevedavaj/install-nsis@v1.0.1
               with:
                 nsis-version: '3.11'
-                
+
             - name: Build installer
               uses: joncloud/makensis-action@v5.0
               with:
