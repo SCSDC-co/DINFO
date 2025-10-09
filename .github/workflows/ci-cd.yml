@@ -4,7 +4,6 @@ on:
     push:
         tags:
             - "v*"
-    workflow_dispatch:
 
 jobs:
     build-linux-windows:
@@ -130,10 +129,10 @@ jobs:
 
             - name: Install EnVar Plugin
               run: |
-                  $nsisRoot = "$env:LOCALAPPDATA\Programs\NSIS"
-                  $pluginDest = Join-Path $nsisRoot "Plugins\amd64-unicode"
+                  $nsisRoot = "C:/Program Files (x86)/NSIS/"
+                  $pluginDest = Join-Path $nsisRoot "Plugins\x86-unicode"
                   if (!(Test-Path $pluginDest)) { New-Item -ItemType Directory -Force -Path $pluginDest | Out-Null }
-                  Copy-Item -Path "EnVarPlugin\Plugins\amd64-unicode\EnVar.dll" -Destination $pluginDest -Force
+                  Start-Process PowerShell -Verb runAs -ArgumentList " -command Copy-Item -Path 'EnVarPlugin\Plugins\x86-unicode\EnVar.dll' -Destination $pluginDest -Force""
 
             - name: Build installer
               run: makensis build-installer.nsi
