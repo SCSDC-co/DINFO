@@ -59,14 +59,11 @@ jobs:
                   name: dinfo-win
                   path: dinfo-win-x64-self-contained.exe
 
-            - name: Move NSI Script from release folder to root
-              run: mv -v InstallerFiles/build-installer.wix.* . && mv -v InstallerFiles/package.wxs .
-
             - name: Upload NSI Script from repo
               uses: actions/upload-artifact@v4.6.2
               with:
                   name: wix-script
-                  path: *.w*x*
+                  path: InstellerFiles
 
             - name: Create Release
               id: create_release
@@ -139,6 +136,9 @@ jobs:
               uses: actions/setup-dotnet@v3
               with:
                   dotnet-version: "9.0.x"
+
+            - name: Copy installer scripts
+              run: cp InstallerFiles/*.w*x* .
 
             - name: Build installer
               run: dotnet build
