@@ -49,14 +49,14 @@ jobs:
             - name: Upload Linux Artifacts
               uses: actions/upload-artifact@v4.6.2
               with:
-                name: dinfo-linux
-                path: dinfo-linux-x64-self-contained
+                  name: dinfo-linux
+                  path: dinfo-linux-x64-self-contained
 
             - name: Upload Windows Artifacts
               uses: actions/upload-artifact@v4.6.2
               with:
-                name: dinfo-win
-                path: dinfo-win-x64-self-contained.exe
+                  name: dinfo-win
+                  path: dinfo-win-x64-self-contained.exe
 
             - name: Move NSI Script from release folder to root
               run: mv -v release/build-installer.nsi .
@@ -64,13 +64,14 @@ jobs:
             - name: Upload NSI Script from repo
               uses: actions/upload-artifact@v4.6.2
               with:
-                name: nsi-script
-                path: build-installer.nsi
+                  name: nsi-script
+                  path: build-installer.nsi
 
     release-linux:
         runs-on: ubuntu-latest
         permissions:
             contents: write
+        needs: build-linux-windows
         steps:
             - name: Download build
               uses: actions/download-artifact@v4.3.0
@@ -96,10 +97,13 @@ jobs:
                   files: |
                       dinfo-linux-x64-self-contained
               env:
-
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     release-windows:
         runs-on: windows-latest
+        needs:
+            - build-linux-windows
+            - release-linux
         permissions:
             contents: write
         steps:
@@ -119,12 +123,12 @@ jobs:
             - name: Install NSIS
               uses: repolevedavaj/install-nsis@v1.0.1
               with:
-                nsis-version: '3.11'
+                  nsis-version: "3.11"
 
             - name: Build installer
               uses: joncloud/makensis-action@v5.0
               with:
-                script-file: 'build-installer.nsi'
+                  script-file: "build-installer.nsi"
 
             - name: Upload Release Assets
               uses: softprops/action-gh-release@v1
@@ -133,6 +137,4 @@ jobs:
                       dinfo-win-x64-self-contained.exe
                       win-installer.exe
               env:
-
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
