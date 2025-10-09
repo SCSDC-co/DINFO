@@ -121,7 +121,7 @@ jobs:
                   name: nsi-script
 
             - name: Download and install NSIS
-              run: winget install -e --id NSIS.NSIS
+              run: winget install -e --id NSIS.NSIS --accept-package-agreements --accept-source-agreements
 
             - name: Download and install NSIS EnVar Plugin
               run: Invoke-WebRequest "https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip" -OutFile envar.zip && Expand-Archive -Path envar.zip -DestinationPath envar && cp -v envar/Plugins/amd64-unicode/* "C:/Program Files (x86)/NSIS/Plugins/amd64-unicode/"
