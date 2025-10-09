@@ -121,10 +121,10 @@ jobs:
                   name: nsi-script
 
             - name: Download and install NSIS
-              run: wget "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.11/nsis-3.11-setup.exe?ts=gAAAAABo5_2iGI_0gVEVZyxmYxQNTZ24mS4-CRzXAnDTotb8QRLRCaZL57yq2VQZA8Ryh8t-bSQGDNTe-ukRygoGFIUgzI8oBw%3D%3D&r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fnsis%2Ffiles%2FNSIS%25203%2F3.11%2Fnsis-3.11-setup.exe%2Fdownload%3Fuse_mirror%3Dnetix%26download" && ./nsis-3.11-setup.exe /S
+              run: Invoke-WebRequest "https://downloads.sourceforge.net/project/nsis/NSIS%203/3.11/nsis-3.11-setup.exe?ts=gAAAAABo5_2iGI_0gVEVZyxmYxQNTZ24mS4-CRzXAnDTotb8QRLRCaZL57yq2VQZA8Ryh8t-bSQGDNTe-ukRygoGFIUgzI8oBw%3D%3D&r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fnsis%2Ffiles%2FNSIS%25203%2F3.11%2Fnsis-3.11-setup.exe%2Fdownload%3Fuse_mirror%3Dnetix%26download" -OutFile nsis-3.11-setup.exe && .\nsis-3.11-setup.exe /S
 
             - name: Download and install NSIS EnVar Plugin
-              run: wget "https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip" && tar xvf EnVar_plugin.zip && mv -v EnVar_Plugin/Plugins/* "C:\Program Files (x86)\NSIS\Plugins\"
+                run: Invoke-WebRequest "https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip" -OutFile envar.zip && Expand-Archive -Path envar.zip -DestinationPath envar && cp -v envar/Plugins/amd64-unicode/* "C:/Program Files (x86)/NSIS/Plugins/amd64-unicode/"
 
             - name: Build installer
               uses: joncloud/makensis-action@v5.0
