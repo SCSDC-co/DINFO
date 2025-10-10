@@ -64,7 +64,7 @@ jobs:
             - name: Edit installer files
               run: |
                   export GIT_TAG=$(git describe --tags)
-                  sed "s/VERSION_BASE/${GIT_TAG:1}" InstallerFiles/package_base.wxs | tee InstallerFiles/package.wsx
+                  sed "s/VERSION_BASE/${GIT_TAG:1}" InstallerFiles/package.wxs.base | tee InstallerFiles/package.wxs
 
             - name: Upload Installer Scripts from repo
               uses: actions/upload-artifact@v4.6.2

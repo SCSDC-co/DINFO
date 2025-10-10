@@ -1,2 +1,26 @@
 <Project Sdk="WixToolset.Sdk/6.0.0">
+  <PropertyGroup>
+
+    <Configuration Condition="'$(Configuration)'==''">Debug</Configuration>
+    <OutputName>win-installer</OutputName>
+
+    <!-- Put outputs into bin\<Configuration>\ -->
+    <BaseOutputPath>bin\</BaseOutputPath>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+
+    <!-- Make WiX write the intermediate MSI into the final bin folder to avoid stray copy issues -->
+    <IntermediateAssembly>$(MSBuildProjectDirectory)\bin\$(Configuration)\$(TargetFileName)</IntermediateAssembly>
+    <EnableDefaultItems>false</EnableDefaultItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+
+    <!-- Exclude template files so they won't be compiled by the WiX SDK default globs -->
+    <Compile Remove="**\*.wxs.base" />
+
+    <!-- Explicitly include only the generated package.wxs entry file -->
+    <Compile Include="package.wxs" />
+  </ItemGroup>
 </Project>
+

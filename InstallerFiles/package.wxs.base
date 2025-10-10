@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <!-- Package is a direct child in WiX v4 -->
+  <Package
+    Name="DINFO"
+    Manufacturer="SCSDC"
+    Version="VERSION_BASE"
+    UpgradeCode="CE564767-00D3-4AAF-94B4-C71A2F69A0F8"
+   >
+    <Icon Id="icon.ico" SourceFile="icon.ico"/>
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+
+    <!-- Embed single CAB into the MSI -->
+    <MediaTemplate EmbedCab="yes" />
+
+    <!-- Declare the standard directory we will use for the install -->
+    <StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="INSTALLFOLDER" Name="SCSDC DINFO" />
+    </StandardDirectory>
+
+    <!-- Group components together for features -->
+    <ComponentGroup Id="ProductComponents">
+      <!-- Component located in INSTALLFOLDER -->
+      <Component Id="MainExecutable" Directory="INSTALLFOLDER">
+        <File Id="DInfoExe" Source="dinfo.exe" KeyPath="yes" />
+        <File Id="DInfoDll" Source="dinfo.dll" KeyPath="no" />
+
+        <!-- Append INSTALLFOLDER to the SYSTEM PATH -->
+        <Environment
+          Id="PathUpdate"
+          Name="PATH"
+          Value="[INSTALLFOLDER]"
+          Action="set"
+          Part="last"
+          Permanent="yes"
+          System="yes" />
+      </Component>
+    </ComponentGroup>
+
+    <!-- Feature selects the component group -->
+    <Feature Id="ProductFeature" Title="DINFO" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+    </Feature>
+
+  </Package>
+</Wix>
