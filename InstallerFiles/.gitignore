@@ -1,3 +1,5 @@
-[Pp]ackage.wsx
+[Pp]ackage.wxs
 bin
 obj
+*.exe
+*.dll
