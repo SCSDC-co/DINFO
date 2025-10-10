@@ -72,8 +72,8 @@ jobs:
                   export GIT_TAG=$(git describe --tags)
                   export ZIP_SHA=$(sha256sum dinfo-linux-x64-self-contained.zip  | cut -d' ' -f1)
                   git log --pretty="# Maintainer: %an <%ae>" | sort -u | sed '/^#/!d' | tee aur-deploy/PKGBUILD
-                  sed -i "s/VERSION_BASE/${GIT_TAG:1}" aur-deploy/PKGBUILD.base
-                  sed -i "s/ZIP_SHA_BASE/${ZIP_SHA:1}" aur-deploy/PKGBUILD.base
+                  sed -i "s/VERSION_BASE/${GIT_TAG:1}/" aur-deploy/PKGBUILD.base
+                  sed -i "s/ZIP_SHA_BASE/${ZIP_SHA:1}/" aur-deploy/PKGBUILD.base
                   cat aur-deploy/PKGBUILD.base >> aur-deploy/PKGBUILD
 
             - name: Upload Installer Scripts from repo
