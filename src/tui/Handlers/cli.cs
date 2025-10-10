@@ -3,6 +3,7 @@ using CliFx.Attributes;
 using CliFx.Infrastructure;
 using dinfo.core.Handlers.Json;
 using dinfo.core.Handlers.Yaml;
+using dinfo.core.Handlers.Html;
 using dinfo.core.Utils.Globals;
 using dinfo.tui.Helpers.Tui;
 using Spectre.Console;
@@ -51,31 +52,38 @@ public class DinfoCommand : ICommand
 
         if (OutputToFileCli)
         {
-            if (OutputCli.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+            switch (Path.GetExtension(OutputCli).ToLowerInvariant())
             {
-                await JsonHandler.DirectorySaveJsonAsync(dir, OutputCli);
+                case ".json":
+                    await JsonHandler.DirectorySaveJsonAsync(dir, OutputCli);
 
-                var savedPanel = new Panel($"[bold green]JSON file saved in:[/] {OutputCli}");
+                    AnsiConsole.Write(new Panel($"[bold green]JSON file saved in:[/] {OutputCli}")
+                        .Border(BoxBorder.Rounded)
+                        .BorderStyle(new Style(Color.Green)));
 
-                savedPanel.Border = BoxBorder.Rounded;
-                savedPanel.BorderStyle = new Style(Color.Green);
+                    break;
 
-                AnsiConsole.Write(savedPanel);
-            }
-            else if (OutputCli.EndsWith(".yaml", StringComparison.OrdinalIgnoreCase))
-            {
-                await YamlHandler.DirectorySaveYamlAsync(dir, OutputCli);
+                case ".yaml":
+                    await YamlHandler.DirectorySaveYamlAsync(dir, OutputCli);
 
-                var savedPanel = new Panel($"[bold green]YAML file saved in:[/] {OutputCli}");
+                    AnsiConsole.Write(new Panel($"[bold green]YAML file saved in:[/] {OutputCli}")
+                        .Border(BoxBorder.Rounded)
+                        .BorderStyle(new Style(Color.Green)));
 
-                savedPanel.Border = BoxBorder.Rounded;
-                savedPanel.BorderStyle = new Style(Color.Green);
+                    break;
 
-                AnsiConsole.Write(savedPanel);
-            }
-            else
-            {
-                AnsiConsole.MarkupLine("[bold red]The output must be a .json/.yaml file[/]");
+                case ".html":
+                    await HtmlHandler.DirectorySaveHtml(dir, OutputCli);
+
+                    AnsiConsole.Write(new Panel($"[bold green]HTML file saved in:[/] {OutputCli}")
+                        .Border(BoxBorder.Rounded)
+                        .BorderStyle(new Style(Color.Green)));
+
+                    break;
+
+                default:
+                    AnsiConsole.MarkupLine("[bold red]The output must be a .json/.yaml/.html file[/]");
+                    break;
             }
         }
         else
@@ -97,7 +105,7 @@ public class FileCommand : ICommand
     [CommandOption(
         "file-format",
         'f',
-        Description = "Specify the output file (formats: json, yaml)."
+        Description = "Specify the output file (formats: json, yaml, html)."
     )]
     public string OutputCli { get; set; } = "output.json";
 
@@ -115,31 +123,38 @@ public class FileCommand : ICommand
 
         if (OutputToFileCli)
         {
-            if (OutputCli.EndsWith(".json", StringComparison.OrdinalIgnoreCase))
+            switch (Path.GetExtension(OutputCli).ToLowerInvariant())
             {
-                await JsonHandler.FileSaveJsonAsync(TargetFile, OutputCli);
+                case ".json":
+                    await JsonHandler.FileSaveJsonAsync(TargetFile, OutputCli);
 
-                var savedPanel = new Panel($"[bold green]JSON file saved in:[/] {OutputCli}");
+                    AnsiConsole.Write(new Panel($"[bold green]JSON file saved in:[/] {OutputCli}")
+                        .Border(BoxBorder.Rounded)
+                        .BorderStyle(new Style(Color.Green)));
 
-                savedPanel.Border = BoxBorder.Rounded;
-                savedPanel.BorderStyle = new Style(Color.Green);
+                    break;
 
-                AnsiConsole.Write(savedPanel);
-            }
-            else if (OutputCli.EndsWith(".yaml", StringComparison.OrdinalIgnoreCase))
-            {
-                await YamlHandler.FileSaveYamlAsync(TargetFile, OutputCli);
+                case ".yaml":
+                    await YamlHandler.FileSaveYamlAsync(TargetFile, OutputCli);
 
-                var savedPanel = new Panel($"[bold green]YAML file saved in:[/] {OutputCli}");
+                    AnsiConsole.Write(new Panel($"[bold green]YAML file saved in:[/] {OutputCli}")
+                        .Border(BoxBorder.Rounded)
+                        .BorderStyle(new Style(Color.Green)));
 
-                savedPanel.Border = BoxBorder.Rounded;
-                savedPanel.BorderStyle = new Style(Color.Green);
+                    break;
 
-                AnsiConsole.Write(savedPanel);
-            }
-            else
-            {
-                AnsiConsole.MarkupLine("[bold red]The output must be a .json/.yaml file[/]");
+                case ".html":
+                    await HtmlHandler.FileSaveHtmlAsync(TargetFile, OutputCli);
+
+                    AnsiConsole.Write(new Panel($"[bold green]HTML file saved in:[/] {OutputCli}")
+                        .Border(BoxBorder.Rounded)
+                        .BorderStyle(new Style(Color.Green)));
+
+                    break;
+
+                default:
+                    AnsiConsole.MarkupLine("[bold red]The output must be a .json/.yaml/.html file[/]");
+                    break;
             }
         }
         else
