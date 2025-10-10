@@ -47,9 +47,6 @@ jobs:
                   mv publish/self-contained/win-x64/dinfo.exe \
                   dinfo-win-x64-self-contained.exe
 
-            - name: Create ZIP for Linux
-              run: zip -r dinfo-linux-x64-self-contained.zip dinfo-linux-x64-self-contained
-
             - name: Upload Linux Artifacts
               uses: actions/upload-artifact@v4.6.2
               with:
