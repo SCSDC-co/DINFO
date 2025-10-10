@@ -136,6 +136,9 @@ jobs:
             - name: Print Installer Script
               run:  cat package.wxs
 
+            - name: list files in directory
+              run: ls
+
             - name: Build installer
               run: dotnet build --configuration Release
 
