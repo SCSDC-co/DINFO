@@ -116,7 +116,6 @@ jobs:
             - name: Copy program to dinfo file
               run: |
                   cp -v dinfo-win-x64-self-contained.exe dinfo.exe
-                  cp -v dinfo-win-x64-self-contained.dll dinfo.dll
 
             - name: Download WiX Script
               uses: actions/download-artifact@v5.0.0
