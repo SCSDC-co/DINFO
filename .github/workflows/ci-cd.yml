@@ -130,8 +130,11 @@ jobs:
               with:
                   dotnet-version: "9.0.x"
 
-            - name: Print Installer Script Contents
-              run: cat win-installer.wixproj && cat package.wxs
+            - name: Print Installer manifest
+              run: cat win-installer.wixproj
+
+            - name: Print Installer Script
+              run:  cat package.wxs
 
             - name: Build installer
               run: dotnet build --configuration Release
