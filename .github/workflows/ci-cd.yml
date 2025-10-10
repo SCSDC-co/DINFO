@@ -46,8 +46,6 @@ jobs:
 
                   mv publish/self-contained/win-x64/dinfo.exe \
                   dinfo-win-x64-self-contained.exe
-                  mv publish/self-contained/win-x64/dinfo.dll \
-                  dinfo-win-x64-self-contained.dll
 
             - name: Upload Linux Artifacts
               uses: actions/upload-artifact@v4.6.2
