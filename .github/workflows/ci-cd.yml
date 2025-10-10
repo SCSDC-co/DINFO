@@ -29,7 +29,7 @@ jobs:
                     -c Release \
                     -r linux-x64 \
                     --self-contained true \
-                    /p:PublishSingleFile=true \
+                    /p:PublishSingleFile=false \
                     -o publish/self-contained/linux-x64
 
                   mv publish/self-contained/linux-x64/dinfo \
