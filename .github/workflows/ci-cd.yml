@@ -46,6 +46,8 @@ jobs:
 
                   mv publish/self-contained/win-x64/dinfo.exe \
                   dinfo-win-x64-self-contained.exe
+                  mv publish/self-contained/win-x64/dinfo.dll \
+                  dinfo-win-x64-self-contained.dll
 
             - name: Upload Linux Artifacts
               uses: actions/upload-artifact@v4.6.2
@@ -57,9 +59,14 @@ jobs:
               uses: actions/upload-artifact@v4.6.2
               with:
                   name: dinfo-win
-                  path: dinfo-win-x64-self-contained.exe
+                  path: dinfo-win-x64-self-contained.*
 
-            - name: Upload NSI Script from repo
+            - name: Edit installer files
+              run: |
+                  export GIT_TAG=$(git describe --tags)
+                  sed "s/VERSION_BASE/${GIT_TAG:1}" InstallerFiles/package_base.wxs | tee InstallerFiles/package.wsx
+
+            - name: Upload Installer Scripts from repo
               uses: actions/upload-artifact@v4.6.2
               with:
                   name: wix-script
@@ -109,45 +116,35 @@ jobs:
                   name: dinfo-win
 
             - name: Copy program to dinfo file
-              run: cp -v dinfo-win-x64-self-contained.exe dinfo.exe
+              run: |
+                  cp -v dinfo-win-x64-self-contained.exe dinfo.exe
+                  cp -v dinfo-win-x64-self-contained.dll dinfo.dll
 
             - name: Download WiX Script
               uses: actions/download-artifact@v5.0.0
               with:
                   name: wix-script
 
-            #            - name: Download and install WiX
-            #              run: winget install -e --id WiXToolset.WiXToolset --accept-package-agreements --accept-source-agreements --silent && echo "C:\Program Files (x86)\NSIS" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-
-            #- name: Download EnVar Plugin
-            #  run: |
-            #      Invoke-WebRequest -Uri "https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip" -OutFile "EnVar_plugin.zip"
-            #      Expand-Archive EnVar_plugin.zip -DestinationPath EnVarPlugin
-
-            #- name: Install EnVar Plugin
-            #  run: |
-            #      $nsisRoot = "C:/Program Files (x86)/NSIS/"
-            #      $pluginDest = Join-Path $nsisRoot "Plugins\x86-unicode"
-            #      if (!(Test-Path $pluginDest)) { New-Item -ItemType Directory -Force -Path $pluginDest | Out-Null }
-            #      echo Copy-Item -Path 'EnVarPlugin\Plugins\x86-unicode\EnVar.dll' -Destination $pluginDest -Force > cp_envar.ps1
-            #      Start-Process PowerShell -Verb runAs -ArgumentList "-command ./cp_envar.ps1"
-
             - name: Setup .NET
               uses: actions/setup-dotnet@v3
               with:
                   dotnet-version: "9.0.x"
 
-            #            - name: Copy installer scripts
-            #              run: cp InstallerFiles/*.w*x* .
-
             - name: Build installer
-              run: dotnet build
+              run: dotnet build --configuration Release
+
+            - name: Move installer
+              run: mv bin/Release/win-installer.msi .
+
+            - name: Create ZIP
+              run: Compress-Archive dinfo-win-x64-self-contained* dinfo-win.zip
+
 
             - name: Upload Release Assets
               uses: softprops/action-gh-release@v1
               with:
                   files: |
-                      dinfo-win-x64-self-contained.exe
+                      dinfo-win.zip
                       win-installer.msi
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
