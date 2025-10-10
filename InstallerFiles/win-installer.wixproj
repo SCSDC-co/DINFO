@@ -1,5 +1,6 @@
 <Project Sdk="WixToolset.Sdk/6.0.0">
   <PropertyGroup>
+    <SignOutput>true</SignOutput>
 
     <Configuration Condition="'$(Configuration)'==''">Debug</Configuration>
     <OutputName>win-installer</OutputName>
