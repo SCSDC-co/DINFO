@@ -165,8 +165,8 @@ Contributions are welcome! Open a **pull request** or create an **issue** for su
 ## Roadmap
 
 - [ ] Adding more output types:
-      - [ ] html
-      - [ ] database
+ - [ ] html
+ - [ ] database
 - [ ] Adding a tree making system of the directory via flags
 
 ---
