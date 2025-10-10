@@ -1,3 +1,4 @@
+# Maintainer: Sckab <giulianodeamicis2009@gmail.com>
 pkgname=dinfo
 pkgver=VERSION_BASE
 pkgrel=1
@@ -7,7 +8,7 @@ url="https://github.com/SCSDC-co/DINFO"
 license=('GPL 3.0')
 
 source=("https://github.com/SCSDC-co/DINFO/releases/download/v$pkgver/dinfo-linux-x64-self-contained.zip")
-sha256sums=(ZIP_SHA_BASE)
+sha256sums=('ZIP_SHA_BASE')
 
 prepare() {
     unzip -q "$srcdir/dinfo-linux-x64-self-contained.zip" -d "$srcdir"
