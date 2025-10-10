@@ -92,12 +92,14 @@ jobs:
               with:
                   name: dinfo-linux
 
-            # --- Upload binaries ---
+            - name: Create ZIP for Linux
+              run: zip -r dinfo-linux-x64-self-contained.zip dinfo-linux-x64-self-contained
+
             - name: Upload Release Assets
               uses: softprops/action-gh-release@v1
               with:
                   files: |
-                      dinfo-linux-x64-self-contained
+                      dinfo-linux-x64-self-contained.zip
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
