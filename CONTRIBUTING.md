@@ -48,16 +48,16 @@ Commit message are really important! so make sure to make them correct!
 - Limit the first line to 72 characters or less
 - Reference issues and pull requests liberally after the first line
 - Use the correct naming conventions for commit messages:
- - `feat:` For adding features
- - `fix:` For fixing bugs
- - `docs:` For updating the docs
- - `update <file name>` When updating only 1 file ("update README.md")
- - `chore:` When making changes that don't change the code behavior
- - `refactor:` When refactoring the code
- - `perf:` For changes that upgrade the performance
- - `ci:` When changing the CI/CD workflow
- - `style:` When changing the code style
- - `revert:` When reverting to the previous commit
+  - `feat:` For adding features
+  - `fix:` For fixing bugs
+  - `docs:` For updating the docs
+  - `update <file name>` When updating only 1 file ("update README.md")
+  - `chore:` When making changes that don't change the code behavior
+  - `refactor:` When refactoring the code
+  - `perf:` For changes that upgrade the performance
+  - `ci:` When changing the CI/CD workflow
+  - `style:` When changing the code style
+  - `revert:` When reverting to the previous commit
 
 ### Coding style / conventions
 
