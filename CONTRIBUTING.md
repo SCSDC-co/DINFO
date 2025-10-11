@@ -64,6 +64,24 @@ Commit message are really important! so make sure to make them correct!
 DINFO is built using C#, so make sure to follow the [C# coding conventions](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions).<br>
 Make sure to follow the .editorconfig!
 
+### Naming branches
+
+If you have the permission you can create a branch, but make sure to follow this naming conventions:
+
+- `feat/` For adding features
+- `fix/` For fixing bugs
+- `docs/` For updating the docs
+- `chore/` When making changes that don't change the code behavior
+- `refactor/` When refactoring the code
+- `perf/` For changes that upgrade the performance
+- `ci/` When changing the CI/CD workflow
+- `style/` When changing the code style
+- `revert/` When reverting to the previous commit
+
+Create an issue when creating a branch and at the end of the name put the issue number and to put dashes (-) between words.
+
+> EXAMPLE: feat/add-dir-tree-14
+
 ## Code of conduct
 
 Make sure to read it before making any pr!<br>
