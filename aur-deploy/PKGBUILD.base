@@ -14,6 +14,6 @@ sha256sums=('FILE_SHA_BASE')
 package() {
     install -dm755 "$pkgdir/usr/lib/dinfo"
     install -Dm755 "$srcdir/../dinfo-linux-x64-self-contained" "$pkgdir/usr/lib/dinfo/dinfo"
-
-    ln -sf /usr/lib/dinfo/dinfo "$pkgdir/usr/bin/dinfo"
+    mkdir -p "$pkgdir/usr/bin"
+    ln -sf "$pkgdir/usr/lib/dinfo/dinfo" "$pkgdir/usr/bin/dinfo"
 }
