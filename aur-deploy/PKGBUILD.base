@@ -12,8 +12,8 @@ source=("https://github.com/SCSDC-co/DINFO/releases/download/v$pkgver/dinfo-linu
 sha256sums=('FILE_SHA_BASE')
 
 package() {
-    mkdir -p "$pkgdir/usr/lib/dinfo"
-    mkdir -p "$pkgdir/usr/bin"
-    cp -r "$srcdir/../dinfo-linux-x64-self-contained" "$pkgdir/usr/lib/dinfo/"
-    ln -s /usr/lib/dinfo/dinfo-linux-x64-self-contained "$pkgdir/usr/bin/dinfo"
+    install -dm755 "$pkgdir/usr/lib/dinfo"
+    install -Dm755 "$srcdir/../dinfo-linux-x64-self-contained" "$pkgdir/usr/lib/dinfo/dinfo"
+
+    ln -sf /usr/lib/dinfo/dinfo "$pkgdir/usr/bin/dinfo"
 }
