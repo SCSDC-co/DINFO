@@ -121,13 +121,39 @@ public static class TuiHelper
 
         if (GlobalsUtils.Verbose)
         {
-            var filesPanel = new Panel($"[bold green]{string.Join(", ", GlobalsUtils.Files)}[/] ");
+            var filesPanel = new Panel($"[bold green]{string.Join(", ", GlobalsUtils.Files)}[/]");
 
             filesPanel.Border = BoxBorder.Rounded;
             filesPanel.BorderStyle = new Style(Color.Green);
             filesPanel.Header = new PanelHeader("[bold green] FILES [/]");
 
             AnsiConsole.Write(filesPanel);
+        }
+
+        /*
+         *  SKIPPED FILES
+         */
+
+        if (GlobalsUtils.SkippedFileLocked == null)
+        {
+            var skippedFileLocked = new Panel($"[bold green]{string.Join(", ", GlobalsUtils.SkippedFileLocked ?? [])}[/]");
+
+            skippedFileLocked.Border = BoxBorder.Rounded;
+            skippedFileLocked.BorderStyle = new Style(Color.Yellow);
+            skippedFileLocked.Header = new PanelHeader("[bold yellow]FILES SKIPPED (locked by system)[/]");
+
+            AnsiConsole.Write(skippedFileLocked);
+        }
+
+        if (GlobalsUtils.SkippedFileAccesDenied == null)
+        {
+            var skippedFileAccessDenied = new Panel($"[bold green]{string.Join(", ", GlobalsUtils.SkippedFileAccesDenied ?? [])}[/]");
+
+            skippedFileAccessDenied.Border = BoxBorder.Rounded;
+            skippedFileAccessDenied.BorderStyle = new Style(Color.Yellow);
+            skippedFileAccessDenied.Header = new PanelHeader("[bold yellow]FILES SKIPPED (access denied)[/]");
+
+            AnsiConsole.Write(skippedFileAccessDenied);
         }
     }
 

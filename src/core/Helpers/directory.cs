@@ -49,9 +49,9 @@ public static class DirectoryHelper
 
             if (!GlobalsUtils.IgnoreGitignore && File.Exists(gitIgnorePath))
             {
-                var IsIgnored = GitHelper.IsFileIgnore(gitIgnorePath, fileInfo);
+                var isIgnoredGit = GitHelper.IsFileIgnore(gitIgnorePath, fileInfo);
 
-                if (IsIgnored)
+                if (isIgnoredGit)
                 {
                     continue;
                 }
@@ -70,12 +70,12 @@ public static class DirectoryHelper
             }
             catch (IOException)
             {
-                Console.WriteLine($"[SKIPPED] {fileName} (file locked by system)");
+                GlobalsUtils.SkippedFileLocked.Add(fileName);
                 continue;
             }
             catch (UnauthorizedAccessException)
             {
-                Console.WriteLine($"[SKIPPED] {fileName} (access denied)");
+                GlobalsUtils.SkippedFileAccesDenied.Add(fileName);
                 continue;
             }
         }
