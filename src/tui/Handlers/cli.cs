@@ -7,6 +7,7 @@ using dinfo.core.Handlers.Html;
 using dinfo.core.Utils.Globals;
 using dinfo.tui.Helpers.Tui;
 using Spectre.Console;
+using dinfo.core.Interfaces.Output;
 
 [Command(Description = "Display information about the specified directory and its contents.")]
 public class DinfoCommand : ICommand
@@ -26,8 +27,7 @@ public class DinfoCommand : ICommand
     [CommandOption("output", 'o', Description = "Specify if you want the output in a file.")]
     public bool OutputToFileCli { get; set; } = false;
 
-    [CommandOption(
-        "file-format",
+    [CommandOption("file-format",
         'f',
         Description = "Specify the output file (formats: json, yaml)."
     )]
@@ -38,6 +38,8 @@ public class DinfoCommand : ICommand
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
+        IOutputHandler handler;
+
         GlobalsUtils.Recursive = RecursiveCli;
         GlobalsUtils.Verbose = VerboseCli;
         GlobalsUtils.IgnoreGitignore = IgnoreGitIgnoreCli;
@@ -55,7 +57,9 @@ public class DinfoCommand : ICommand
             switch (Path.GetExtension(OutputCli).ToLowerInvariant())
             {
                 case ".json":
-                    await JsonHandler.DirectorySaveJsonAsync(dir, OutputCli);
+                    handler = new JsonHandler();
+
+                    await handler.DirectorySaveAsync(dir, OutputCli);
 
                     AnsiConsole.Write(new Panel($"[bold green]JSON file saved in:[/] {OutputCli}")
                         .Border(BoxBorder.Rounded)
@@ -64,7 +68,9 @@ public class DinfoCommand : ICommand
                     break;
 
                 case ".yaml":
-                    await YamlHandler.DirectorySaveYamlAsync(dir, OutputCli);
+                    handler = new YamlHandler();
+
+                    await handler.DirectorySaveAsync(dir, OutputCli);
 
                     AnsiConsole.Write(new Panel($"[bold green]YAML file saved in:[/] {OutputCli}")
                         .Border(BoxBorder.Rounded)
@@ -72,8 +78,11 @@ public class DinfoCommand : ICommand
 
                     break;
 
+                case ".htm":
                 case ".html":
-                    await HtmlHandler.DirectorySaveHtml(dir, OutputCli);
+                    handler = new HtmlHandler();
+
+                    await handler.DirectorySaveAsync(dir, OutputCli);
 
                     AnsiConsole.Write(new Panel($"[bold green]HTML file saved in:[/] {OutputCli}")
                         .Border(BoxBorder.Rounded)
@@ -114,6 +123,8 @@ public class FileCommand : ICommand
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
+        IOutputHandler handler;
+
         GlobalsUtils.NoTui = NoTuiCli;
 
         if (!GlobalsUtils.NoTui)
@@ -126,7 +137,9 @@ public class FileCommand : ICommand
             switch (Path.GetExtension(OutputCli).ToLowerInvariant())
             {
                 case ".json":
-                    await JsonHandler.FileSaveJsonAsync(TargetFile, OutputCli);
+                    handler = new JsonHandler();
+
+                    await handler.FileSaveAsync(TargetFile, OutputCli);
 
                     AnsiConsole.Write(new Panel($"[bold green]JSON file saved in:[/] {OutputCli}")
                         .Border(BoxBorder.Rounded)
@@ -135,7 +148,9 @@ public class FileCommand : ICommand
                     break;
 
                 case ".yaml":
-                    await YamlHandler.FileSaveYamlAsync(TargetFile, OutputCli);
+                    handler = new YamlHandler();
+
+                    await handler.FileSaveAsync(TargetFile, OutputCli);
 
                     AnsiConsole.Write(new Panel($"[bold green]YAML file saved in:[/] {OutputCli}")
                         .Border(BoxBorder.Rounded)
@@ -143,8 +158,11 @@ public class FileCommand : ICommand
 
                     break;
 
+                case ".htm":
                 case ".html":
-                    await HtmlHandler.FileSaveHtmlAsync(TargetFile, OutputCli);
+                    handler = new HtmlHandler();
+
+                    await handler.FileSaveAsync(TargetFile, OutputCli);
 
                     AnsiConsole.Write(new Panel($"[bold green]HTML file saved in:[/] {OutputCli}")
                         .Border(BoxBorder.Rounded)

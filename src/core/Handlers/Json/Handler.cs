@@ -3,12 +3,13 @@ using dinfo.core.Helpers.DirTools;
 using dinfo.core.Helpers.FilesTools;
 using dinfo.core.Helpers.GitTools;
 using dinfo.core.Utils.Globals;
+using dinfo.core.Interfaces.Output;
 
 namespace dinfo.core.Handlers.Json;
 
-public static class JsonHandler
+public class JsonHandler : IOutputHandler
 {
-    public static async Task DirectorySaveJsonAsync(string targetDirectory, string pathJson)
+    public async Task DirectorySaveAsync(string targetDirectory, string filePath, CancellationToken cancellationToken = default)
     {
         if (GlobalsUtils.NoTui)
         {
@@ -61,10 +62,10 @@ public static class JsonHandler
         var options = new JsonSerializerOptions { WriteIndented = true };
         string jsonString = JsonSerializer.Serialize(json, options);
 
-        await File.WriteAllTextAsync(pathJson, jsonString);
+        await File.WriteAllTextAsync(filePath, jsonString);
     }
 
-    public static async Task FileSaveJsonAsync(string targetFile, string pathJson)
+    public async Task FileSaveAsync(string targetFile, string filePath, CancellationToken cancellationToken = default)
     {
         if (GlobalsUtils.NoTui)
         {
@@ -90,6 +91,6 @@ public static class JsonHandler
         var options = new JsonSerializerOptions { WriteIndented = true };
         string jsonString = JsonSerializer.Serialize(json, options);
 
-        await File.WriteAllTextAsync(pathJson, jsonString);
+        await File.WriteAllTextAsync(filePath, jsonString);
     }
 }

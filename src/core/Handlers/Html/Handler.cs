@@ -3,10 +3,11 @@ using dinfo.core.Helpers.DirTools;
 using dinfo.core.Helpers.FilesTools;
 using dinfo.core.Helpers.GitTools;
 using dinfo.core.Utils.Globals;
+using dinfo.core.Interfaces.Output;
 
 namespace dinfo.core.Handlers.Html;
 
-public static class HtmlHandler
+public class HtmlHandler : IOutputHandler
 {
     private static void AddRow(HtmlNode table, string property, string value)
     {
@@ -18,7 +19,7 @@ public static class HtmlHandler
         table.AppendChild(tr);
     }
 
-    public static async Task DirectorySaveHtml(string targetDirectory, string pathHtml)
+    public async Task DirectorySaveAsync(string targetDirectory, string filePath, CancellationToken cancellationToken = default)
     {
         if (GlobalsUtils.NoTui)
         {
@@ -88,7 +89,7 @@ public static class HtmlHandler
         AddRowGit("GitCommit", GlobalsUtils.GitCommitter);
         AddRowGit("GitSubject", GlobalsUtils.GitSubject);
 
-        doc.Save(pathHtml);
+        doc.Save(filePath);
 
         void AddRowGit(string property, string value)
         {
@@ -99,7 +100,7 @@ public static class HtmlHandler
         }
     }
 
-    public static async Task FileSaveHtmlAsync(string targetFile, string pathHtml)
+    public async Task FileSaveAsync(string targetFile, string filePath, CancellationToken cancellationToken = default)
     {
         if (GlobalsUtils.NoTui)
         {
@@ -133,6 +134,6 @@ public static class HtmlHandler
         AddRow(table, "Encoding", GlobalsUtils.Encodings.Distinct().ToString() ?? string.Empty);
         AddRow(table, "FileTypes", FilesHelper.GetFileTypeSingleFile(targetFile));
 
-        doc.Save(pathHtml);
+        doc.Save(filePath);
     }
 }

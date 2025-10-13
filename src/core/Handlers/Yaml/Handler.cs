@@ -4,12 +4,13 @@ using dinfo.core.Helpers.GitTools;
 using dinfo.core.Utils.Globals;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using dinfo.core.Interfaces.Output;
 
 namespace dinfo.core.Handlers.Yaml;
 
-public static class YamlHandler
+public class YamlHandler : IOutputHandler
 {
-    public static async Task DirectorySaveYamlAsync(string targetDirectory, string pathYaml)
+    public async Task DirectorySaveAsync(string targetDirectory, string filePath, CancellationToken cancellationToken = default)
     {
         if (GlobalsUtils.NoTui)
         {
@@ -65,10 +66,10 @@ public static class YamlHandler
 
         var yamlString = serializer.Serialize(yaml);
 
-        await File.WriteAllTextAsync(pathYaml, yamlString);
+        await File.WriteAllTextAsync(filePath, yamlString);
     }
 
-    public static async Task FileSaveYamlAsync(string targetFile, string pathYaml)
+    public async Task FileSaveAsync(string targetFile, string filePath, CancellationToken cancellationToken = default)
     {
         if (GlobalsUtils.NoTui)
         {
@@ -96,6 +97,6 @@ public static class YamlHandler
             .Build();
         var yamlString = serializer.Serialize(yaml);
 
-        await File.WriteAllTextAsync(pathYaml, yamlString);
+        await File.WriteAllTextAsync(filePath, yamlString);
     }
 }
