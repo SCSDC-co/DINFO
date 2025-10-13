@@ -15,14 +15,14 @@ public static class FilesHelper
 
     public static async Task<int> GetCommentsLinesAsync(string fileName)
     {
-        var slashComment = new Regex(@"^\s*//");
-        var hashComment = new Regex(@"^\s*#");
-        var multiLineCommentStart = new Regex(@"^\s*/\*");
-        var multiLineCommentEnd = new Regex(@"^\s*\*/");
-        var multiLineMarkupStart = new Regex(@"^\s*<!--");
-        var multiLineMarkupEnd = new Regex(@"^\s*-->$");
-        var dashComment = new Regex(@"^\s*--");
-        var semicolonComment = new Regex(@"^\s*;");
+        var slashComment = new Regex(@"^\s*//"); // //
+        var hashComment = new Regex(@"^\s*#"); // #
+        var multiLineCommentStart = new Regex(@"^\s*/\*"); // /*
+        var multiLineCommentEnd = new Regex(@"\s*\*/"); // */
+        var multiLineMarkupStart = new Regex(@"^\s*<!--"); // <!--
+        var multiLineMarkupEnd = new Regex(@"\s*-->$"); // -->
+        var dashComment = new Regex(@"^\s*--"); // --
+        var semicolonComment = new Regex(@"^\s*;"); // ;
 
         IEnumerable<string> lines = await File.ReadAllLinesAsync(fileName);
 
@@ -115,13 +115,13 @@ public static class FilesHelper
         return "N/A";
     }
 
-    public static Encoding GetEncoding(string fileName)
+    public static async Task<Encoding> GetEncodingAsync(string fileName)
     {
         var bom = new byte[4];
-        using (var file = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-        {
-            file.ReadExactlyAsync(bom, 0, Math.Min(4, (int)file.Length));
-        }
+
+        await using var file = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+
+        await file.ReadExactlyAsync(bom, 0, Math.Min(4, (int)file.Length));
 
         if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf)
             return Encoding.UTF8;
@@ -134,7 +134,7 @@ public static class FilesHelper
         if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff)
             return new UTF32Encoding(true, true);
 
-        var allBytes = File.ReadAllBytes(fileName);
+        var allBytes = await File.ReadAllBytesAsync(fileName);
         if (IsUtf8(allBytes))
             return Encoding.UTF8;
 
@@ -176,7 +176,7 @@ public static class FilesHelper
             await GetCommentsLinesAsync(fileName);
             await GetBlankLinesAsync(fileName);
             GlobalsUtils.Files.Add(fileName);
-            GlobalsUtils.Encodings.Add(GetEncoding(fileName).WebName);
+            GlobalsUtils.Encodings.Add((await GetEncodingAsync(fileName)).WebName);
         }
         catch (IOException)
         {

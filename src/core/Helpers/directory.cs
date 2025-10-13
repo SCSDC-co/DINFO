@@ -62,7 +62,7 @@ public static class DirectoryHelper
                 GlobalsUtils.TotalFiles++;
                 GlobalsUtils.TotalLines += await FilesHelper.CountLinesAsync(fileName);
                 GlobalsUtils.Files.Add(fileName);
-                GlobalsUtils.Encodings.Add(FilesHelper.GetEncoding(fileName).WebName);
+                GlobalsUtils.Encodings.Add(FilesHelper.GetEncodingAsync(fileName).WebName);
 
                 FilesHelper.GetFileType(fileName);
                 await FilesHelper.GetCommentsLinesAsync(fileName);
