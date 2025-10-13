@@ -8,6 +8,16 @@ namespace dinfo.core.Handlers.Html;
 
 public static class HtmlHandler
 {
+    private static void AddRow(HtmlNode table, string property, string value)
+    {
+        var tr = HtmlNode.CreateNode("<tr></tr>");
+
+        tr.AppendChild(HtmlNode.CreateNode($"<td>{HtmlEntity.Entitize(property)}</td>"));
+        tr.AppendChild(HtmlNode.CreateNode($"<td>{HtmlEntity.Entitize(value)}</td>"));
+
+        table.AppendChild(tr);
+    }
+
     public static async Task DirectorySaveHtml(string targetDirectory, string pathHtml)
     {
         if (GlobalsUtils.NoTui)
@@ -17,7 +27,7 @@ public static class HtmlHandler
         }
 
         string directorySize =
-            (DirectoryHelper.SizeToReturn()).ToString() + " " + GlobalsUtils.SizeExtension;
+            $"{DirectoryHelper.SizeToReturn()} {GlobalsUtils.SizeExtension}";
 
         var mostUsedExtension =
             GlobalsUtils
@@ -47,28 +57,20 @@ public static class HtmlHandler
         var trHead = HtmlNode.CreateNode("<tr><th>Property</th><th>Value</th></tr>");
         table.AppendChild(trHead);
 
-        void AddRow(string property, string value)
-        {
-            var tr = HtmlNode.CreateNode("<tr></tr>");
-            tr.AppendChild(HtmlNode.CreateNode($"<td>{HtmlEntity.Entitize(property)}</td>"));
-            tr.AppendChild(HtmlNode.CreateNode($"<td>{HtmlEntity.Entitize(value)}</td>"));
-            table.AppendChild(tr);
-        }
-
-        AddRow("Path", targetDirectory);
-        AddRow("BiggestFile", GlobalsUtils.BiggestFile);
-        AddRow("LatestModifiedFile", GlobalsUtils.LastModifiedFile);
-        AddRow("FileTypes", string.Join(", ", GlobalsUtils.FileTypes.Distinct()));
-        AddRow("MostUsedExtension", mostUsedExtension.TrimStart('.'));
-        AddRow("Encoding", string.Join(", ", GlobalsUtils.Encodings));
-        AddRow("Files", GlobalsUtils.TotalFiles.ToString());
-        AddRow("Size", directorySize);
-        AddRow("Permissions", perms);
-        AddRow("Lines", GlobalsUtils.TotalLines.ToString());
-        AddRow("Code", GlobalsUtils.TotalLinesCode.ToString());
-        AddRow("Comments", GlobalsUtils.TotalLinesComments.ToString());
-        AddRow("Blank", GlobalsUtils.TotalBlankLines.ToString());
-        AddRow("Directories", GlobalsUtils.TotalDirs.ToString());
+        AddRow(table, "Path", targetDirectory);
+        AddRow(table, "BiggestFile", GlobalsUtils.BiggestFile);
+        AddRow(table, "LatestModifiedFile", GlobalsUtils.LastModifiedFile);
+        AddRow(table, "FileTypes", string.Join(", ", GlobalsUtils.FileTypes.Distinct()));
+        AddRow(table, "MostUsedExtension", mostUsedExtension.TrimStart('.'));
+        AddRow(table, "Encoding", string.Join(", ", GlobalsUtils.Encodings));
+        AddRow(table, "Files", GlobalsUtils.TotalFiles.ToString());
+        AddRow(table, "Size", directorySize);
+        AddRow(table, "Permissions", perms);
+        AddRow(table, "Lines", GlobalsUtils.TotalLines.ToString());
+        AddRow(table, "Code", GlobalsUtils.TotalLinesCode.ToString());
+        AddRow(table, "Comments", GlobalsUtils.TotalLinesComments.ToString());
+        AddRow(table, "Blank", GlobalsUtils.TotalBlankLines.ToString());
+        AddRow(table, "Directories", GlobalsUtils.TotalDirs.ToString());
 
         /*
          *  TABLE 2 GIT DATA
@@ -80,14 +82,6 @@ public static class HtmlHandler
         var trHeadGit = HtmlNode.CreateNode("<tr><th>Property</th><th>Value</th></tr>");
         tableGit.AppendChild(trHeadGit);
 
-        void AddRowGit(string property, string value)
-        {
-            var tr = HtmlNode.CreateNode("<tr></tr>");
-            tr.AppendChild(HtmlNode.CreateNode($"<td>{HtmlEntity.Entitize(property)}</td>"));
-            tr.AppendChild(HtmlNode.CreateNode($"<td>{HtmlEntity.Entitize(value)}</td>"));
-            tableGit.AppendChild(tr);
-        }
-
         AddRowGit("GitBranchName", GlobalsUtils.GitBranchName);
         AddRowGit("GitHash", GlobalsUtils.GitHash);
         AddRowGit("GitAuthor", GlobalsUtils.GitAuthor);
@@ -95,6 +89,14 @@ public static class HtmlHandler
         AddRowGit("GitSubject", GlobalsUtils.GitSubject);
 
         doc.Save(pathHtml);
+
+        void AddRowGit(string property, string value)
+        {
+            var tr = HtmlNode.CreateNode("<tr></tr>");
+            tr.AppendChild(HtmlNode.CreateNode($"<td>{HtmlEntity.Entitize(property)}</td>"));
+            tr.AppendChild(HtmlNode.CreateNode($"<td>{HtmlEntity.Entitize(value)}</td>"));
+            tableGit.AppendChild(tr);
+        }
     }
 
     public static async Task FileSaveHtmlAsync(string targetFile, string pathHtml)
@@ -123,21 +125,13 @@ public static class HtmlHandler
         var trHead = HtmlNode.CreateNode("<tr><th>Property</th><th>Value</th></tr>");
         table.AppendChild(trHead);
 
-        void AddRow(string property, string value)
-        {
-            var tr = HtmlNode.CreateNode("<tr></tr>");
-            tr.AppendChild(HtmlNode.CreateNode($"<td>{HtmlEntity.Entitize(property)}</td>"));
-            tr.AppendChild(HtmlNode.CreateNode($"<td>{HtmlEntity.Entitize(value)}</td>"));
-            table.AppendChild(tr);
-        }
-
-        AddRow("FileName", targetFile);
-        AddRow("Lines", lines.ToString());
-        AddRow("Comments", comments.ToString());
-        AddRow("Code", code.ToString());
-        AddRow("Blanks", blank.ToString());
-        AddRow("Encoding", GlobalsUtils.Encodings.Distinct().ToString());
-        AddRow("FileTypes", FilesHelper.GetFileTypeSingleFile(targetFile));
+        AddRow(table, "FileName", targetFile);
+        AddRow(table, "Lines", lines.ToString());
+        AddRow(table, "Comments", comments.ToString());
+        AddRow(table, "Code", code.ToString());
+        AddRow(table, "Blanks", blank.ToString());
+        AddRow(table, "Encoding", GlobalsUtils.Encodings.Distinct().ToString() ?? string.Empty);
+        AddRow(table, "FileTypes", FilesHelper.GetFileTypeSingleFile(targetFile));
 
         doc.Save(pathHtml);
     }
