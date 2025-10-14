@@ -3,3 +3,4 @@ bin
 obj
 *.exe
 *.dll
+!finish_dinfo_MSIX_install.exe
