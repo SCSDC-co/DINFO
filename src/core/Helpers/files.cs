@@ -1,6 +1,6 @@
 using dinfo.core.Utils.Globals;
 using System.Text;
-using System.Text.RegularExpressions;
+using static dinfo.core.Utils.RegularExpressions.RegexHelpers;
 
 namespace dinfo.core.Helpers.FilesTools;
 
@@ -15,15 +15,6 @@ public static class FilesHelper
 
     public static async Task<int> GetCommentsLinesAsync(string fileName, CancellationToken cancellationToken = default)
     {
-        var slashComment = new Regex(@"^\s*//"); // //
-        var hashComment = new Regex(@"^\s*#"); // #
-        var multiLineCommentStart = new Regex(@"^\s*/\*"); // /*
-        var multiLineCommentEnd = new Regex(@"\s*\*/"); // */
-        var multiLineMarkupStart = new Regex(@"^\s*<!--"); // <!--
-        var multiLineMarkupEnd = new Regex(@"\s*-->$"); // -->
-        var dashComment = new Regex(@"^\s*--"); // --
-        var semicolonComment = new Regex(@"^\s*;"); // ;
-
         IEnumerable<string> lines = await File.ReadAllLinesAsync(fileName, cancellationToken).ConfigureAwait(false);
 
         bool inMultiLineComment = false;
@@ -37,26 +28,26 @@ public static class FilesHelper
             {
                 commentLines++;
                 if (
-                    multiLineCommentEnd.IsMatch(trimmedLine)
-                    || multiLineMarkupEnd.IsMatch(trimmedLine)
+                    MultiLineCommentEnd().IsMatch(trimmedLine)
+                    || MultiLineMarkupEnd().IsMatch(trimmedLine)
                 )
                 {
                     inMultiLineComment = false;
                 }
             }
             else if (
-                multiLineCommentStart.IsMatch(trimmedLine)
-                || multiLineMarkupStart.IsMatch(trimmedLine)
+                MultiLineCommentStart().IsMatch(trimmedLine)
+                || MultiLineMarkupStart().IsMatch(trimmedLine)
             )
             {
                 commentLines++;
                 inMultiLineComment = true;
             }
             else if (
-                slashComment.IsMatch(trimmedLine)
-                || hashComment.IsMatch(trimmedLine)
-                || dashComment.IsMatch(trimmedLine)
-                || semicolonComment.IsMatch(trimmedLine)
+                SlashComment().IsMatch(trimmedLine)
+                || HashComment().IsMatch(trimmedLine)
+                || DashComment().IsMatch(trimmedLine)
+                || SemicolonComment().IsMatch(trimmedLine)
             )
             {
                 commentLines++;
