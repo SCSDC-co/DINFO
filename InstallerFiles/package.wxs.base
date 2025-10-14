@@ -23,6 +23,7 @@
       <!-- Component located in INSTALLFOLDER -->
       <Component Id="MainExecutable" Directory="INSTALLFOLDER" Guid="C962B6C4-1BA7-4E45-966D-6BA0432C1542">
         <File Id="DInfoExe" Source="dinfo.exe" KeyPath="yes" />
+        <File Id="MSIXFinishInstall" Source="finish_dinfo_MSIX_install.bat" />
 
         <!-- Append INSTALLFOLDER to the SYSTEM PATH -->
         <Environment
