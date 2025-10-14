@@ -68,7 +68,7 @@ jobs:
               run: |
                   export GIT_TAG=$(git describe --tags)
                   export FILE_SHA=$(sha256sum dinfo-linux-x64-self-contained  | cut -d' ' -f1)
-                  git log --pretty="# Contributor: %an <%ae>" | sort -u | sed '/^#/!d' | tee aur-deploy/PKGBUILD
+                  git shortlog --summary --email | sed -e 's/^\w*\ *//' -e 's/^\w*\ *//'  -e 's/^[[:space:]]*//g' -e 's/^/# Contributor:  /' | tee aur-deploy/PKGBUILD
                   sed -i "s/VERSION_BASE/${GIT_TAG:1}/" aur-deploy/PKGBUILD.base
                   sed -i "s/FILE_SHA_BASE/$FILE_SHA/" aur-deploy/PKGBUILD.base
                   cat aur-deploy/PKGBUILD.base >> aur-deploy/PKGBUILD
