@@ -1,30 +1,21 @@
-using System.Text;
-using System.Text.RegularExpressions;
 using dinfo.core.Utils.Globals;
+using System.Text;
+using static dinfo.core.Utils.RegularExpressions.RegexHelpers;
 
 namespace dinfo.core.Helpers.FilesTools;
 
 public static class FilesHelper
 {
-    public static async Task<int> CountLinesAsync(string fileName)
+    public static async Task<int> CountLinesAsync(string fileName, CancellationToken cancellationToken = default)
     {
-        IEnumerable<string> lines = await File.ReadAllLinesAsync(fileName);
+        IEnumerable<string> lines = await File.ReadAllLinesAsync(fileName, cancellationToken);
 
         return lines.Count();
     }
 
-    public static async Task<int> GetCommentsLinesAsync(string fileName)
+    public static async Task<int> GetCommentsLinesAsync(string fileName, CancellationToken cancellationToken = default)
     {
-        var slashComment = new Regex(@"^\s*//"); // //
-        var hashComment = new Regex(@"^\s*#"); // #
-        var multiLineCommentStart = new Regex(@"^\s*/\*"); // /*
-        var multiLineCommentEnd = new Regex(@"\s*\*/"); // */
-        var multiLineMarkupStart = new Regex(@"^\s*<!--"); // <!--
-        var multiLineMarkupEnd = new Regex(@"\s*-->$"); // -->
-        var dashComment = new Regex(@"^\s*--"); // --
-        var semicolonComment = new Regex(@"^\s*;"); // ;
-
-        IEnumerable<string> lines = await File.ReadAllLinesAsync(fileName);
+        IEnumerable<string> lines = await File.ReadAllLinesAsync(fileName, cancellationToken).ConfigureAwait(false);
 
         bool inMultiLineComment = false;
         int commentLines = 0;
@@ -37,26 +28,26 @@ public static class FilesHelper
             {
                 commentLines++;
                 if (
-                    multiLineCommentEnd.IsMatch(trimmedLine)
-                    || multiLineMarkupEnd.IsMatch(trimmedLine)
+                    MultiLineCommentEnd().IsMatch(trimmedLine)
+                    || MultiLineMarkupEnd().IsMatch(trimmedLine)
                 )
                 {
                     inMultiLineComment = false;
                 }
             }
             else if (
-                multiLineCommentStart.IsMatch(trimmedLine)
-                || multiLineMarkupStart.IsMatch(trimmedLine)
+                MultiLineCommentStart().IsMatch(trimmedLine)
+                || MultiLineMarkupStart().IsMatch(trimmedLine)
             )
             {
                 commentLines++;
                 inMultiLineComment = true;
             }
             else if (
-                slashComment.IsMatch(trimmedLine)
-                || hashComment.IsMatch(trimmedLine)
-                || dashComment.IsMatch(trimmedLine)
-                || semicolonComment.IsMatch(trimmedLine)
+                SlashComment().IsMatch(trimmedLine)
+                || HashComment().IsMatch(trimmedLine)
+                || DashComment().IsMatch(trimmedLine)
+                || SemicolonComment().IsMatch(trimmedLine)
             )
             {
                 commentLines++;
@@ -68,9 +59,9 @@ public static class FilesHelper
         return commentLines;
     }
 
-    public static async Task<int> GetBlankLinesAsync(string fileName)
+    public static async Task<int> GetBlankLinesAsync(string fileName, CancellationToken cancellationToken = default)
     {
-        IEnumerable<string> lines = await File.ReadAllLinesAsync(fileName);
+        IEnumerable<string> lines = await File.ReadAllLinesAsync(fileName, cancellationToken).ConfigureAwait(false);
 
         int blankLines = lines.Count(line => string.IsNullOrWhiteSpace(line));
 
@@ -81,14 +72,14 @@ public static class FilesHelper
 
     public static void GetFileType(string fileName)
     {
-        string name = Path.GetFileName(fileName);
+        string? name = Path.GetFileName(fileName);
 
-        if (name.StartsWith("."))
+        if (name.StartsWith('.'))
         {
             return;
         }
 
-        string ext = Path.GetExtension(name);
+        string? ext = Path.GetExtension(name);
 
         if (!string.IsNullOrEmpty(ext))
         {
@@ -98,14 +89,14 @@ public static class FilesHelper
 
     public static string GetFileTypeSingleFile(string fileName)
     {
-        string name = Path.GetFileName(fileName);
+        string? name = Path.GetFileName(fileName);
 
-        if (name.StartsWith("."))
+        if (name.StartsWith('.'))
         {
             return "N/A";
         }
 
-        string ext = Path.GetExtension(name);
+        string? ext = Path.GetExtension(name);
 
         if (!string.IsNullOrEmpty(ext))
         {
@@ -115,13 +106,13 @@ public static class FilesHelper
         return "N/A";
     }
 
-    public static async Task<Encoding> GetEncodingAsync(string fileName)
+    public static async Task<Encoding> GetEncodingAsync(string fileName, CancellationToken cancellationToken = default)
     {
         var bom = new byte[4];
 
         await using var file = new FileStream(fileName, FileMode.Open, FileAccess.Read);
 
-        await file.ReadExactlyAsync(bom, 0, Math.Min(4, (int)file.Length));
+        await file.ReadExactlyAsync(bom, 0, Math.Min(4, (int)file.Length), cancellationToken).ConfigureAwait(false);
 
         if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf)
             return Encoding.UTF8;
@@ -134,7 +125,7 @@ public static class FilesHelper
         if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff)
             return new UTF32Encoding(true, true);
 
-        var allBytes = await File.ReadAllBytesAsync(fileName);
+        var allBytes = await File.ReadAllBytesAsync(fileName, cancellationToken).ConfigureAwait(false);
         if (IsUtf8(allBytes))
             return Encoding.UTF8;
 
@@ -167,16 +158,18 @@ public static class FilesHelper
         GlobalsUtils.LastModifiedFile = files.OrderBy(fi => fi.LastWriteTime).Last().FullName;
     }
 
-    public static async Task ProcessFileAsync(string fileName)
+    public static async Task ProcessFileAsync(string fileName, CancellationToken cancellationToken = default)
     {
         try
         {
             GlobalsUtils.TotalFiles++;
-            GlobalsUtils.TotalLines += await CountLinesAsync(fileName);
-            await GetCommentsLinesAsync(fileName);
-            await GetBlankLinesAsync(fileName);
+            GlobalsUtils.TotalLines += await CountLinesAsync(fileName, cancellationToken).ConfigureAwait(false);
+            await GetCommentsLinesAsync(fileName, cancellationToken).ConfigureAwait(false);
+            await GetBlankLinesAsync(fileName, cancellationToken).ConfigureAwait(false);
             GlobalsUtils.Files.Add(fileName);
-            GlobalsUtils.Encodings.Add((await GetEncodingAsync(fileName)).WebName);
+
+            var encoding = await GetEncodingAsync(fileName, cancellationToken).ConfigureAwait(false);
+            GlobalsUtils.Encodings.Add(encoding.WebName);
         }
         catch (IOException)
         {
