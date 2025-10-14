@@ -1,16 +1,16 @@
-using System.Security.AccessControl;
-using System.Security.Principal;
 using dinfo.core.Handlers.ConfigTools;
 using dinfo.core.Helpers.FilesTools;
 using dinfo.core.Helpers.GitTools;
 using dinfo.core.Utils.Globals;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text.RegularExpressions;
 
 namespace dinfo.core.Helpers.DirTools;
 
 public static class DirectoryHelper
 {
-    public static async Task ProcessDirectoryAsync(string targetDirectory)
+    public static async Task ProcessDirectoryAsync(string targetDirectory, CancellationToken cancellationToken = default)
     {
         GlobalsUtils.TotalDirs++;
         GetDirectorySize(targetDirectory);
@@ -20,7 +20,7 @@ public static class DirectoryHelper
         GitHelper.FindGitRoot(targetDirectory);
 
         var gitIgnorePath = Path.Combine(
-            (GlobalsUtils.GitRootDirectory).Replace("\\", "/"),
+            GlobalsUtils.GitRootDirectory.Replace("\\", "/"),
             ".gitignore"
         );
 
@@ -60,13 +60,15 @@ public static class DirectoryHelper
             try
             {
                 GlobalsUtils.TotalFiles++;
-                GlobalsUtils.TotalLines += await FilesHelper.CountLinesAsync(fileName);
+                GlobalsUtils.TotalLines += await FilesHelper.CountLinesAsync(fileName, cancellationToken).ConfigureAwait(false);
                 GlobalsUtils.Files.Add(fileName);
-                GlobalsUtils.Encodings.Add(FilesHelper.GetEncodingAsync(fileName).WebName);
+
+                var encoding = await FilesHelper.GetEncodingAsync(fileName, cancellationToken).ConfigureAwait(false);
+                GlobalsUtils.Encodings.Add(encoding.WebName);
 
                 FilesHelper.GetFileType(fileName);
-                await FilesHelper.GetCommentsLinesAsync(fileName);
-                await FilesHelper.GetBlankLinesAsync(fileName);
+                await FilesHelper.GetCommentsLinesAsync(fileName, cancellationToken).ConfigureAwait(false);
+                await FilesHelper.GetBlankLinesAsync(fileName, cancellationToken).ConfigureAwait(false);
             }
             catch (IOException)
             {
@@ -112,7 +114,7 @@ public static class DirectoryHelper
                     continue;
                 }
 
-                await ProcessDirectoryAsync(subDirectory);
+                await ProcessDirectoryAsync(subDirectory, cancellationToken).ConfigureAwait(false);
             }
         }
     }

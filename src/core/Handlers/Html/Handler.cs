@@ -1,9 +1,9 @@
-using HtmlAgilityPack;
 using dinfo.core.Helpers.DirTools;
 using dinfo.core.Helpers.FilesTools;
 using dinfo.core.Helpers.GitTools;
-using dinfo.core.Utils.Globals;
 using dinfo.core.Interfaces.Output;
+using dinfo.core.Utils.Globals;
+using HtmlAgilityPack;
 
 namespace dinfo.core.Handlers.Html;
 
@@ -23,20 +23,13 @@ public class HtmlHandler : IOutputHandler
     {
         if (GlobalsUtils.NoTui)
         {
-            await DirectoryHelper.ProcessDirectoryAsync(targetDirectory);
-            await GitHelper.GetGitInfoAsync(targetDirectory);
+            await DirectoryHelper.ProcessDirectoryAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
+            await GitHelper.GetGitInfoAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
         }
 
-        string directorySize =
-            $"{DirectoryHelper.SizeToReturn()} {GlobalsUtils.SizeExtension}";
+        string directorySize = $"{DirectoryHelper.SizeToReturn()} {GlobalsUtils.SizeExtension}";
 
-        var mostUsedExtension =
-            GlobalsUtils
-                .FileTypes.GroupBy(x => x)
-                .OrderByDescending(g => g.Count())
-                .Select(g => g.Key)
-                .FirstOrDefault()
-            ?? "N/A";
+        var mostUsedExtension = GlobalsUtils.GetMostUsedExtension();
 
         var perms = DirectoryHelper.GetDirectoryPermissions(targetDirectory);
 
@@ -104,12 +97,12 @@ public class HtmlHandler : IOutputHandler
     {
         if (GlobalsUtils.NoTui)
         {
-            await FilesHelper.ProcessFileAsync(targetFile);
+            await FilesHelper.ProcessFileAsync(targetFile, cancellationToken).ConfigureAwait(false);
         }
 
-        var lines = await FilesHelper.CountLinesAsync(targetFile);
-        var comments = await FilesHelper.GetCommentsLinesAsync(targetFile);
-        var blank = await FilesHelper.GetBlankLinesAsync(targetFile);
+        var lines = await FilesHelper.CountLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
+        var comments = await FilesHelper.GetCommentsLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
+        var blank = await FilesHelper.GetBlankLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
         var code = lines - (comments + blank);
 
         var doc = new HtmlDocument();

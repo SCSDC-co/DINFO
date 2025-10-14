@@ -31,21 +31,19 @@ public static class GitHelper
         GlobalsUtils.GitRootDirectory = string.Empty;
     }
 
-    public static async Task GetGitInfoAsync(string targetDirectory)
+    public static async Task GetGitInfoAsync(string targetDirectory, CancellationToken cancellationToken = default)
     {
         try
         {
             GlobalsUtils.TargetDirectory = targetDirectory;
 
-            using StructuredRepository repository = await Repository.Factory.OpenStructureAsync(
-                targetDirectory
-            );
+            using StructuredRepository repository = await Repository.Factory.OpenStructureAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
 
             if (repository.Head is Branch head)
             {
                 GlobalsUtils.GitBranchName = head.Name;
 
-                Commit commit = await head.GetHeadCommitAsync();
+                Commit commit = await head.GetHeadCommitAsync(cancellationToken).ConfigureAwait(false);
 
                 GlobalsUtils.GitHash = (commit.Hash).ToString();
                 GlobalsUtils.GitAuthor = (commit.Author).ToString();

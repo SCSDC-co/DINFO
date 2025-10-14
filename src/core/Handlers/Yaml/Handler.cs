@@ -1,10 +1,10 @@
 using dinfo.core.Helpers.DirTools;
 using dinfo.core.Helpers.FilesTools;
 using dinfo.core.Helpers.GitTools;
+using dinfo.core.Interfaces.Output;
 using dinfo.core.Utils.Globals;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
-using dinfo.core.Interfaces.Output;
 
 namespace dinfo.core.Handlers.Yaml;
 
@@ -14,20 +14,13 @@ public class YamlHandler : IOutputHandler
     {
         if (GlobalsUtils.NoTui)
         {
-            await DirectoryHelper.ProcessDirectoryAsync(targetDirectory);
-            await GitHelper.GetGitInfoAsync(targetDirectory);
+            await DirectoryHelper.ProcessDirectoryAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
+            await GitHelper.GetGitInfoAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
         }
 
-        string directorySize =
-            (DirectoryHelper.SizeToReturn()).ToString() + " " + GlobalsUtils.SizeExtension;
+        string directorySize = $"{DirectoryHelper.SizeToReturn()} {GlobalsUtils.SizeExtension}";
 
-        var mostUsedExtension =
-            GlobalsUtils
-                .FileTypes.GroupBy(x => x)
-                .OrderByDescending(g => g.Count())
-                .Select(g => g.Key)
-                .FirstOrDefault()
-            ?? "N/A";
+        var mostUsedExtension = GlobalsUtils.GetMostUsedExtension();
 
         var perms = DirectoryHelper.GetDirectoryPermissions(targetDirectory);
 
@@ -66,19 +59,19 @@ public class YamlHandler : IOutputHandler
 
         var yamlString = serializer.Serialize(yaml);
 
-        await File.WriteAllTextAsync(filePath, yamlString);
+        await File.WriteAllTextAsync(filePath, yamlString, cancellationToken).ConfigureAwait(false);
     }
 
     public async Task FileSaveAsync(string targetFile, string filePath, CancellationToken cancellationToken = default)
     {
         if (GlobalsUtils.NoTui)
         {
-            await FilesHelper.ProcessFileAsync(targetFile);
+            await FilesHelper.ProcessFileAsync(targetFile, cancellationToken).ConfigureAwait(false);
         }
 
-        var lines = await FilesHelper.CountLinesAsync(targetFile);
-        var comments = await FilesHelper.GetCommentsLinesAsync(targetFile);
-        var blank = await FilesHelper.GetBlankLinesAsync(targetFile);
+        var lines = await FilesHelper.CountLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
+        var comments = await FilesHelper.GetCommentsLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
+        var blank = await FilesHelper.GetBlankLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
         var code = lines - (comments + blank);
 
         var yaml = new FileYaml
@@ -95,8 +88,9 @@ public class YamlHandler : IOutputHandler
         var serializer = new SerializerBuilder()
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
             .Build();
+
         var yamlString = serializer.Serialize(yaml);
 
-        await File.WriteAllTextAsync(filePath, yamlString);
+        await File.WriteAllTextAsync(filePath, yamlString, cancellationToken).ConfigureAwait(false);
     }
 }

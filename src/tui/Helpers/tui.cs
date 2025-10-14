@@ -1,5 +1,6 @@
 using dinfo.core.Helpers.DirTools;
 using dinfo.core.Helpers.FilesTools;
+using dinfo.core.Helpers.GitTools;
 using dinfo.core.Utils.Globals;
 using Spectre.Console;
 
@@ -7,9 +8,9 @@ namespace dinfo.tui.Helpers.Tui;
 
 public static class TuiHelper
 {
-    public static async Task<Panel> BuildGitPanelAsync(string targetDirectory)
+    public static async Task<Panel> BuildGitPanelAsync(string targetDirectory, CancellationToken cancellationToken = default)
     {
-        await dinfo.core.Helpers.GitTools.GitHelper.GetGitInfoAsync(targetDirectory);
+        await GitHelper.GetGitInfoAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
 
         if (GlobalsUtils.IsRepo)
         {
@@ -39,9 +40,9 @@ public static class TuiHelper
         }
     }
 
-    public static async Task PrintDirectoryInfoAsync(string targetDirectory)
+    public static async Task PrintDirectoryInfoAsync(string targetDirectory, CancellationToken cancellationToken = default)
     {
-        await DirectoryHelper.ProcessDirectoryAsync(targetDirectory);
+        await DirectoryHelper.ProcessDirectoryAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
 
         /*
          *  HEADER
@@ -60,9 +61,7 @@ public static class TuiHelper
 
         var perms = DirectoryHelper.GetDirectoryPermissions(targetDirectory);
 
-        int linesOfCode =
-            GlobalsUtils.TotalLines
-            - (GlobalsUtils.TotalLinesComments + GlobalsUtils.TotalBlankLines);
+        int linesOfCode = GlobalsUtils.GetLinesOfCode();
 
         var infoPanel = new Panel(
             $"[bold green]Number of files:[/] {GlobalsUtils.TotalFiles}\n"
@@ -85,13 +84,7 @@ public static class TuiHelper
 
         var fileTypesNoDupes = GlobalsUtils.FileTypes.Distinct().ToList();
 
-        var mostUsedExtension =
-            GlobalsUtils
-                .FileTypes.GroupBy(x => x)
-                .OrderByDescending(g => g.Count())
-                .Select(g => g.Key)
-                .FirstOrDefault()
-            ?? "N/A";
+        var mostUsedExtension = GlobalsUtils.GetMostUsedExtension();
 
         var extensionsPanel = new Panel(
             $"[bold green]File extensions:[/] {string.Join(", ", fileTypesNoDupes)}\n"
@@ -115,7 +108,7 @@ public static class TuiHelper
         infoColumns.AddColumn();
         infoColumns.AddColumn();
 
-        infoColumns.AddRow(infoPanel, extensionsPanel, await BuildGitPanelAsync(targetDirectory));
+        infoColumns.AddRow(infoPanel, extensionsPanel, await BuildGitPanelAsync(targetDirectory, cancellationToken).ConfigureAwait(false));
 
         AnsiConsole.Write(infoColumns);
 
@@ -157,9 +150,9 @@ public static class TuiHelper
         }
     }
 
-    public static async Task PrintFileInfoAsync(string targetFile)
+    public static async Task PrintFileInfoAsync(string targetFile, CancellationToken cancellationToken = default)
     {
-        await FilesHelper.ProcessFileAsync(targetFile);
+        await FilesHelper.ProcessFileAsync(targetFile, cancellationToken).ConfigureAwait(false);
         FilesHelper.GetFileType(targetFile);
 
         /*
@@ -178,9 +171,9 @@ public static class TuiHelper
          *  INFO
          */
 
-        var lines = await FilesHelper.CountLinesAsync(targetFile);
-        var comments = await FilesHelper.GetCommentsLinesAsync(targetFile);
-        var blanks = await FilesHelper.GetBlankLinesAsync(targetFile);
+        var lines = await FilesHelper.CountLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
+        var comments = await FilesHelper.GetCommentsLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
+        var blanks = await FilesHelper.GetBlankLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
         var code = lines - (comments + blanks);
 
         var infoPanel = new Panel(
