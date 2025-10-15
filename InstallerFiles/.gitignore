@@ -4,3 +4,6 @@ obj
 *.exe
 *.dll
 !finish_dinfo_MSIX_install.exe
+*.sed
+*.rpt
+*.dff
