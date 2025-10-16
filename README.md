@@ -9,6 +9,12 @@ It uses **Spectre.Console** to create a clean and colorful TUI, showing files, l
 ![License](https://img.shields.io/github/license/SCSDC-co/DINFO?style=for-the-badge)
 ![CD](https://img.shields.io/github/actions/workflow/status/SCSDC-co/DINFO/ci-cd.yml?branch=master&style=for-the-badge&logo=github&logoColor=white)
 
+
+</div>
+<div align="center">
+    <a href="https://apps.microsoft.com/detail/9N2DTJM04TXF?referrer=appbadge&cid=github-repo&mode=full">
+	    <img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
+    </a>
 </div>
 
 ## 🚀 Features
@@ -172,5 +178,6 @@ Contributions are welcome! Open a **pull request** or create an **issue** for su
 ---
 
 ## 📜 License
+
 
 This project is licensed under the **GNU GPL v3.0**. See the [LICENSE](LICENSE) file for details.
