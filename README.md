@@ -12,8 +12,9 @@ It uses **Spectre.Console** to create a clean and colorful TUI, showing files, l
 ## Where to download
 
 <a href="https://apps.microsoft.com/detail/9N2DTJM04TXF?referrer=appbadge&cid=github-repo&mode=full">
-    <img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
+    <img src="https://get.microsoft.com/images/en-us%20dark.svg" width="100"/>
 </a>
+
 </div>
 
 ## 🚀 Features
