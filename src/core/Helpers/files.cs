@@ -116,20 +116,21 @@ public static class FilesHelper
 
         if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf)
             return Encoding.UTF8;
+
         if (bom[0] == 0xff && bom[1] == 0xfe && bom[2] == 0 && bom[3] == 0)
             return Encoding.UTF32;
+
         if (bom[0] == 0xff && bom[1] == 0xfe)
             return Encoding.Unicode;
+
         if (bom[0] == 0xfe && bom[1] == 0xff)
             return Encoding.BigEndianUnicode;
+
         if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff)
             return new UTF32Encoding(true, true);
 
         var allBytes = await File.ReadAllBytesAsync(fileName, cancellationToken).ConfigureAwait(false);
-        if (IsUtf8(allBytes))
-            return Encoding.UTF8;
-
-        return Encoding.ASCII;
+        return IsUtf8(allBytes) ? Encoding.UTF8 : Encoding.ASCII;
     }
 
     private static bool IsUtf8(byte[] bytes)
