@@ -1,6 +1,9 @@
 using dinfo.core.Handlers.Html;
 using dinfo.core.Handlers.Json;
 using dinfo.core.Handlers.Yaml;
+using dinfo.core.Helpers.DirTools;
+using dinfo.core.Helpers.FilesTools;
+using dinfo.core.Helpers.GitTools;
 using dinfo.core.Interfaces.Output;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -11,6 +14,10 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddDInfo(this IServiceCollection services, ServiceLifetime handlersLifetime = ServiceLifetime.Scoped)
     {
+        services.AddSingleton<DirectoryHelper>();
+        services.AddSingleton<FilesHelper>();
+        services.AddSingleton<GitHelper>();
+
         switch (handlersLifetime)
         {
             case ServiceLifetime.Singleton:

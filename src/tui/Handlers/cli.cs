@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 
 [Command(Description = "Display information about the specified directory and its contents.")]
-public class DinfoCommand(IServiceProvider serviceProvider) : ICommand
+public class DinfoCommand(IServiceProvider serviceProvider, TuiHelper tuiHelper) : ICommand
 {
     [CommandParameter(0, Description = "The Directory to be analyzed.", IsRequired = false)]
     public string TargetDirectory { get; set; } = Environment.CurrentDirectory;
@@ -49,7 +49,7 @@ public class DinfoCommand(IServiceProvider serviceProvider) : ICommand
 
         if (!GlobalsUtils.NoTui)
         {
-            await TuiHelper.PrintDirectoryInfoAsync(dir);
+            await tuiHelper.PrintDirectoryInfoAsync(dir);
         }
 
         if (OutputToFileCli)
@@ -65,7 +65,7 @@ public class DinfoCommand(IServiceProvider serviceProvider) : ICommand
 }
 
 [Command("file", Description = "Display information about the specified file.")]
-public class FileCommand(IServiceProvider serviceProvider) : ICommand
+public class FileCommand(IServiceProvider serviceProvider, TuiHelper tuiHelper) : ICommand
 {
     [CommandParameter(0, Description = "The File to be analyzed.", IsRequired = true)]
     public required string TargetFile { get; set; }
@@ -92,7 +92,7 @@ public class FileCommand(IServiceProvider serviceProvider) : ICommand
 
         if (!GlobalsUtils.NoTui)
         {
-            await TuiHelper.PrintFileInfoAsync(TargetFile);
+            await tuiHelper.PrintFileInfoAsync(TargetFile);
         }
 
         if (OutputToFileCli)

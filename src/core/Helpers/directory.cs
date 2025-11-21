@@ -2,22 +2,23 @@ using dinfo.core.Handlers.ConfigTools;
 using dinfo.core.Helpers.FilesTools;
 using dinfo.core.Helpers.GitTools;
 using dinfo.core.Utils.Globals;
+using Microsoft.Extensions.Logging;
 using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text.RegularExpressions;
 
 namespace dinfo.core.Helpers.DirTools;
 
-public static class DirectoryHelper
+public class DirectoryHelper(FilesHelper filesHelper, GitHelper gitHelper, ILogger<DirectoryHelper> logger)
 {
-    public static async Task ProcessDirectoryAsync(string targetDirectory, CancellationToken cancellationToken = default)
+    public async Task ProcessDirectoryAsync(string targetDirectory, CancellationToken cancellationToken = default)
     {
         GlobalsUtils.TotalDirs++;
         GetDirectorySize(targetDirectory);
 
         string[] fileEntries = Directory.GetFiles(targetDirectory);
 
-        GitHelper.FindGitRoot(targetDirectory);
+        gitHelper.FindGitRoot(targetDirectory);
 
         var gitIgnorePath = Path.Combine(
             GlobalsUtils.GitRootDirectory.Replace("\\", "/"),
@@ -33,7 +34,7 @@ public static class DirectoryHelper
             var fileInfo = new FileInfo(fileName);
 
             string relativePath = string.IsNullOrEmpty(GlobalsUtils.TargetDirectory)
-                ? ""
+                ? string.Empty
                 : Path.GetRelativePath(GlobalsUtils.TargetDirectory, fileName);
 
             bool isIgnored = GlobalsUtils.IgnoredFiles.Any(pattern =>
@@ -49,7 +50,7 @@ public static class DirectoryHelper
 
             if (!GlobalsUtils.IgnoreGitignore && File.Exists(gitIgnorePath))
             {
-                var isIgnoredGit = GitHelper.IsFileIgnore(gitIgnorePath, fileInfo);
+                var isIgnoredGit = gitHelper.IsFileIgnore(gitIgnorePath, fileInfo);
 
                 if (isIgnoredGit)
                 {
@@ -60,30 +61,33 @@ public static class DirectoryHelper
             try
             {
                 GlobalsUtils.TotalFiles++;
-                GlobalsUtils.TotalLines += await FilesHelper.CountLinesAsync(fileName, cancellationToken).ConfigureAwait(false);
+                GlobalsUtils.TotalLines += await filesHelper.CountLinesAsync(fileName, cancellationToken).ConfigureAwait(false);
                 GlobalsUtils.Files.Add(fileName);
 
-                var encoding = await FilesHelper.GetEncodingAsync(fileName, cancellationToken).ConfigureAwait(false);
+                var encoding = await filesHelper.GetEncodingAsync(fileName, cancellationToken).ConfigureAwait(false);
                 GlobalsUtils.Encodings.Add(encoding.WebName);
 
-                FilesHelper.GetFileType(fileName);
-                await FilesHelper.GetCommentsLinesAsync(fileName, cancellationToken).ConfigureAwait(false);
-                await FilesHelper.GetBlankLinesAsync(fileName, cancellationToken).ConfigureAwait(false);
+                filesHelper.GetFileType(fileName);
+                await filesHelper.GetCommentsLinesAsync(fileName, cancellationToken).ConfigureAwait(false);
+                await filesHelper.GetBlankLinesAsync(fileName, cancellationToken).ConfigureAwait(false);
             }
-            catch (IOException)
+            catch (IOException ex)
             {
                 GlobalsUtils.SkippedFileLocked.Add(fileName);
+                logger.LogError(ex, "skipped file locked {fileName}", fileName);
+
                 continue;
             }
-            catch (UnauthorizedAccessException)
+            catch (UnauthorizedAccessException ex)
             {
                 GlobalsUtils.SkippedFileAccesDenied.Add(fileName);
+                logger.LogError(ex, "skipped file {fileName}", fileName);
+
                 continue;
             }
         }
 
-        FilesHelper.GetLastModifiedFile(targetDirectory);
-
+        filesHelper.GetLastModifiedFile(targetDirectory);
         string[] subDirectoryEntries = Directory.GetDirectories(targetDirectory);
 
         if (GlobalsUtils.Recursive)
@@ -99,7 +103,7 @@ public static class DirectoryHelper
                 }
 
                 string relativePath = string.IsNullOrEmpty(GlobalsUtils.TargetDirectory)
-                    ? ""
+                    ? string.Empty
                     : Path.GetRelativePath(GlobalsUtils.TargetDirectory, subDirectory);
 
                 bool isIgnoredDir = GlobalsUtils.IgnoredDirectories.Any(pattern =>
@@ -119,8 +123,9 @@ public static class DirectoryHelper
         }
     }
 
-    public static void GetDirectorySize(string targetDirectory)
+    public void GetDirectorySize(string targetDirectory)
     {
+        logger.LogDebug("Getting directory size for directory {targetDirectory}", targetDirectory);
         long dirSize = Directory.GetFiles(targetDirectory).Sum(f => new FileInfo(f).Length);
 
         var files = Directory.GetFiles(targetDirectory);
@@ -170,10 +175,13 @@ public static class DirectoryHelper
         }
     }
 
-    public static string GetDirectoryPermissions(string path)
+    public string GetDirectoryPermissions(string path)
     {
         if (!Directory.Exists(path))
+        {
+            logger.LogDebug("No directory found for the path {path}", path);
             return "Directory does not exist";
+        }
 
         if (OperatingSystem.IsWindows())
         {
@@ -183,7 +191,7 @@ public static class DirectoryHelper
                 var acl = dirInfo.GetAccessControl();
                 var rules = acl.GetAccessRules(true, true, typeof(NTAccount));
 
-                string result = "";
+                string result = string.Empty;
                 foreach (FileSystemAccessRule rule in rules)
                 {
                     result +=
@@ -194,6 +202,7 @@ public static class DirectoryHelper
             }
             catch (Exception ex)
             {
+                logger.LogError(ex, "Error reading permissions: {message}", ex.Message);
                 return $"Error reading permissions: {ex.Message}";
             }
         }
@@ -210,6 +219,7 @@ public static class DirectoryHelper
             }
             catch (Exception ex)
             {
+                logger.LogError(ex, "Error reading permissions: {message}", ex.Message);
                 return $"Error reading Unix permissions: {ex.Message}";
             }
         }
