@@ -1,16 +1,15 @@
 using CliFx;
 using CliFx.Attributes;
 using CliFx.Infrastructure;
-using dinfo.core.Handlers.Json;
-using dinfo.core.Handlers.Yaml;
-using dinfo.core.Handlers.Html;
-using dinfo.core.Utils.Globals;
-using dinfo.tui.Helpers.Tui;
-using Spectre.Console;
 using dinfo.core.Interfaces.Output;
+using dinfo.core.Utils.Globals;
+using dinfo.tui.Helpers;
+using dinfo.tui.Helpers.Tui;
+using Microsoft.Extensions.DependencyInjection;
+using Spectre.Console;
 
 [Command(Description = "Display information about the specified directory and its contents.")]
-public class DinfoCommand : ICommand
+public class DinfoCommand(IServiceProvider serviceProvider, TuiHelper tuiHelper) : ICommand
 {
     [CommandParameter(0, Description = "The Directory to be analyzed.", IsRequired = false)]
     public string TargetDirectory { get; set; } = Environment.CurrentDirectory;
@@ -38,7 +37,8 @@ public class DinfoCommand : ICommand
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
-        IOutputHandler handler;
+        var outputCli = Path.GetExtension(OutputCli).ToLowerInvariant();
+        var handler = serviceProvider.GetRequiredKeyedService<IOutputHandler>(outputCli);
 
         GlobalsUtils.Recursive = RecursiveCli;
         GlobalsUtils.Verbose = VerboseCli;
@@ -49,51 +49,13 @@ public class DinfoCommand : ICommand
 
         if (!GlobalsUtils.NoTui)
         {
-            await TuiHelper.PrintDirectoryInfoAsync(dir);
+            await tuiHelper.PrintDirectoryInfoAsync(dir);
         }
 
         if (OutputToFileCli)
         {
-            switch (Path.GetExtension(OutputCli).ToLowerInvariant())
-            {
-                case ".json":
-                    handler = new JsonHandler();
-
-                    await handler.DirectorySaveAsync(dir, OutputCli);
-
-                    AnsiConsole.Write(new Panel($"[bold green]JSON file saved in:[/] {OutputCli}")
-                        .Border(BoxBorder.Rounded)
-                        .BorderStyle(new Style(Color.Green)));
-
-                    break;
-
-                case ".yaml":
-                    handler = new YamlHandler();
-
-                    await handler.DirectorySaveAsync(dir, OutputCli);
-
-                    AnsiConsole.Write(new Panel($"[bold green]YAML file saved in:[/] {OutputCli}")
-                        .Border(BoxBorder.Rounded)
-                        .BorderStyle(new Style(Color.Green)));
-
-                    break;
-
-                case ".htm":
-                case ".html":
-                    handler = new HtmlHandler();
-
-                    await handler.DirectorySaveAsync(dir, OutputCli);
-
-                    AnsiConsole.Write(new Panel($"[bold green]HTML file saved in:[/] {OutputCli}")
-                        .Border(BoxBorder.Rounded)
-                        .BorderStyle(new Style(Color.Green)));
-
-                    break;
-
-                default:
-                    AnsiConsole.MarkupLine("[bold red]The output must be a .json/.yaml/.html file[/]");
-                    break;
-            }
+            await handler.DirectorySaveAsync(dir, OutputCli);
+            AnsiConsoleHelper.Print(OutputCli);
         }
         else
         {
@@ -103,7 +65,7 @@ public class DinfoCommand : ICommand
 }
 
 [Command("file", Description = "Display information about the specified file.")]
-public class FileCommand : ICommand
+public class FileCommand(IServiceProvider serviceProvider, TuiHelper tuiHelper) : ICommand
 {
     [CommandParameter(0, Description = "The File to be analyzed.", IsRequired = true)]
     public required string TargetFile { get; set; }
@@ -123,57 +85,20 @@ public class FileCommand : ICommand
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
-        IOutputHandler handler;
+        var outputCli = Path.GetExtension(OutputCli).ToLowerInvariant();
+        var handler = serviceProvider.GetRequiredKeyedService<IOutputHandler>(outputCli);
 
         GlobalsUtils.NoTui = NoTuiCli;
 
         if (!GlobalsUtils.NoTui)
         {
-            await TuiHelper.PrintFileInfoAsync(TargetFile);
+            await tuiHelper.PrintFileInfoAsync(TargetFile);
         }
 
         if (OutputToFileCli)
         {
-            switch (Path.GetExtension(OutputCli).ToLowerInvariant())
-            {
-                case ".json":
-                    handler = new JsonHandler();
-
-                    await handler.FileSaveAsync(TargetFile, OutputCli);
-
-                    AnsiConsole.Write(new Panel($"[bold green]JSON file saved in:[/] {OutputCli}")
-                        .Border(BoxBorder.Rounded)
-                        .BorderStyle(new Style(Color.Green)));
-
-                    break;
-
-                case ".yaml":
-                    handler = new YamlHandler();
-
-                    await handler.FileSaveAsync(TargetFile, OutputCli);
-
-                    AnsiConsole.Write(new Panel($"[bold green]YAML file saved in:[/] {OutputCli}")
-                        .Border(BoxBorder.Rounded)
-                        .BorderStyle(new Style(Color.Green)));
-
-                    break;
-
-                case ".htm":
-                case ".html":
-                    handler = new HtmlHandler();
-
-                    await handler.FileSaveAsync(TargetFile, OutputCli);
-
-                    AnsiConsole.Write(new Panel($"[bold green]HTML file saved in:[/] {OutputCli}")
-                        .Border(BoxBorder.Rounded)
-                        .BorderStyle(new Style(Color.Green)));
-
-                    break;
-
-                default:
-                    AnsiConsole.MarkupLine("[bold red]The output must be a .json/.yaml/.html file[/]");
-                    break;
-            }
+            await handler.FileSaveAsync(TargetFile, OutputCli);
+            AnsiConsoleHelper.Print(OutputCli);
         }
         else
         {

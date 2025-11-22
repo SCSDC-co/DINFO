@@ -7,7 +7,7 @@ using HtmlAgilityPack;
 
 namespace dinfo.core.Handlers.Html;
 
-public class HtmlHandler : IOutputHandler
+public class HtmlHandler(DirectoryHelper directoryHelper, GitHelper gitHelper, FilesHelper filesHelper) : IOutputHandler
 {
     private static void AddRow(HtmlNode table, string property, string value)
     {
@@ -23,15 +23,15 @@ public class HtmlHandler : IOutputHandler
     {
         if (GlobalsUtils.NoTui)
         {
-            await DirectoryHelper.ProcessDirectoryAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
-            await GitHelper.GetGitInfoAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
+            await directoryHelper.ProcessDirectoryAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
+            await gitHelper.GetGitInfoAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
         }
 
         string directorySize = $"{DirectoryHelper.SizeToReturn()} {GlobalsUtils.SizeExtension}";
 
         var mostUsedExtension = GlobalsUtils.GetMostUsedExtension();
 
-        var perms = DirectoryHelper.GetDirectoryPermissions(targetDirectory);
+        var perms = directoryHelper.GetDirectoryPermissions(targetDirectory);
 
         var doc = new HtmlDocument();
 
@@ -97,12 +97,12 @@ public class HtmlHandler : IOutputHandler
     {
         if (GlobalsUtils.NoTui)
         {
-            await FilesHelper.ProcessFileAsync(targetFile, cancellationToken).ConfigureAwait(false);
+            await filesHelper.ProcessFileAsync(targetFile, cancellationToken).ConfigureAwait(false);
         }
 
-        var lines = await FilesHelper.CountLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
-        var comments = await FilesHelper.GetCommentsLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
-        var blank = await FilesHelper.GetBlankLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
+        var lines = await filesHelper.CountLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
+        var comments = await filesHelper.GetCommentsLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
+        var blank = await filesHelper.GetBlankLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
         var code = lines - (comments + blank);
 
         var doc = new HtmlDocument();
@@ -125,7 +125,7 @@ public class HtmlHandler : IOutputHandler
         AddRow(table, "Code", code.ToString());
         AddRow(table, "Blanks", blank.ToString());
         AddRow(table, "Encoding", GlobalsUtils.Encodings.Distinct().ToString() ?? string.Empty);
-        AddRow(table, "FileTypes", FilesHelper.GetFileTypeSingleFile(targetFile));
+        AddRow(table, "FileTypes", filesHelper.GetFileTypeSingleFile(targetFile));
 
         doc.Save(filePath);
     }

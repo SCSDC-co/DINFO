@@ -8,21 +8,21 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace dinfo.core.Handlers.Yaml;
 
-public class YamlHandler : IOutputHandler
+public class YamlHandler(DirectoryHelper directoryHelper, GitHelper gitHelper, FilesHelper filesHelper) : IOutputHandler
 {
     public async Task DirectorySaveAsync(string targetDirectory, string filePath, CancellationToken cancellationToken = default)
     {
         if (GlobalsUtils.NoTui)
         {
-            await DirectoryHelper.ProcessDirectoryAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
-            await GitHelper.GetGitInfoAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
+            await directoryHelper.ProcessDirectoryAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
+            await gitHelper.GetGitInfoAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
         }
 
         string directorySize = $"{DirectoryHelper.SizeToReturn()} {GlobalsUtils.SizeExtension}";
 
         var mostUsedExtension = GlobalsUtils.GetMostUsedExtension();
 
-        var perms = DirectoryHelper.GetDirectoryPermissions(targetDirectory);
+        var perms = directoryHelper.GetDirectoryPermissions(targetDirectory);
 
         var yaml = new DirectoryYaml
         {
@@ -66,12 +66,12 @@ public class YamlHandler : IOutputHandler
     {
         if (GlobalsUtils.NoTui)
         {
-            await FilesHelper.ProcessFileAsync(targetFile, cancellationToken).ConfigureAwait(false);
+            await filesHelper.ProcessFileAsync(targetFile, cancellationToken).ConfigureAwait(false);
         }
 
-        var lines = await FilesHelper.CountLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
-        var comments = await FilesHelper.GetCommentsLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
-        var blank = await FilesHelper.GetBlankLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
+        var lines = await filesHelper.CountLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
+        var comments = await filesHelper.GetCommentsLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
+        var blank = await filesHelper.GetBlankLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
         var code = lines - (comments + blank);
 
         var yaml = new FileYaml
@@ -82,7 +82,7 @@ public class YamlHandler : IOutputHandler
             Code = code,
             Blanks = blank,
             Encoding = GlobalsUtils.Encodings.Distinct().ToList(),
-            FileType = FilesHelper.GetFileTypeSingleFile(targetFile),
+            FileType = filesHelper.GetFileTypeSingleFile(targetFile),
         };
 
         var serializer = new SerializerBuilder()

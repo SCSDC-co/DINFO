@@ -2,20 +2,24 @@ using dinfo.core.Utils.Globals;
 using GitReader;
 using GitReader.Structures;
 using MAB.DotIgnore;
+using Microsoft.Extensions.Logging;
 
 namespace dinfo.core.Helpers.GitTools;
 
-public static class GitHelper
+public class GitHelper(ILogger<GitHelper> logger)
 {
-    public static bool IsFileIgnore(string path, FileInfo fileName)
+    public bool IsFileIgnore(string path, FileInfo fileName)
     {
-        var parser = new IgnoreList(path);
+        logger.LogDebug("checking if file {path} is ignored", path);
 
+        var parser = new IgnoreList(path);
         return parser.IsIgnored(fileName);
     }
 
-    public static void FindGitRoot(string targetDirectory)
+    public void FindGitRoot(string targetDirectory)
     {
+        logger.LogDebug("Finding git root for directory {targetDirectory}", targetDirectory);
+
         while (!string.IsNullOrEmpty(targetDirectory))
         {
             if (Directory.Exists(Path.Combine(targetDirectory, ".git")))
@@ -31,8 +35,10 @@ public static class GitHelper
         GlobalsUtils.GitRootDirectory = string.Empty;
     }
 
-    public static async Task GetGitInfoAsync(string targetDirectory, CancellationToken cancellationToken = default)
+    public async Task GetGitInfoAsync(string targetDirectory, CancellationToken cancellationToken = default)
     {
+        logger.LogDebug("Getting git info for directory {targetDirectory}", targetDirectory);
+
         try
         {
             GlobalsUtils.TargetDirectory = targetDirectory;
@@ -53,8 +59,9 @@ public static class GitHelper
 
             GlobalsUtils.IsRepo = true;
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Unable to get git info for directory {targetDirectory}", targetDirectory);
             // Ignore errors (e.g., not a git repository)
         }
     }

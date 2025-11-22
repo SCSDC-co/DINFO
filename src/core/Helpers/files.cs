@@ -1,20 +1,26 @@
 using dinfo.core.Utils.Globals;
+using Microsoft.Extensions.Logging;
 using System.Text;
 using static dinfo.core.Utils.RegularExpressions.RegexHelpers;
 
 namespace dinfo.core.Helpers.FilesTools;
 
-public static class FilesHelper
+public class FilesHelper(ILogger<FilesHelper> logger)
 {
-    public static async Task<int> CountLinesAsync(string fileName, CancellationToken cancellationToken = default)
+    public async Task<int> CountLinesAsync(string fileName, CancellationToken cancellationToken = default)
     {
+        logger.LogDebug("Counting the lines of code for file {fileName}", fileName);
         IEnumerable<string> lines = await File.ReadAllLinesAsync(fileName, cancellationToken);
 
-        return lines.Count();
+        var totalLines = lines.Count();
+        logger.LogDebug("Found {totalLines} lines", totalLines);
+
+        return totalLines;
     }
 
-    public static async Task<int> GetCommentsLinesAsync(string fileName, CancellationToken cancellationToken = default)
+    public async Task<int> GetCommentsLinesAsync(string fileName, CancellationToken cancellationToken = default)
     {
+        logger.LogDebug("Counting the lines of comments for file {fileName}", fileName);
         IEnumerable<string> lines = await File.ReadAllLinesAsync(fileName, cancellationToken).ConfigureAwait(false);
 
         bool inMultiLineComment = false;
@@ -55,23 +61,23 @@ public static class FilesHelper
         }
 
         GlobalsUtils.TotalLinesComments += commentLines;
-
         return commentLines;
     }
 
-    public static async Task<int> GetBlankLinesAsync(string fileName, CancellationToken cancellationToken = default)
+    public async Task<int> GetBlankLinesAsync(string fileName, CancellationToken cancellationToken = default)
     {
+        logger.LogDebug("Counting the blank lines for file {fileName}", fileName);
         IEnumerable<string> lines = await File.ReadAllLinesAsync(fileName, cancellationToken).ConfigureAwait(false);
 
         int blankLines = lines.Count(line => string.IsNullOrWhiteSpace(line));
-
         GlobalsUtils.TotalBlankLines += blankLines;
 
         return blankLines;
     }
 
-    public static void GetFileType(string fileName)
+    public void GetFileType(string fileName)
     {
+        logger.LogDebug("Getting file type for file {fileName}", fileName);
         string? name = Path.GetFileName(fileName);
 
         if (name.StartsWith('.'))
@@ -79,16 +85,16 @@ public static class FilesHelper
             return;
         }
 
-        string? ext = Path.GetExtension(name);
-
-        if (!string.IsNullOrEmpty(ext))
+        string? extension = Path.GetExtension(name);
+        if (!string.IsNullOrEmpty(extension))
         {
-            GlobalsUtils.FileTypes.Add(ext);
+            GlobalsUtils.FileTypes.Add(extension);
         }
     }
 
-    public static string GetFileTypeSingleFile(string fileName)
+    public string GetFileTypeSingleFile(string fileName)
     {
+        logger.LogDebug("Getting file type single file");
         string? name = Path.GetFileName(fileName);
 
         if (name.StartsWith('.'))
@@ -96,18 +102,18 @@ public static class FilesHelper
             return "N/A";
         }
 
-        string? ext = Path.GetExtension(name);
-
-        if (!string.IsNullOrEmpty(ext))
+        string? extension = Path.GetExtension(name);
+        if (!string.IsNullOrEmpty(extension))
         {
-            return ext;
+            return extension;
         }
 
         return "N/A";
     }
 
-    public static async Task<Encoding> GetEncodingAsync(string fileName, CancellationToken cancellationToken = default)
+    public async Task<Encoding> GetEncodingAsync(string fileName, CancellationToken cancellationToken = default)
     {
+        logger.LogDebug("Getting the encoding for file {fileName}", fileName);
         var bom = new byte[4];
 
         await using var file = new FileStream(fileName, FileMode.Open, FileAccess.Read);
@@ -116,37 +122,40 @@ public static class FilesHelper
 
         if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf)
             return Encoding.UTF8;
+
         if (bom[0] == 0xff && bom[1] == 0xfe && bom[2] == 0 && bom[3] == 0)
             return Encoding.UTF32;
+
         if (bom[0] == 0xff && bom[1] == 0xfe)
             return Encoding.Unicode;
+
         if (bom[0] == 0xfe && bom[1] == 0xff)
             return Encoding.BigEndianUnicode;
+
         if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff)
             return new UTF32Encoding(true, true);
 
         var allBytes = await File.ReadAllBytesAsync(fileName, cancellationToken).ConfigureAwait(false);
-        if (IsUtf8(allBytes))
-            return Encoding.UTF8;
-
-        return Encoding.ASCII;
+        return IsUtf8(allBytes) ? Encoding.UTF8 : Encoding.ASCII;
     }
 
-    private static bool IsUtf8(byte[] bytes)
+    private bool IsUtf8(byte[] bytes)
     {
         try
         {
             Encoding.UTF8.GetString(bytes);
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Not an utf-8 string");
             return false;
         }
     }
 
-    public static void GetLastModifiedFile(string targetDirectory)
+    public void GetLastModifiedFile(string targetDirectory)
     {
+        logger.LogDebug("Getting last modified file from directory {targetDirectory}", targetDirectory);
         var files = new DirectoryInfo(targetDirectory).EnumerateFiles().ToArray();
 
         if (files.Length == 0)
@@ -158,7 +167,7 @@ public static class FilesHelper
         GlobalsUtils.LastModifiedFile = files.OrderBy(fi => fi.LastWriteTime).Last().FullName;
     }
 
-    public static async Task ProcessFileAsync(string fileName, CancellationToken cancellationToken = default)
+    public async Task ProcessFileAsync(string fileName, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -171,12 +180,14 @@ public static class FilesHelper
             var encoding = await GetEncodingAsync(fileName, cancellationToken).ConfigureAwait(false);
             GlobalsUtils.Encodings.Add(encoding.WebName);
         }
-        catch (IOException)
+        catch (IOException ex)
         {
+            logger.LogError(ex, "[SKIPPED] {fileName} (file locked by system)", fileName);
             Console.WriteLine($"[SKIPPED] {fileName} (file locked by system)");
         }
-        catch (UnauthorizedAccessException)
+        catch (UnauthorizedAccessException ex)
         {
+            logger.LogError(ex, "[SKIPPED] {fileName} (access denied)", fileName);
             Console.WriteLine($"[SKIPPED] {fileName} (access denied)");
         }
     }

@@ -6,11 +6,11 @@ using Spectre.Console;
 
 namespace dinfo.tui.Helpers.Tui;
 
-public static class TuiHelper
+public class TuiHelper(DirectoryHelper directoryHelper, GitHelper gitHelper, FilesHelper filesHelper)
 {
-    public static async Task<Panel> BuildGitPanelAsync(string targetDirectory, CancellationToken cancellationToken = default)
+    public async Task<Panel> BuildGitPanelAsync(string targetDirectory, CancellationToken cancellationToken = default)
     {
-        await GitHelper.GetGitInfoAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
+        await gitHelper.GetGitInfoAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
 
         if (GlobalsUtils.IsRepo)
         {
@@ -40,9 +40,9 @@ public static class TuiHelper
         }
     }
 
-    public static async Task PrintDirectoryInfoAsync(string targetDirectory, CancellationToken cancellationToken = default)
+    public async Task PrintDirectoryInfoAsync(string targetDirectory, CancellationToken cancellationToken = default)
     {
-        await DirectoryHelper.ProcessDirectoryAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
+        await directoryHelper.ProcessDirectoryAsync(targetDirectory, cancellationToken).ConfigureAwait(false);
 
         /*
          *  HEADER
@@ -59,7 +59,7 @@ public static class TuiHelper
          *  INFO
          */
 
-        var perms = DirectoryHelper.GetDirectoryPermissions(targetDirectory);
+        var perms = directoryHelper.GetDirectoryPermissions(targetDirectory);
 
         int linesOfCode = GlobalsUtils.GetLinesOfCode();
 
@@ -150,10 +150,10 @@ public static class TuiHelper
         }
     }
 
-    public static async Task PrintFileInfoAsync(string targetFile, CancellationToken cancellationToken = default)
+    public async Task PrintFileInfoAsync(string targetFile, CancellationToken cancellationToken = default)
     {
-        await FilesHelper.ProcessFileAsync(targetFile, cancellationToken).ConfigureAwait(false);
-        FilesHelper.GetFileType(targetFile);
+        await filesHelper.ProcessFileAsync(targetFile, cancellationToken).ConfigureAwait(false);
+        filesHelper.GetFileType(targetFile);
 
         /*
          *  HEADER
@@ -171,9 +171,9 @@ public static class TuiHelper
          *  INFO
          */
 
-        var lines = await FilesHelper.CountLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
-        var comments = await FilesHelper.GetCommentsLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
-        var blanks = await FilesHelper.GetBlankLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
+        var lines = await filesHelper.CountLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
+        var comments = await filesHelper.GetCommentsLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
+        var blanks = await filesHelper.GetBlankLinesAsync(targetFile, cancellationToken).ConfigureAwait(false);
         var code = lines - (comments + blanks);
 
         var infoPanel = new Panel(
@@ -182,7 +182,7 @@ public static class TuiHelper
                 + $"[bold green]Blank lines:[/] {blanks}\n"
                 + $"[bold green]Code:[/] {code}\n"
                 + $"[bold green]File encoding:[/] {string.Join(", ", GlobalsUtils.Encodings.Distinct())}\n"
-                + $"[bold green]File type:[/] {FilesHelper.GetFileTypeSingleFile(targetFile)}"
+                + $"[bold green]File type:[/] {filesHelper.GetFileTypeSingleFile(targetFile)}"
         );
 
         infoPanel.Border = BoxBorder.Rounded;
