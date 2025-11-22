@@ -1,7 +1,56 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Nicola\\Desktop\\DINFO\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|c:\\users\\nicola\\desktop\\dinfo\\src\\core\\utils\\globals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|solutionrelative:src\\core\\utils\\globals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|c:\\users\\nicola\\desktop\\dinfo\\src\\core\\helpers\\git.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|solutionrelative:src\\core\\helpers\\git.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|c:\\users\\nicola\\desktop\\dinfo\\src\\core\\helpers\\files.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|solutionrelative:src\\core\\helpers\\files.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|c:\\users\\nicola\\desktop\\dinfo\\src\\core\\helpers\\directory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|solutionrelative:src\\core\\helpers\\directory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|c:\\users\\nicola\\desktop\\dinfo\\src\\core\\handlers\\html\\handler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|solutionrelative:src\\core\\handlers\\html\\handler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|c:\\users\\nicola\\desktop\\dinfo\\src\\core\\handlers\\json\\handler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|solutionrelative:src\\core\\handlers\\json\\handler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|c:\\users\\nicola\\desktop\\dinfo\\src\\core\\handlers\\yaml\\handler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|solutionrelative:src\\core\\handlers\\yaml\\handler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|c:\\users\\nicola\\desktop\\dinfo\\src\\core\\handlers\\config-file.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|solutionrelative:src\\core\\handlers\\config-file.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|c:\\users\\nicola\\desktop\\dinfo\\src\\core\\handlers\\json\\git.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|solutionrelative:src\\core\\handlers\\json\\git.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|c:\\users\\nicola\\desktop\\dinfo\\src\\core\\handlers\\json\\file.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|solutionrelative:src\\core\\handlers\\json\\file.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|c:\\users\\nicola\\desktop\\dinfo\\src\\core\\handlers\\json\\directory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|solutionrelative:src\\core\\handlers\\json\\directory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0BC8E1BC-9495-4D71-8FA4-99571EB3014A}|src\\tui\\dinfo.tui.csproj|c:\\users\\nicola\\desktop\\dinfo\\src\\tui\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0BC8E1BC-9495-4D71-8FA4-99571EB3014A}|src\\tui\\dinfo.tui.csproj|solutionrelative:src\\tui\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +58,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -30,6 +79,166 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "globals.cs",
+              "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Utils\\globals.cs",
+              "RelativeDocumentMoniker": "src\\core\\Utils\\globals.cs",
+              "ToolTip": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Utils\\globals.cs",
+              "RelativeToolTip": "src\\core\\Utils\\globals.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAqwC0AAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T21:31:47.931Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "git.cs",
+              "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Helpers\\git.cs",
+              "RelativeDocumentMoniker": "src\\core\\Helpers\\git.cs",
+              "ToolTip": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Helpers\\git.cs",
+              "RelativeToolTip": "src\\core\\Helpers\\git.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC0AAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T21:30:57.55Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "files.cs",
+              "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Helpers\\files.cs",
+              "RelativeDocumentMoniker": "src\\core\\Helpers\\files.cs",
+              "ToolTip": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Helpers\\files.cs",
+              "RelativeToolTip": "src\\core\\Helpers\\files.cs",
+              "ViewState": "AgIAAKoAAAAAAAAAAAAAwJ4AAABSAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T21:29:04.994Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "directory.cs",
+              "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Helpers\\directory.cs",
+              "RelativeDocumentMoniker": "src\\core\\Helpers\\directory.cs",
+              "ToolTip": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Helpers\\directory.cs",
+              "RelativeToolTip": "src\\core\\Helpers\\directory.cs",
+              "ViewState": "AgIAAMQAAAAAAAAAAADwv9AAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T21:26:46.608Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Handler.cs",
+              "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\Yaml\\Handler.cs",
+              "RelativeDocumentMoniker": "src\\core\\Handlers\\Yaml\\Handler.cs",
+              "ToolTip": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\Yaml\\Handler.cs",
+              "RelativeToolTip": "src\\core\\Handlers\\Yaml\\Handler.cs",
+              "ViewState": "AgIAAEwAAAAAAAAAAAA7wAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T21:25:13.451Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "config-file.cs",
+              "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\config-file.cs",
+              "RelativeDocumentMoniker": "src\\core\\Handlers\\config-file.cs",
+              "ToolTip": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\config-file.cs",
+              "RelativeToolTip": "src\\core\\Handlers\\config-file.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAowEkAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T21:22:28.089Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Handler.cs",
+              "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\Json\\Handler.cs",
+              "RelativeDocumentMoniker": "src\\core\\Handlers\\Json\\Handler.cs",
+              "ToolTip": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\Json\\Handler.cs",
+              "RelativeToolTip": "src\\core\\Handlers\\Json\\Handler.cs",
+              "ViewState": "AgIAAEMAAAAAAAAAAAA7wAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T21:20:58.385Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Git.cs",
+              "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\Json\\Git.cs",
+              "RelativeDocumentMoniker": "src\\core\\Handlers\\Json\\Git.cs",
+              "ToolTip": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\Json\\Git.cs",
+              "RelativeToolTip": "src\\core\\Handlers\\Json\\Git.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T21:20:56.66Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "File.cs",
+              "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\Json\\File.cs",
+              "RelativeDocumentMoniker": "src\\core\\Handlers\\Json\\File.cs",
+              "ToolTip": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\Json\\File.cs",
+              "RelativeToolTip": "src\\core\\Handlers\\Json\\File.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T21:20:54.929Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Directory.cs",
+              "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\Json\\Directory.cs",
+              "RelativeDocumentMoniker": "src\\core\\Handlers\\Json\\Directory.cs",
+              "ToolTip": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\Json\\Directory.cs",
+              "RelativeToolTip": "src\\core\\Handlers\\Json\\Directory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T21:20:51.961Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Handler.cs",
+              "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\Html\\Handler.cs",
+              "RelativeDocumentMoniker": "src\\core\\Handlers\\Html\\Handler.cs",
+              "ToolTip": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\Html\\Handler.cs",
+              "RelativeToolTip": "src\\core\\Handlers\\Html\\Handler.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAA7wAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T21:20:38.717Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\tui\\Program.cs",
+              "RelativeDocumentMoniker": "src\\tui\\Program.cs",
+              "ToolTip": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\tui\\Program.cs",
+              "RelativeToolTip": "src\\tui\\Program.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAcwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T21:19:37.666Z",
+              "EditorCaption": ""
             }
           ]
         }

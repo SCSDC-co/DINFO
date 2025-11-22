@@ -32,10 +32,7 @@ public class DirectoryHelper(FilesHelper filesHelper, GitHelper gitHelper, ILogg
         foreach (string fileName in fileEntries)
         {
             var fileInfo = new FileInfo(fileName);
-
-            string relativePath = string.IsNullOrEmpty(GlobalsUtils.TargetDirectory)
-                ? string.Empty
-                : Path.GetRelativePath(GlobalsUtils.TargetDirectory, fileName);
+            string relativePath = string.IsNullOrWhiteSpace(GlobalsUtils.TargetDirectory) ? string.Empty : Path.GetRelativePath(GlobalsUtils.TargetDirectory, fileName);
 
             bool isIgnored = GlobalsUtils.IgnoredFiles.Any(pattern =>
             {
@@ -102,9 +99,7 @@ public class DirectoryHelper(FilesHelper filesHelper, GitHelper gitHelper, ILogg
                     continue;
                 }
 
-                string relativePath = string.IsNullOrEmpty(GlobalsUtils.TargetDirectory)
-                    ? string.Empty
-                    : Path.GetRelativePath(GlobalsUtils.TargetDirectory, subDirectory);
+                string relativePath = string.IsNullOrWhiteSpace(GlobalsUtils.TargetDirectory) ? string.Empty : Path.GetRelativePath(GlobalsUtils.TargetDirectory, subDirectory);
 
                 bool isIgnoredDir = GlobalsUtils.IgnoredDirectories.Any(pattern =>
                 {

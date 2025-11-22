@@ -20,7 +20,7 @@ public class GitHelper(ILogger<GitHelper> logger)
     {
         logger.LogDebug("Finding git root for directory {targetDirectory}", targetDirectory);
 
-        while (!string.IsNullOrEmpty(targetDirectory))
+        while (!string.IsNullOrWhiteSpace(targetDirectory))
         {
             if (Directory.Exists(Path.Combine(targetDirectory, ".git")))
             {

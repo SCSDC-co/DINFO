@@ -35,7 +35,7 @@ public static class ConfigHelper
 {
     public static void FindConfigFile(string targetDirectory)
     {
-        while (!string.IsNullOrEmpty(targetDirectory))
+        while (!string.IsNullOrWhiteSpace(targetDirectory))
         {
             var configPath = Path.Combine(targetDirectory, "dinfo.yaml");
 
@@ -63,7 +63,7 @@ public static class ConfigHelper
 
     public static void DeserializeConfigFile(string configFilePath)
     {
-        if (string.IsNullOrEmpty(configFilePath) || !File.Exists(configFilePath))
+        if (string.IsNullOrWhiteSpace(configFilePath) || !File.Exists(configFilePath))
             return;
 
         var deserializer = new DeserializerBuilder()

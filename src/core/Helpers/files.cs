@@ -80,13 +80,13 @@ public class FilesHelper(ILogger<FilesHelper> logger)
         logger.LogDebug("Getting file type for file {fileName}", fileName);
         string? name = Path.GetFileName(fileName);
 
-        if (name.StartsWith('.'))
+        if (name?.StartsWith('.') ?? false)
         {
             return;
         }
 
         string? extension = Path.GetExtension(name);
-        if (!string.IsNullOrEmpty(extension))
+        if (!string.IsNullOrWhiteSpace(extension))
         {
             GlobalsUtils.FileTypes.Add(extension);
         }
@@ -97,13 +97,13 @@ public class FilesHelper(ILogger<FilesHelper> logger)
         logger.LogDebug("Getting file type single file");
         string? name = Path.GetFileName(fileName);
 
-        if (name.StartsWith('.'))
+        if (name?.StartsWith('.') ?? false)
         {
             return "N/A";
         }
 
         string? extension = Path.GetExtension(name);
-        if (!string.IsNullOrEmpty(extension))
+        if (!string.IsNullOrWhiteSpace(extension))
         {
             return extension;
         }
