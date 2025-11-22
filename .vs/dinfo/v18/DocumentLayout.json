@@ -3,6 +3,22 @@
   "WorkspaceRootPath": "C:\\Users\\Nicola\\Desktop\\DINFO\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{0BC8E1BC-9495-4D71-8FA4-99571EB3014A}|src\\tui\\dinfo.tui.csproj|c:\\users\\nicola\\desktop\\dinfo\\src\\tui\\helpers\\tui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0BC8E1BC-9495-4D71-8FA4-99571EB3014A}|src\\tui\\dinfo.tui.csproj|solutionrelative:src\\tui\\helpers\\tui.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0BC8E1BC-9495-4D71-8FA4-99571EB3014A}|src\\tui\\dinfo.tui.csproj|c:\\users\\nicola\\desktop\\dinfo\\src\\tui\\helpers\\ansi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0BC8E1BC-9495-4D71-8FA4-99571EB3014A}|src\\tui\\dinfo.tui.csproj|solutionrelative:src\\tui\\helpers\\ansi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0BC8E1BC-9495-4D71-8FA4-99571EB3014A}|src\\tui\\dinfo.tui.csproj|c:\\users\\nicola\\desktop\\dinfo\\src\\tui\\handlers\\cli.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0BC8E1BC-9495-4D71-8FA4-99571EB3014A}|src\\tui\\dinfo.tui.csproj|solutionrelative:src\\tui\\handlers\\cli.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|c:\\users\\nicola\\desktop\\dinfo\\src\\core\\extensions\\services.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|solutionrelative:src\\core\\extensions\\services.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|c:\\users\\nicola\\desktop\\dinfo\\src\\core\\utils\\globals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CFB3EE22-0291-4573-AFDD-651D20F202C4}|src\\core\\dinfo.core.csproj|solutionrelative:src\\core\\utils\\globals.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -87,6 +103,58 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "tui.cs",
+              "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\tui\\Helpers\\tui.cs",
+              "RelativeDocumentMoniker": "src\\tui\\Helpers\\tui.cs",
+              "ToolTip": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\tui\\Helpers\\tui.cs",
+              "RelativeToolTip": "src\\tui\\Helpers\\tui.cs",
+              "ViewState": "AgIAAE0AAAAAAAAAAAArwFsAAACEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T21:33:50.855Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ansi.cs",
+              "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\tui\\Helpers\\ansi.cs",
+              "RelativeDocumentMoniker": "src\\tui\\Helpers\\ansi.cs",
+              "ToolTip": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\tui\\Helpers\\ansi.cs",
+              "RelativeToolTip": "src\\tui\\Helpers\\ansi.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAcwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T21:33:44.185Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "cli.cs",
+              "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\tui\\Handlers\\cli.cs",
+              "RelativeDocumentMoniker": "src\\tui\\Handlers\\cli.cs",
+              "ToolTip": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\tui\\Handlers\\cli.cs",
+              "RelativeToolTip": "src\\tui\\Handlers\\cli.cs",
+              "ViewState": "AgIAAFEAAAAAAAAAAAA9wAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T21:33:04.525Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "services.cs",
+              "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Extensions\\services.cs",
+              "RelativeDocumentMoniker": "src\\core\\Extensions\\services.cs",
+              "ToolTip": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Extensions\\services.cs",
+              "RelativeToolTip": "src\\core\\Extensions\\services.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-22T21:32:58.813Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "globals.cs",
               "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Utils\\globals.cs",
               "RelativeDocumentMoniker": "src\\core\\Utils\\globals.cs",
@@ -99,7 +167,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 5,
               "Title": "git.cs",
               "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Helpers\\git.cs",
               "RelativeDocumentMoniker": "src\\core\\Helpers\\git.cs",
@@ -112,7 +180,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "files.cs",
               "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Helpers\\files.cs",
               "RelativeDocumentMoniker": "src\\core\\Helpers\\files.cs",
@@ -125,7 +193,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
               "Title": "directory.cs",
               "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Helpers\\directory.cs",
               "RelativeDocumentMoniker": "src\\core\\Helpers\\directory.cs",
@@ -138,7 +206,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 10,
               "Title": "Handler.cs",
               "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\Yaml\\Handler.cs",
               "RelativeDocumentMoniker": "src\\core\\Handlers\\Yaml\\Handler.cs",
@@ -151,7 +219,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 11,
               "Title": "config-file.cs",
               "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\config-file.cs",
               "RelativeDocumentMoniker": "src\\core\\Handlers\\config-file.cs",
@@ -164,7 +232,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 9,
               "Title": "Handler.cs",
               "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\Json\\Handler.cs",
               "RelativeDocumentMoniker": "src\\core\\Handlers\\Json\\Handler.cs",
@@ -177,7 +245,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 12,
               "Title": "Git.cs",
               "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\Json\\Git.cs",
               "RelativeDocumentMoniker": "src\\core\\Handlers\\Json\\Git.cs",
@@ -190,7 +258,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 13,
               "Title": "File.cs",
               "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\Json\\File.cs",
               "RelativeDocumentMoniker": "src\\core\\Handlers\\Json\\File.cs",
@@ -203,7 +271,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 14,
               "Title": "Directory.cs",
               "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\Json\\Directory.cs",
               "RelativeDocumentMoniker": "src\\core\\Handlers\\Json\\Directory.cs",
@@ -216,7 +284,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 8,
               "Title": "Handler.cs",
               "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\core\\Handlers\\Html\\Handler.cs",
               "RelativeDocumentMoniker": "src\\core\\Handlers\\Html\\Handler.cs",
@@ -229,7 +297,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 15,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\Nicola\\Desktop\\DINFO\\src\\tui\\Program.cs",
               "RelativeDocumentMoniker": "src\\tui\\Program.cs",

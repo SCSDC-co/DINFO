@@ -15,10 +15,10 @@ public class TuiHelper(DirectoryHelper directoryHelper, GitHelper gitHelper, Fil
         if (GlobalsUtils.IsRepo)
         {
             var gitPanel = new Panel(
-                $"[bold green]Git Branch Name:[/] {GlobalsUtils.GitBranchName}\n"
-                    + $"[bold green]Git Hash:[/] {GlobalsUtils.GitHash}\n"
-                    + $"[bold green]Git Author:[/] {GlobalsUtils.GitAuthor}\n"
-                    + $"[bold green]Git Committer:[/] {GlobalsUtils.GitCommitter}\n"
+                $"[bold green]Git Branch Name:[/] {GlobalsUtils.GitBranchName}{Environment.NewLine}"
+                    + $"[bold green]Git Hash:[/] {GlobalsUtils.GitHash}{Environment.NewLine}"
+                    + $"[bold green]Git Author:[/] {GlobalsUtils.GitAuthor}{Environment.NewLine}"
+                    + $"[bold green]Git Committer:[/] {GlobalsUtils.GitCommitter}{Environment.NewLine}"
                     + $"[bold green]Git Subject:[/] {GlobalsUtils.GitSubject}"
             );
 
@@ -64,13 +64,13 @@ public class TuiHelper(DirectoryHelper directoryHelper, GitHelper gitHelper, Fil
         int linesOfCode = GlobalsUtils.GetLinesOfCode();
 
         var infoPanel = new Panel(
-            $"[bold green]Number of files:[/] {GlobalsUtils.TotalFiles}\n"
-                + $"[bold green]Number of lines:[/] {GlobalsUtils.TotalLines}\n"
-                + $"[bold green]Commentes:[/] {GlobalsUtils.TotalLinesComments}\n"
-                + $"[bold green]Blank lines:[/] {GlobalsUtils.TotalBlankLines}\n"
-                + $"[bold green]Code:[/] {linesOfCode}\n"
-                + $"[bold green]Number of directories:[/] {GlobalsUtils.TotalDirs}\n"
-                + $"[bold green]Permissions:[/] {perms}\n"
+            $"[bold green]Number of files:[/] {GlobalsUtils.TotalFiles}{Environment.NewLine}"
+                + $"[bold green]Number of lines:[/] {GlobalsUtils.TotalLines}{Environment.NewLine}"
+                + $"[bold green]Commentes:[/] {GlobalsUtils.TotalLinesComments}{Environment.NewLine}"
+                + $"[bold green]Blank lines:[/] {GlobalsUtils.TotalBlankLines}{Environment.NewLine}"
+                + $"[bold green]Code:[/] {linesOfCode}{Environment.NewLine}"
+                + $"[bold green]Number of directories:[/] {GlobalsUtils.TotalDirs}{Environment.NewLine}"
+                + $"[bold green]Permissions:[/] {perms}{Environment.NewLine}"
                 + $"[bold green]Total size:[/] {DirectoryHelper.SizeToReturn()} {GlobalsUtils.SizeExtension}"
         );
 
@@ -87,10 +87,10 @@ public class TuiHelper(DirectoryHelper directoryHelper, GitHelper gitHelper, Fil
         var mostUsedExtension = GlobalsUtils.GetMostUsedExtension();
 
         var extensionsPanel = new Panel(
-            $"[bold green]File extensions:[/] {string.Join(", ", fileTypesNoDupes)}\n"
-                + $"[bold green]Most used extension:[/] {mostUsedExtension.TrimStart('.')}\n"
-                + $"[bold green]Biggest file:[/] {GlobalsUtils.BiggestFile} ({GlobalsUtils.BiggestFileSize} B)\n"
-                + $"[bold green]Last modified file:[/] {GlobalsUtils.LastModifiedFile}\n"
+            $"[bold green]File extensions:[/] {string.Join(", ", fileTypesNoDupes)}{Environment.NewLine}"
+                + $"[bold green]Most used extension:[/] {mostUsedExtension.TrimStart('.')}{Environment.NewLine}"
+                + $"[bold green]Biggest file:[/] {GlobalsUtils.BiggestFile} ({GlobalsUtils.BiggestFileSize} B){Environment.NewLine}"
+                + $"[bold green]Last modified file:[/] {GlobalsUtils.LastModifiedFile}{Environment.NewLine}"
                 + $"[bold green]File encodings:[/] {string.Join(", ", GlobalsUtils.Encodings.Distinct())}"
         );
 
@@ -177,11 +177,11 @@ public class TuiHelper(DirectoryHelper directoryHelper, GitHelper gitHelper, Fil
         var code = lines - (comments + blanks);
 
         var infoPanel = new Panel(
-            $"[bold green]Number of lines:[/] {lines.ToString()}\n"
-                + $"[bold green]Commentes:[/] {comments}\n"
-                + $"[bold green]Blank lines:[/] {blanks}\n"
-                + $"[bold green]Code:[/] {code}\n"
-                + $"[bold green]File encoding:[/] {string.Join(", ", GlobalsUtils.Encodings.Distinct())}\n"
+            $"[bold green]Number of lines:[/] {lines.ToString()}{Environment.NewLine}"
+                + $"[bold green]Commentes:[/] {comments}{Environment.NewLine}"
+                + $"[bold green]Blank lines:[/] {blanks}{Environment.NewLine}"
+                + $"[bold green]Code:[/] {code}{Environment.NewLine}"
+                + $"[bold green]File encoding:[/] {string.Join(", ", GlobalsUtils.Encodings.Distinct())}{Environment.NewLine}"
                 + $"[bold green]File type:[/] {filesHelper.GetFileTypeSingleFile(targetFile)}"
         );
 
